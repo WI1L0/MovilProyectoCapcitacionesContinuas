@@ -13,13 +13,14 @@ public class MUsuario implements Serializable {
     private Boolean estadoActivoCapacitador;
     private String tituloCapacitador;
 
-    private List<MCursos> listcursos;
-    private List<MInscritos> listinscritos;
+
+    private MPersona mPersona;
+    private List<MCursos> mCursosList;
 
     public MUsuario() {
     }
 
-    public MUsuario(int idUsuario, String username, String password, String fotoPerfil, Boolean estadoUsuarioActivo, Boolean estadoActivoCapacitador, String tituloCapacitador, List<MCursos> listcursos, List<MInscritos> listinscritos) {
+    public MUsuario(int idUsuario, String username, String password, String fotoPerfil, Boolean estadoUsuarioActivo, Boolean estadoActivoCapacitador, String tituloCapacitador, MPersona mPersona, List<MCursos> mCursosList) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.password = password;
@@ -27,8 +28,8 @@ public class MUsuario implements Serializable {
         this.estadoUsuarioActivo = estadoUsuarioActivo;
         this.estadoActivoCapacitador = estadoActivoCapacitador;
         this.tituloCapacitador = tituloCapacitador;
-        this.listcursos = listcursos;
-        this.listinscritos = listinscritos;
+        this.mPersona = mPersona;
+        this.mCursosList = mCursosList;
     }
 
     public int getIdUsuario() {
@@ -87,19 +88,19 @@ public class MUsuario implements Serializable {
         this.tituloCapacitador = tituloCapacitador;
     }
 
-    public List<MCursos> getListcursos() {
-        return listcursos;
+    public MPersona getmPersona() {
+        return mPersona;
     }
 
-    public void setListcursos(List<MCursos> listcursos) {
-        this.listcursos = listcursos;
+    public void setmPersona(MPersona mPersona) {
+        this.mPersona = mPersona;
     }
 
-    public List<MInscritos> getListinscritos() {
-        return listinscritos;
+    public List<MCursos> getmCursosList() {
+        return mCursosList;
     }
 
-    public void setListinscritos(List<MInscritos> listinscritos) {
-        this.listinscritos = listinscritos;
+    public void setmCursosList(List<MCursos> mCursosList) {
+        this.mCursosList = mCursosList;
     }
 }

@@ -130,12 +130,12 @@ public class Atributos {
     public static final String CREAR_TABLA_INSCRITOS = "CREATE TABLE " + table_inscritos + " (" +
             atr_ins_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_usu_id + " INTEGER NOT NULL, " +
             atr_cur_id + " INTEGER NOT NULL, " + atr_ins_fecha + " TEXT NOT NULL, " +
-            atr_ins_estado_activo + " BOOLEAN NOT NULL, " + atr_ins_estado_aprobado + " BOOLEAN NOT NULL, " +
+            atr_ins_estado_activo + " BOOLEAN NOT NULL, " + atr_ins_estado_aprobado + " TEXT NOT NULL, " +
             atr_ins_estado_participante + " BOOLEAN NOT NULL, " +
             "FOREIGN KEY(" + atr_usu_id + ") REFERENCES " + table_usuarios + " (" + atr_usu_id + "));";
 
     public static final String CREAR_TABLA_ASISTENCIAS = "CREATE TABLE " + table_asistencia + " (" +
-            atr_asi_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_ins_id + " INTEGER NOT NULL, " +
+            atr_asi_id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + atr_ins_id + " INTEGER NOT NULL, " +
             atr_asi_fecha + " TEXT NOT NULL, " + atr_asi_estado + " BOOLEAN NOT NULL, " +
             atr_asi_observaciones + " TEXT, " +
             "FOREIGN KEY(" + atr_ins_id + ") REFERENCES " + table_inscritos + " (" + atr_ins_id + "));";

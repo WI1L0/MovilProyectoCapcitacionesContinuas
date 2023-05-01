@@ -8,17 +8,16 @@ public class MPrerequisitos {
     private Boolean estadoPrerequisitoCurso;
     private String nombrePrerequisitoCurso;
 
-
-    private List<MCursos> listcursos;
+    private MCursos mCursos;
 
     public MPrerequisitos() {
     }
 
-    public MPrerequisitos(int idPrerequisitoCurso, Boolean estadoPrerequisitoCurso, String nombrePrerequisitoCurso, List<MCursos> listcursos) {
+    public MPrerequisitos(int idPrerequisitoCurso, Boolean estadoPrerequisitoCurso, String nombrePrerequisitoCurso, MCursos mCursos) {
         this.idPrerequisitoCurso = idPrerequisitoCurso;
         this.estadoPrerequisitoCurso = estadoPrerequisitoCurso;
         this.nombrePrerequisitoCurso = nombrePrerequisitoCurso;
-        this.listcursos = listcursos;
+        this.mCursos = mCursos;
     }
 
     public int getIdPrerequisitoCurso() {
@@ -45,11 +44,11 @@ public class MPrerequisitos {
         this.nombrePrerequisitoCurso = nombrePrerequisitoCurso;
     }
 
-    public List<MCursos> getListcursos() {
-        return listcursos;
+    public MCursos getmCursos() {
+        return mCursos;
     }
 
-    public void setListcursos(List<MCursos> listcursos) {
-        this.listcursos = listcursos;
+    public void setmCursos(MCursos mCursos) {
+        this.mCursos = mCursos;
     }
 }

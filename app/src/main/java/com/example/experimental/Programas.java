@@ -13,6 +13,7 @@ import com.example.experimental.Adaptadores.ProgramasAdaptador;
 import com.example.experimental.DB.DataBase;
 import com.example.experimental.Modelos.MProgramas;
 import com.example.experimental.Utilidades.Atributos;
+import com.google.android.material.search.SearchView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Programas extends AppCompatActivity {
 
     //vista
     private RecyclerView recycleViewProgramas;
+    //private SearchView svprogramas;
 
 
     //use database
@@ -45,9 +47,11 @@ public class Programas extends AppCompatActivity {
 
         //vista
         recycleViewProgramas = (RecyclerView) findViewById(R.id.recicleProgramas);
+        //svprogramas = (SearchView) findViewById(R.id.svprogramas);
 
 
         consultarListaProgramas(id, rol);
+
     }
 
     private void consultarListaProgramas(int id, String rol) {
@@ -109,7 +113,7 @@ public class Programas extends AppCompatActivity {
 
     public void moveToDescription(MProgramas item, int id, String rol) {
         Intent intent = new Intent(this, Cursos.class);
-        intent.putExtra("MProgramas", item);
+        intent.putExtra("idPrograma", item.getIdPrograma());
         intent.putExtra("id", id);
         intent.putExtra("rol", rol);
         startActivity(intent);

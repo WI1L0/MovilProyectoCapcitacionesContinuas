@@ -10,14 +10,18 @@ public class MAsistencia implements Serializable {
     private Boolean estadoAsistencia;
     private String observacionAsistencia;
 
+
+    private MInscritos mInscritos;
+
     public MAsistencia() {
     }
 
-    public MAsistencia(int idAsistencia, String fechaAsistencia, Boolean estadoAsistencia, String observacionAsistencia) {
+    public MAsistencia(int idAsistencia, String fechaAsistencia, Boolean estadoAsistencia, String observacionAsistencia, MInscritos mInscritos) {
         this.idAsistencia = idAsistencia;
         this.fechaAsistencia = fechaAsistencia;
         this.estadoAsistencia = estadoAsistencia;
         this.observacionAsistencia = observacionAsistencia;
+        this.mInscritos = mInscritos;
     }
 
     public int getIdAsistencia() {
@@ -50,5 +54,13 @@ public class MAsistencia implements Serializable {
 
     public void setObservacionAsistencia(String observacionAsistencia) {
         this.observacionAsistencia = observacionAsistencia;
+    }
+
+    public MInscritos getmInscritos() {
+        return mInscritos;
+    }
+
+    public void setmInscritos(MInscritos mInscritos) {
+        this.mInscritos = mInscritos;
     }
 }

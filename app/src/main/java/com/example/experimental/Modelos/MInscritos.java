@@ -12,18 +12,23 @@ public class MInscritos implements Serializable {
     private Boolean estadoParticipanteAprobacion;
     private Boolean estadoParticipanteActivo;
 
-    private List<MAsistencia> listasistencia;
+
+    private List<MAsistencia> mAsistenciaList;
+    private MUsuario mUsuario;
+    private MCursos mCursos;
 
     public MInscritos() {
     }
 
-    public MInscritos(int idInscrito, Boolean estadoInscritoActivo, String fechaInscrito, Boolean estadoParticipanteAprobacion, Boolean estadoParticipanteActivo, List<MAsistencia> listasistencia) {
+    public MInscritos(int idInscrito, Boolean estadoInscritoActivo, String fechaInscrito, Boolean estadoParticipanteAprobacion, Boolean estadoParticipanteActivo, List<MAsistencia> mAsistenciaList, MUsuario mUsuario, MCursos mCursos) {
         this.idInscrito = idInscrito;
         this.estadoInscritoActivo = estadoInscritoActivo;
         this.fechaInscrito = fechaInscrito;
         this.estadoParticipanteAprobacion = estadoParticipanteAprobacion;
         this.estadoParticipanteActivo = estadoParticipanteActivo;
-        this.listasistencia = listasistencia;
+        this.mAsistenciaList = mAsistenciaList;
+        this.mUsuario = mUsuario;
+        this.mCursos = mCursos;
     }
 
     public int getIdInscrito() {
@@ -66,11 +71,27 @@ public class MInscritos implements Serializable {
         this.estadoParticipanteActivo = estadoParticipanteActivo;
     }
 
-    public List<MAsistencia> getListasistencia() {
-        return listasistencia;
+    public List<MAsistencia> getmAsistenciaList() {
+        return mAsistenciaList;
     }
 
-    public void setListasistencia(List<MAsistencia> listasistencia) {
-        this.listasistencia = listasistencia;
+    public void setmAsistenciaList(List<MAsistencia> mAsistenciaList) {
+        this.mAsistenciaList = mAsistenciaList;
+    }
+
+    public MUsuario getmUsuario() {
+        return mUsuario;
+    }
+
+    public void setmUsuario(MUsuario mUsuario) {
+        this.mUsuario = mUsuario;
+    }
+
+    public MCursos getmCursos() {
+        return mCursos;
+    }
+
+    public void setmCursos(MCursos mCursos) {
+        this.mCursos = mCursos;
     }
 }

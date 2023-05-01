@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
 
     public interface OnItemClickListener{
         void onItemClick(MCursos item);
+
+        void onItemClickDetalle(int item);
     }
 
     public CursosAdaptador (List<MCursos> itemList, Context context, CursosAdaptador.OnItemClickListener listener){
@@ -54,6 +57,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtnombre, txtduracion, txtmodalidad, txttipo, txtespecialidad, txtarea, txtfinicio, txtffin;
 
+        Button btndetalles;
+
         ViewHolder(View itemView){
             super(itemView);
             txtnombre = itemView.findViewById(R.id.txtvnombrecurso);
@@ -64,6 +69,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             txtarea = itemView.findViewById(R.id.txtvareacurso);
             txtfinicio = itemView.findViewById(R.id.txtvfechainiciocurso);
             txtffin = itemView.findViewById(R.id.txtvfechafincurso);
+
+            btndetalles = itemView.findViewById(R.id.btnDetallesCurso);
         }
 
         void bindData(final MCursos item, int position){
@@ -76,6 +83,13 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             txtarea.setText(item.getNombreArea());
             txtfinicio.setText(String.valueOf(item.getFechaInicioCurso()));
             txtffin.setText(String.valueOf(item.getFechaFinalizacionCurso()));
+
+            btndetalles.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClickDetalle(item.getIdCurso());
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

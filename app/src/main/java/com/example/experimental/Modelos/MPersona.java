@@ -19,12 +19,12 @@ public class MPersona implements Serializable {
     private String etnia;
 
 
-    private List<MUsuario> listusuario;
+    private List<MUsuario> mUsuarioList;
 
     public MPersona() {
     }
 
-    public MPersona(int idPersona, String identificacion, String nombre1, String nombre2, String apellido1, String apellido2, String correo, String telefono, String celular, String genero, String etnia, List<MUsuario> listusuario) {
+    public MPersona(int idPersona, String identificacion, String nombre1, String nombre2, String apellido1, String apellido2, String correo, String telefono, String celular, String genero, String etnia, List<MUsuario> mUsuarioList) {
         this.idPersona = idPersona;
         this.identificacion = identificacion;
         this.nombre1 = nombre1;
@@ -36,7 +36,7 @@ public class MPersona implements Serializable {
         this.celular = celular;
         this.genero = genero;
         this.etnia = etnia;
-        this.listusuario = listusuario;
+        this.mUsuarioList = mUsuarioList;
     }
 
     public int getIdPersona() {
@@ -127,11 +127,11 @@ public class MPersona implements Serializable {
         this.etnia = etnia;
     }
 
-    public List<MUsuario> getListusuario() {
-        return listusuario;
+    public List<MUsuario> getmUsuarioList() {
+        return mUsuarioList;
     }
 
-    public void setListusuario(List<MUsuario> listusuario) {
-        this.listusuario = listusuario;
+    public void setmUsuarioList(List<MUsuario> mUsuarioList) {
+        this.mUsuarioList = mUsuarioList;
     }
 }

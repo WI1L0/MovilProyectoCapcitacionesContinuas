@@ -11,17 +11,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.experimental.DB.DataBase;
+import com.example.experimental.DB.DataBaseTemporal;
 import com.example.experimental.DB.ImportData;
 import com.example.experimental.Utilidades.Atributos;
 
 public class MainActivity extends AppCompatActivity{
 
     //use database
-    private DataBase conection;
+    private DataBase conection1;
+    private DataBaseTemporal conection2;
 
 
     //vista
-    private Button btninicio, btndatos;
+    private Button btninicio, btndatos, btnbase;
     private EditText edtusername, edtpassword;
 
 
@@ -31,11 +33,13 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         //use database
-        conection = new DataBase(getApplicationContext());
+        conection1 = new DataBase(getApplicationContext());
+        conection2 = new DataBaseTemporal(getApplicationContext());
 
 
         //crear database
         SQLiteDatabase sdb = (new DataBase(MainActivity.this).getWritableDatabase());
+        SQLiteDatabase sdb2 = (new DataBaseTemporal(MainActivity.this).getWritableDatabase());
         if (sdb != null){
             Toast.makeText(this, "BASE DE DATOS CREADA", Toast.LENGTH_SHORT).show();
         } else {
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity{
         //vista
         btninicio = (Button) findViewById(R.id.btninicio);
         btndatos = (Button) findViewById(R.id.btndatos);
+        btnbase = (Button) findViewById(R.id.btndatabasetemporal);
 
         edtusername = (EditText) findViewById(R.id.editTextUserName);
         edtpassword = (EditText) findViewById(R.id.editTextPassword);
@@ -65,11 +70,23 @@ public class MainActivity extends AppCompatActivity{
                 importData.importarDatos();
             }
         });
+
+        btnbase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                t();
+            }
+        });
+    }
+
+    public void t(){
+        Intent intent = new Intent(this, Import.class);
+        startActivity(intent);
     }
 
     public void pasa(){
 
-        SQLiteDatabase db = conection.getReadableDatabase();
+        SQLiteDatabase db = conection1.getReadableDatabase();
 
         Cursor cursor1 = db.rawQuery("SELECT " + Atributos.atr_usu_id +
                         " FROM " + Atributos.table_usuarios +

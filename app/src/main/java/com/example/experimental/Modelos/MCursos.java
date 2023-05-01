@@ -2,6 +2,7 @@ package com.example.experimental.Modelos;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 public class MCursos implements Serializable {
 
@@ -25,10 +26,14 @@ public class MCursos implements Serializable {
     private String horaInicio;
     private String horaFin;
 
+
+    private List<MPrerequisitos> mPrerequisitosList;
+    private List<MUsuario> mUsuarioList;
+
     public MCursos() {
     }
 
-    public MCursos(int idCurso, String nombreCurso, String fotoCurso, int duracionCurso, String fechaInicioCurso, String fechaFinalizacionCurso, String observacionCurso, String descripcionCurso, int numeroCuposCurso, String objetivoGeneralesCurso, Boolean estadoCurso, Boolean estadoAprovacionCurso, Boolean estadoPublicasionCurso, String nombreEspecialidad, String nombreArea, String nombreTipoCurso, String nombreModalidadCurso, String horaInicio, String horaFin) {
+    public MCursos(int idCurso, String nombreCurso, String fotoCurso, int duracionCurso, String fechaInicioCurso, String fechaFinalizacionCurso, String observacionCurso, String descripcionCurso, int numeroCuposCurso, String objetivoGeneralesCurso, Boolean estadoCurso, Boolean estadoAprovacionCurso, Boolean estadoPublicasionCurso, String nombreEspecialidad, String nombreArea, String nombreTipoCurso, String nombreModalidadCurso, String horaInicio, String horaFin, List<MPrerequisitos> mPrerequisitosList, List<MUsuario> mUsuarioList) {
         this.idCurso = idCurso;
         this.nombreCurso = nombreCurso;
         this.fotoCurso = fotoCurso;
@@ -48,6 +53,8 @@ public class MCursos implements Serializable {
         this.nombreModalidadCurso = nombreModalidadCurso;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.mPrerequisitosList = mPrerequisitosList;
+        this.mUsuarioList = mUsuarioList;
     }
 
     public int getIdCurso() {
@@ -200,5 +207,21 @@ public class MCursos implements Serializable {
 
     public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
+    }
+
+    public List<MPrerequisitos> getmPrerequisitosList() {
+        return mPrerequisitosList;
+    }
+
+    public void setmPrerequisitosList(List<MPrerequisitos> mPrerequisitosList) {
+        this.mPrerequisitosList = mPrerequisitosList;
+    }
+
+    public List<MUsuario> getmUsuarioList() {
+        return mUsuarioList;
+    }
+
+    public void setmUsuarioList(List<MUsuario> mUsuarioList) {
+        this.mUsuarioList = mUsuarioList;
     }
 }

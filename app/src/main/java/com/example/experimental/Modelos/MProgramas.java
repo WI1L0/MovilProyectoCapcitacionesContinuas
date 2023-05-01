@@ -15,12 +15,12 @@ public class MProgramas implements Serializable {
     private Boolean estadoPeriodoPrograma;
 
 
-    private List<MCursos> listcursos;
+    private List<MCursos> mCursosList;
 
     public MProgramas() {
     }
 
-    public MProgramas(int idPrograma, String nombrePrograma, String nombrePeriodoPrograma, String fechaInicioPeriodoPrograma, String fechaFinPeriodoPrograma, Boolean estadoProgramaActivo, Boolean estadoPeriodoPrograma, List<MCursos> listcursos) {
+    public MProgramas(int idPrograma, String nombrePrograma, String nombrePeriodoPrograma, String fechaInicioPeriodoPrograma, String fechaFinPeriodoPrograma, Boolean estadoProgramaActivo, Boolean estadoPeriodoPrograma, List<MCursos> mCursosList) {
         this.idPrograma = idPrograma;
         this.nombrePrograma = nombrePrograma;
         this.nombrePeriodoPrograma = nombrePeriodoPrograma;
@@ -28,7 +28,7 @@ public class MProgramas implements Serializable {
         this.fechaFinPeriodoPrograma = fechaFinPeriodoPrograma;
         this.estadoProgramaActivo = estadoProgramaActivo;
         this.estadoPeriodoPrograma = estadoPeriodoPrograma;
-        this.listcursos = listcursos;
+        this.mCursosList = mCursosList;
     }
 
     public int getIdPrograma() {
@@ -87,11 +87,11 @@ public class MProgramas implements Serializable {
         this.estadoPeriodoPrograma = estadoPeriodoPrograma;
     }
 
-    public List<MCursos> getListcursos() {
-        return listcursos;
+    public List<MCursos> getmCursosList() {
+        return mCursosList;
     }
 
-    public void setListcursos(List<MCursos> listcursos) {
-        this.listcursos = listcursos;
+    public void setmCursosList(List<MCursos> mCursosList) {
+        this.mCursosList = mCursosList;
     }
 }

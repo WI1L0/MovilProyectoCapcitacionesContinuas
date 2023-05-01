@@ -15,7 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/textView5"
@@ -24,23 +25,39 @@
                 android:layout_weight="1"
                 android:text="TextView" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_email"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/editTextBuscar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:inputType="textEmailAddress"
+                    android:hint="."
+                    app:expandedHintEnabled="false"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/txtvfecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:hint="email"
                 android:layout_weight="1"
-                app:expandedHintEnabled="false">
+                android:text="TextView" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnfecha"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:inputType="textEmailAddress"
+                android:hint="."
+                app:expandedHintEnabled="false"/>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

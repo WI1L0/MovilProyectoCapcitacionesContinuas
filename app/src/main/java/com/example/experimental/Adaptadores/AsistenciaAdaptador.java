@@ -5,35 +5,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.experimental.Modelos.MAsistencia;
-import com.example.experimental.Modelos.MPersona;
+import com.example.experimental.Modelos.MInscritos;
 import com.example.experimental.R;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptador.ViewHolder> {
 
     MAsistencia mAsistencia;
+    MInscritos mInscritos;
 
-    private List<MPersona> mData;
+    private List<MInscritos> mData;
     private LayoutInflater mInflater;
     private Context context;
     final AsistenciaAdaptador.OnItemClickListener listener;
 
     public interface OnItemClickListener{
-        void onItemClick(MPersona item);
+        void onItemClick(MInscritos item);
 
         void obtenList(MAsistencia item);
     }
 
-    public AsistenciaAdaptador(List<MPersona> itemList, Context context, AsistenciaAdaptador.OnItemClickListener listener){
+    public AsistenciaAdaptador(List<MInscritos> itemList, Context context, AsistenciaAdaptador.OnItemClickListener listener){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mData = itemList;
@@ -56,13 +56,14 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
         holder.bindData(mData.get(position), position);
     }
 
-    public void setItems(List<MPersona> items){
+    public void setItems(List<MInscritos> items){
         mData = items;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtnombres, txtapellidos;
         Button btnasiste, btnnoasiste, btnobservacione;
+        EditText edtobservaciones;
 
         ViewHolder(View itemView){
             super(itemView);
@@ -71,49 +72,86 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
             btnasiste = itemView.findViewById(R.id.btnasisteasistencia);
             btnnoasiste = itemView.findViewById(R.id.btnnoasisteasistencia);
             btnobservacione = itemView.findViewById(R.id.btnobservacionesasistencia);
+            edtobservaciones = itemView.findViewById(R.id.editTextobservaciones);
         }
 
-        void bindData(final MPersona item, int position){
+        void bindData(final MInscritos item, int position){
 
-            txtnombres.setText(item.getNombre1() + ", " + item.getNombre2());
-            txtnombres.setText(item.getApellido1() + ", " + item.getApellido2());
+            txtnombres.setText(item.getmUsuario().getmPersona().getNombre1() + ", " + item.getmUsuario().getmPersona().getNombre2());
+            txtapellidos.setText(item.getmUsuario().getmPersona().getApellido1() + ", " + item.getmUsuario().getmPersona().getApellido2());
+            edtobservaciones.setText(item.getmAsistenciaList().get(0).getObservacionAsistencia());
+
+            btnasiste.setEnabled(true);
+            btnnoasiste.setEnabled(true);
+
+            if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
+                if (item.getmAsistenciaList().get(0).getEstadoAsistencia() == true) {
+                    btnasiste.setEnabled(false);
+                } else {
+                    btnnoasiste.setEnabled(false);
+                }
+            }
 
             btnasiste.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
 
                     mAsistencia = new MAsistencia();
+                    mInscritos = new MInscritos();
 
-                    mAsistencia.setIdAsistencia(item.getIdPersona());
+                    mInscritos.setIdInscrito(item.getIdInscrito());
+
                     mAsistencia.setEstadoAsistencia(true);
-                    mAsistencia.setFechaAsistencia("2023, 4, 26");
-                    mAsistencia.setObservacionAsistencia(item.getNombre1() + ", " + item.getNombre2() + ", " + item.getApellido1() + ", " + item.getApellido2());
+                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
+                    mAsistencia.setmInscritos(mInscritos);
+
+                    if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
+                        mAsistencia.setIdAsistencia(item.getmAsistenciaList().get(0).getIdAsistencia());
+                        mAsistencia.setFechaAsistencia(item.getmAsistenciaList().get(0).getFechaAsistencia());
+                    }
 
                     listener.obtenList(mAsistencia);
+
+                    btnasiste.setEnabled(false);
+                    btnnoasiste.setEnabled(true);
                 }
             });
 
             btnnoasiste.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "NO ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "NO ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
 
                     mAsistencia = new MAsistencia();
+                    mInscritos = new MInscritos();
 
-                    mAsistencia.setIdAsistencia(item.getIdPersona());
+                    mInscritos.setIdInscrito(item.getIdInscrito());
+
                     mAsistencia.setEstadoAsistencia(false);
-                    mAsistencia.setFechaAsistencia("2023, 4, 26");
-                    mAsistencia.setObservacionAsistencia(item.getNombre1() + ", " + item.getNombre2() + ", " + item.getApellido1() + ", " + item.getApellido2());
+                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
+                    mAsistencia.setmInscritos(mInscritos);
+
+                    if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
+                        mAsistencia.setIdAsistencia(item.getmAsistenciaList().get(0).getIdAsistencia());
+                        mAsistencia.setFechaAsistencia(item.getmAsistenciaList().get(0).getFechaAsistencia());
+                    }
 
                     listener.obtenList(mAsistencia);
+
+                    btnnoasiste.setEnabled(false);
+                    btnasiste.setEnabled(true);
                 }
             });
 
             btnobservacione.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "Observaciones uwu", Toast.LENGTH_SHORT).show();
+                    if (edtobservaciones.getVisibility() == View.VISIBLE) {
+                        edtobservaciones.setVisibility(View.INVISIBLE);
+                    } else {
+                        edtobservaciones.setVisibility(View.VISIBLE);
+                    }
                 }
             });
         }
