@@ -27,6 +27,14 @@
         android:id="@+id/btnimportdata"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="DESCARGAR"
         android:layout_margin="20dp" />
+
+    <Button
+        android:id="@+id/btnfinalizarimportdata"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="FINALIZAR"
+        android:layout_margin="20dp"
+        android:visibility="gone"/>
 </LinearLayout>

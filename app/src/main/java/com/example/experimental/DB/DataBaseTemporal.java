@@ -14,6 +14,7 @@ public class DataBaseTemporal extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(Atributos.CREAR_TABLA_CONTROL);
         db.execSQL(Atributos.CREAR_TABLA_PERSONAS);
         db.execSQL(Atributos.CREAR_TABLA_PROGRAMAS);
         db.execSQL(Atributos.CREAR_TABLA_USUARIOS);
@@ -34,6 +35,21 @@ public class DataBaseTemporal extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_USUARIOS);
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PROGRAMAS);
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PERSONAS);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_CONTROL);
         onCreate(db);
+    }
+
+    public void insercontrol(){
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_persona + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_programas + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_usuarios + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_capacitador + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_cursos + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_prerequisitos + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_inscritos + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_asistencia + "', " + false + ")");
     }
 }

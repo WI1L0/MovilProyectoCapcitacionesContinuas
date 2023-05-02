@@ -78,6 +78,9 @@ public class Atributos {
     public static final String atr_asi_estado = "estadoAsistencia";
     public static final String atr_asi_observaciones = "observacionAsistencia";
 
+    public static final String table_control = "control";
+    public static final String atr_con_table = "nametable";
+    public static final String atr_con_estado = "estado";
 
 
 
@@ -139,4 +142,7 @@ public class Atributos {
             atr_asi_fecha + " TEXT NOT NULL, " + atr_asi_estado + " BOOLEAN NOT NULL, " +
             atr_asi_observaciones + " TEXT, " +
             "FOREIGN KEY(" + atr_ins_id + ") REFERENCES " + table_inscritos + " (" + atr_ins_id + "));";
+
+    public static final String CREAR_TABLA_CONTROL = "CREATE TABLE " + table_control + " (" +
+            atr_con_table + " TEXT PRIMARY KEY, " + atr_con_estado + " BOOLEAN NOT NULL);";
 }

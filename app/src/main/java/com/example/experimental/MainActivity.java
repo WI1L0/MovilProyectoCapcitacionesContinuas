@@ -55,6 +55,12 @@ public class MainActivity extends AppCompatActivity{
         edtusername = (EditText) findViewById(R.id.editTextUserName);
         edtpassword = (EditText) findViewById(R.id.editTextPassword);
 
+        if //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
+            // control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_asistencia) == true) {
+
+        (control(Atributos.table_persona) == false && control(Atributos.table_usuarios) == false && control(Atributos.table_programas) == false && control(Atributos.table_capacitador) == false && control(Atributos.table_prerequisitos) == false) {
+            t();
+        }
 
         btninicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +90,7 @@ public class MainActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void pasa(){
-
+    public void pasa() {
         SQLiteDatabase db = conection1.getReadableDatabase();
 
         Cursor cursor1 = db.rawQuery("SELECT " + Atributos.atr_usu_id +
@@ -131,5 +136,16 @@ public class MainActivity extends AppCompatActivity{
 
         cursor1.close();
         db.close();
+    }
+
+    public Boolean control(String tab){
+        SQLiteDatabase db = conection1.getWritableDatabase();
+        Boolean estado = false;
+        Cursor cursor = db.query(Atributos.table_control, new String[]{"estado"}, "nametable = ?", new String[]{tab}, null, null, null);
+
+        while (cursor.moveToNext()) {
+            estado = cursor.getInt(0) == 1 ? true : false;
+        }
+        return estado;
     }
 }

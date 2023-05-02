@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -13,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.experimental.Import;
 import com.example.experimental.Utilidades.Atributos;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +28,6 @@ import java.util.Random;
 
 public class ImportData extends DataBaseTemporal {
 
-    private RequestQueue requestQueue;
     private Context conection;
     private ContentValues values;
     private String host = "192.168.100.31";
@@ -35,7 +36,6 @@ public class ImportData extends DataBaseTemporal {
     public ImportData(@NotNull Context context) {
         super(context);
         this.conection = context;
-        this.requestQueue = Volley.newRequestQueue(context);
     }
 
     public void importarDatos() {
@@ -50,57 +50,59 @@ public class ImportData extends DataBaseTemporal {
         cargarDatosTemporales();
     }
 
-    public boolean limpiartable(String table){
-        SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-        db.execSQL("DELETE FROM " + table);
-
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table, null);
-        int count = 0;
-        if (cursor.moveToFirst()) {
-            count = cursor.getInt(0);
-        }
-        cursor.close();
-
-        if (count == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean importarPersonas(){
+    public void importarPersonas(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/persona/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO PERSONA.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
 
-                        values = new ContentValues();
-                        values.put("idPersona", jsonObject.getInt("idPersona"));
-                        values.put("identificacion", jsonObject.getString("identificacion"));
-                        values.put("nombre1", jsonObject.getString("nombre1"));
-                        values.put("nombre2", jsonObject.getString("nombre2"));
-                        values.put("apellido1", jsonObject.getString("apellido1"));
-                        values.put("apellido2", jsonObject.getString("apellido2"));
-                        values.put("correo", jsonObject.getString("correo"));
-                        values.put("telefono", jsonObject.getString("telefono"));
-                        values.put("celular", jsonObject.getString("celular"));
-                        values.put("genero", jsonObject.getString("genero"));
-                        values.put("etnia", jsonObject.getString("etnia"));
+                            values = new ContentValues();
+                            values.put("idPersona", jsonObject.getInt("idPersona"));
+                            values.put("identificacion", jsonObject.getString("identificacion"));
+                            values.put("nombre1", jsonObject.getString("nombre1"));
+                            values.put("nombre2", jsonObject.getString("nombre2"));
+                            values.put("apellido1", jsonObject.getString("apellido1"));
+                            values.put("apellido2", jsonObject.getString("apellido2"));
+                            values.put("correo", jsonObject.getString("correo"));
+                            values.put("telefono", jsonObject.getString("telefono"));
+                            values.put("celular", jsonObject.getString("celular"));
+                            values.put("genero", jsonObject.getString("genero"));
+                            values.put("etnia", jsonObject.getString("etnia"));
 
-                        long resultado = db.insert(Atributos.table_persona, null, values);
-                        resultados.add(resultado);
+                            long resultado = db.insert(Atributos.table_persona, null, values);
 
-                        System.out.println(resultado + " PERSONA ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH PERSONA............................");
-                        throw new RuntimeException(e);
+                            System.out.println(resultado + " PERSONA ALMACENADA CORRECTAMENTE");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                        listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -108,6 +110,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL PERSONA............................");
                 System.out.println(error.getMessage());
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -115,46 +118,61 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public boolean importarUsuarios(){
+    public void importarUsuarios(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/usuario/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO USUARIO.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                        JSONObject jsonObjectIdPersona = new JSONObject(jsonObject.get("persona").toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectIdPersona = new JSONObject(jsonObject.get("persona").toString());
 
-                        values = new ContentValues();
-                        values.put("idUsuario", jsonObject.getInt("idUsuario"));
-                        values.put("username", jsonObject.getString("username"));
-                        values.put("password", jsonObject.getString("password"));
-                        //values.put("fotoPerfil", jsonObject.getString("fotoPerfil"));
-                        values.put("estadoUsuarioActivo", jsonObject.getBoolean("estadoUsuarioActivo"));
-                        values.put("idPersona", jsonObjectIdPersona.getInt("idPersona"));
+                            values = new ContentValues();
+                            values.put("idUsuario", jsonObject.getInt("idUsuario"));
+                            values.put("username", jsonObject.getString("username"));
+                            values.put("password", jsonObject.getString("password"));
+                            //values.put("fotoPerfil", jsonObject.getString("fotoPerfil"));
+                            values.put("estadoUsuarioActivo", jsonObject.getBoolean("estadoUsuarioActivo"));
+                            values.put("idPersona", jsonObjectIdPersona.getInt("idPersona"));
 
-                        long resultado = db.insert(Atributos.table_usuarios, null, values);
-                        resultados.add(resultado);
+                            long resultado = db.insert(Atributos.table_usuarios, null, values);
 
-                        System.out.println(resultado + " USUARIO ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH USUARIO............................");
-                        throw new RuntimeException(e);
+                            System.out.println(resultado + " USUARIO ALMACENADA CORRECTAMENTE");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -162,6 +180,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL USUARIO............................");
                 System.out.println(error.getMessage());
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -169,45 +188,60 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public boolean importarCapacitador(){
+    public void importarCapacitador(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/capacitador/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO CAPACITADOR.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                        JSONObject jsonObjectIdUsuario = new JSONObject(jsonObject.get("usuario").toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectIdUsuario = new JSONObject(jsonObject.get("usuario").toString());
 
 
-                        values = new ContentValues();
-                        values.put("idCapacitador", jsonObject.getInt("idCapacitador"));
-                        values.put("estadoActivoCapacitador", jsonObject.getBoolean("estadoActivoCapacitador"));
-                        values.put("tituloCapacitador", jsonObject.getString("tituloCapacitador"));
-                        values.put("idUsuario", jsonObjectIdUsuario.getInt("idUsuario"));
+                            values = new ContentValues();
+                            values.put("idCapacitador", jsonObject.getInt("idCapacitador"));
+                            values.put("estadoActivoCapacitador", jsonObject.getBoolean("estadoActivoCapacitador"));
+                            values.put("tituloCapacitador", jsonObject.getString("tituloCapacitador"));
+                            values.put("idUsuario", jsonObjectIdUsuario.getInt("idUsuario"));
 
-                        long resultado = db.insert(Atributos.table_capacitador, null, values);
-                        resultados.add(resultado);
+                            long resultado = db.insert(Atributos.table_capacitador, null, values);
 
-                        System.out.println(resultado + " CAPACITADOR ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH CAPACITADOR............................");
-                        throw new RuntimeException(e);
+                            System.out.println(resultado + " CAPACITADOR ALMACENADA CORRECTAMENTE");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -215,6 +249,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL CAPACITADOR............................");
                 System.out.println(error.getMessage());
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -222,47 +257,62 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public boolean importarProgramas(){
+    public void importarProgramas(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/programa/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO PROGRAMA.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                        JSONObject jsonObjectPeriodoProgramas = new JSONObject(jsonObject.get("periodoPrograma").toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectPeriodoProgramas = new JSONObject(jsonObject.get("periodoPrograma").toString());
 
-                        values = new ContentValues();
-                        values.put("idPrograma", jsonObject.getInt("idPrograma"));
-                        values.put("nombrePrograma", jsonObject.getString("nombrePrograma"));
-                        values.put("estadoProgramaActivo", jsonObject.getBoolean("estadoProgramaActivo"));
-                        values.put("estadoPeriodoPrograma", jsonObjectPeriodoProgramas.getBoolean("estadoPeriodoPrograma"));
-                        values.put("fechaInicioPeriodoPrograma", jsonObjectPeriodoProgramas.getString("fechaInicioPeriodoPrograma"));
-                        values.put("fechaFinPeriodoPrograma", jsonObjectPeriodoProgramas.getString("fechaFinPeriodoPrograma"));
-                        values.put("nombrePeriodoPrograma", jsonObjectPeriodoProgramas.getString("nombrePeriodoPrograma"));
+                            values = new ContentValues();
+                            values.put("idPrograma", jsonObject.getInt("idPrograma"));
+                            values.put("nombrePrograma", jsonObject.getString("nombrePrograma"));
+                            values.put("estadoProgramaActivo", jsonObject.getBoolean("estadoProgramaActivo"));
+                            values.put("estadoPeriodoPrograma", jsonObjectPeriodoProgramas.getBoolean("estadoPeriodoPrograma"));
+                            values.put("fechaInicioPeriodoPrograma", jsonObjectPeriodoProgramas.getString("fechaInicioPeriodoPrograma"));
+                            values.put("fechaFinPeriodoPrograma", jsonObjectPeriodoProgramas.getString("fechaFinPeriodoPrograma"));
+                            values.put("nombrePeriodoPrograma", jsonObjectPeriodoProgramas.getString("nombrePeriodoPrograma"));
 
-                        long resultado = db.insert(Atributos.table_programas, null, values);
-                                resultados.add(resultado);
+                            long resultado = db.insert(Atributos.table_programas, null, values);
 
-                        System.out.println(resultado + " PROGRAMA ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH PROGRAMA............................");
-                        throw new RuntimeException(e);
+                            System.out.println(resultado + " PROGRAMA ALMACENADA CORRECTAMENTE");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -270,6 +320,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL PROGRAMA............................");
                 System.out.println(error.getMessage());
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -277,73 +328,87 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public boolean importarCursos(){
+    public void importarCursos(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/curso/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO CURSO.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                        JSONObject jsonObjectEspecialidadCursos = new JSONObject(jsonObject.get("especialidad").toString());
-                        JSONObject jsonObjectAreaCursos = new JSONObject(jsonObjectEspecialidadCursos.get("area").toString());
-                        JSONObject jsonObjectTipoCursos = new JSONObject(jsonObject.get("tipoCurso").toString());
-                        JSONObject jsonObjectModalidadCursos = new JSONObject(jsonObject.get("modalidadCurso").toString());
-                        JSONObject jsonObjectHorarioCursos = new JSONObject(jsonObject.get("horarioCurso").toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectEspecialidadCursos = new JSONObject(jsonObject.get("especialidad").toString());
+                            JSONObject jsonObjectAreaCursos = new JSONObject(jsonObjectEspecialidadCursos.get("area").toString());
+                            JSONObject jsonObjectTipoCursos = new JSONObject(jsonObject.get("tipoCurso").toString());
+                            JSONObject jsonObjectModalidadCursos = new JSONObject(jsonObject.get("modalidadCurso").toString());
+                            JSONObject jsonObjectHorarioCursos = new JSONObject(jsonObject.get("horarioCurso").toString());
 
 
-                        JSONObject jsonObjectIdCapacitador = new JSONObject(jsonObject.get("capacitador").toString());
-                        JSONObject jsonObjectIdProgramas = new JSONObject(jsonObject.get("programas").toString());
+                            JSONObject jsonObjectIdCapacitador = new JSONObject(jsonObject.get("capacitador").toString());
+                            JSONObject jsonObjectIdProgramas = new JSONObject(jsonObject.get("programas").toString());
 
 
+                            values = new ContentValues();
+                            values.put("idCurso", jsonObject.getInt("idCurso"));
+                            values.put("nombreCurso", jsonObject.getString("nombreCurso"));
+                            //values.put("fotoCurso", jsonObject.getString("fotoCurso"));
+                            values.put("duracionCurso", jsonObject.getInt("duracionCurso"));
+                            values.put("observacionCurso", jsonObject.getString("observacionCurso"));
+                            values.put("estadoCurso", jsonObject.getBoolean("estadoCurso"));
+                            values.put("estadoAprovacionCurso", jsonObject.getString("estadoAprovacionCurso"));
+                            values.put("estadoPublicasionCurso", jsonObject.getBoolean("estadoPublicasionCurso"));
+                            values.put("descripcionCurso", jsonObject.getString("descripcionCurso"));
+                            values.put("objetivoGeneralesCurso", jsonObject.getString("objetivoGeneralesCurso"));
+                            values.put("numeroCuposCurso", jsonObject.getInt("numeroCuposCurso"));
+                            values.put("fechaInicioCurso", jsonObject.getString("fechaInicioCurso"));
+                            values.put("fechaFinalizacionCurso", jsonObject.getString("fechaFinalizacionCurso"));
 
-                        values = new ContentValues();
-                        values.put("idCurso", jsonObject.getInt("idCurso"));
-                        values.put("nombreCurso", jsonObject.getString("nombreCurso"));
-                        //values.put("fotoCurso", jsonObject.getString("fotoCurso"));
-                        values.put("duracionCurso", jsonObject.getInt("duracionCurso"));
-                        values.put("observacionCurso", jsonObject.getString("observacionCurso"));
-                        values.put("estadoCurso", jsonObject.getBoolean("estadoCurso"));
-                        values.put("estadoAprovacionCurso", jsonObject.getString("estadoAprovacionCurso"));
-                        values.put("estadoPublicasionCurso", jsonObject.getBoolean("estadoPublicasionCurso"));
-                        values.put("descripcionCurso", jsonObject.getString("descripcionCurso"));
-                        values.put("objetivoGeneralesCurso", jsonObject.getString("objetivoGeneralesCurso"));
-                        values.put("numeroCuposCurso", jsonObject.getInt("numeroCuposCurso"));
-                        values.put("fechaInicioCurso", jsonObject.getString("fechaInicioCurso"));
-                        values.put("fechaFinalizacionCurso", jsonObject.getString("fechaFinalizacionCurso"));
+                            values.put("nombreEspecialidad", jsonObjectEspecialidadCursos.getString("nombreEspecialidad"));
+                            values.put("nombreArea", jsonObjectAreaCursos.getString("nombreArea"));
+                            values.put("nombreTipoCurso", jsonObjectTipoCursos.getString("nombreTipoCurso"));
+                            values.put("nombreModalidadCurso", jsonObjectModalidadCursos.getString("nombreModalidadCurso"));
+                            values.put("horaInicio", jsonObjectHorarioCursos.getString("horaInicio"));
+                            values.put("horaFin", jsonObjectHorarioCursos.getString("horaFin"));
 
-                        values.put("nombreEspecialidad", jsonObjectEspecialidadCursos.getString("nombreEspecialidad"));
-                        values.put("nombreArea", jsonObjectAreaCursos.getString("nombreArea"));
-                        values.put("nombreTipoCurso", jsonObjectTipoCursos.getString("nombreTipoCurso"));
-                        values.put("nombreModalidadCurso", jsonObjectModalidadCursos.getString("nombreModalidadCurso"));
-                        values.put("horaInicio", jsonObjectHorarioCursos.getString("horaInicio"));
-                        values.put("horaFin", jsonObjectHorarioCursos.getString("horaFin"));
+                            values.put("idCapacitador", jsonObjectIdCapacitador.getInt("idCapacitador"));
+                            values.put("idPrograma", jsonObjectIdProgramas.getInt("idPrograma"));
 
-                        values.put("idCapacitador", jsonObjectIdCapacitador.getInt("idCapacitador"));
-                        values.put("idPrograma", jsonObjectIdProgramas.getInt("idPrograma"));
+                            long resultado = db.insert(Atributos.table_cursos, null, values);
 
-                        long resultado = db.insert(Atributos.table_cursos, null, values);
-                        resultados.add(resultado);
+                            System.out.println(resultado + " CURSO ALMACENADA CORRECTAMENTE");
 
-                        System.out.println(resultado + " CURSO ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH CURSO............................");
-                        throw new RuntimeException(e);
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -351,6 +416,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL CURSO............................");
                 System.out.println(error.getMessage());
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -358,44 +424,59 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public boolean importarPrerequisitos(){
+    public void importarPrerequisitos(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/prerequisitoCurso/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO PREREQUISITO.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                        JSONObject jsonObjectIdCurso = new JSONObject(jsonObject.get("curso").toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectIdCurso = new JSONObject(jsonObject.get("curso").toString());
 
-                        values = new ContentValues();
-                        values.put("idPrerequisitoCurso", jsonObject.getInt("idPrerequisitoCurso"));
-                        values.put("nombrePrerequisitoCurso", jsonObject.getString("nombrePrerequisitoCurso"));
-                        values.put("estadoPrerequisitoCurso", jsonObject.getBoolean("estadoPrerequisitoCurso"));
-                        values.put("idCurso", jsonObjectIdCurso.getInt("idCurso"));
+                            values = new ContentValues();
+                            values.put("idPrerequisitoCurso", jsonObject.getInt("idPrerequisitoCurso"));
+                            values.put("nombrePrerequisitoCurso", jsonObject.getString("nombrePrerequisitoCurso"));
+                            values.put("estadoPrerequisitoCurso", jsonObject.getBoolean("estadoPrerequisitoCurso"));
+                            values.put("idCurso", jsonObjectIdCurso.getInt("idCurso"));
 
-                        long resultado = db.insert(Atributos.table_prerequisitos, null, values);
-                        resultados.add(resultado);
+                            long resultado = db.insert(Atributos.table_prerequisitos, null, values);
 
-                        System.out.println(resultado + " PREREQUISITOS ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH PREREQUISITO............................");
-                        throw new RuntimeException(e);
+                            System.out.println(resultado + " PREREQUISITOS ALMACENADA CORRECTAMENTE");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -403,6 +484,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL PREREQUISITO............................");
                 error.printStackTrace();
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -410,54 +492,69 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public boolean importarInscrito(){
+    public void importarInscrito(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/inscritocurso/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO INSCRITOS.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
 
-                        values = new ContentValues();
-                        values.put("idInscrito", jsonObject.getInt("idInscrito"));
-                        values.put("fechaInscrito", jsonObject.getString("fechaInscrito"));
-                        values.put("estadoInscritoActivo", jsonObject.getBoolean("estadoInscritoActivo"));
-                        values.put("estadoParticipanteAprobacion", "cur");
-                        values.put("estadoParticipanteActivo", false);
+                            values = new ContentValues();
+                            values.put("idInscrito", jsonObject.getInt("idInscrito"));
+                            values.put("fechaInscrito", jsonObject.getString("fechaInscrito"));
+                            values.put("estadoInscritoActivo", jsonObject.getBoolean("estadoInscritoActivo"));
+                            values.put("estadoParticipanteAprobacion", "cur");
+                            values.put("estadoParticipanteActivo", false);
 
-                        values.put("idCurso", jsonObject.getInt("idCurso"));
+                            values.put("idCurso", jsonObject.getInt("idCurso"));
 
-                        long resultado = db.insert(Atributos.table_inscritos, null, values);
-                        resultados.add(resultado);
+                            long resultado = db.insert(Atributos.table_inscritos, null, values);
 
-                        System.out.println(resultado + " INSCRITOS ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH INSCRITOS............................");
-                        throw new RuntimeException(e);
+                            System.out.println(resultado + " INSCRITOS ALMACENADA CORRECTAMENTE");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
-                importarParticipanteMatriculado();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL INSCRITOS............................");
                 error.printStackTrace();
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -465,43 +562,60 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public void importarParticipanteMatriculado(){
+    public void importarParticipanteMatriculado(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/participantesMatriculados/listar";
+        final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO PARTICIPANTE.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                        JSONObject jsonObjectIdInscrito = new JSONObject(jsonObject.get("inscrito").toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectIdInscrito = new JSONObject(jsonObject.get("inscrito").toString());
 
-                        Boolean est = jsonObject.getBoolean("estadoParticipanteActivo");
-                        int estint = est ? 1 : 0;
+                            Boolean est = jsonObject.getBoolean("estadoParticipanteActivo");
+                            int estint = est ? 1 : 0;
 
-                        String sql = "UPDATE inscritos SET estadoParticipanteAprobacion = ?, estadoParticipanteActivo = ? WHERE idInscrito = ?";
-                        SQLiteStatement statement = db.compileStatement(sql);
-                        statement.bindString(1, jsonObject.getString("estadoParticipanteAprobacion"));
-                        statement.bindLong(2, estint);
-                        statement.bindLong(3, jsonObjectIdInscrito.getInt("idInscrito"));
-                        statement.execute();
-                        System.out.println("PARTICIPANTE ALMACENADA CORRECTAMENTE.....................................");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH PARTICIPANTE............................");
-                        throw new RuntimeException(e);
+                            String sql = "UPDATE inscritos SET estadoParticipanteAprobacion = ?, estadoParticipanteActivo = ? WHERE idInscrito = ?";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1, jsonObject.getString("estadoParticipanteAprobacion"));
+                            statement.bindLong(2, estint);
+                            statement.bindLong(3, jsonObjectIdInscrito.getInt("idInscrito"));
+                            long resultado = statement.executeUpdateDelete();
+                            System.out.println("PARTICIPANTE ALMACENADA CORRECTAMENTE.....................................");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -509,6 +623,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL PARTICIPANTE............................");
                 System.out.println(error.getMessage());
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -516,37 +631,60 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
+
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
-    public boolean importarAsistencia(){
+    public void importarAsistencia(final OnImportListener listener){
         String uri = "http://" + host + ":8080/api/asistencia/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 System.out.println("CARGANDO ASISTENCIA.....................................");
-                SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
-                for (int a = 0; a < response.length(); a++) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                        JSONObject jsonObjectIdInscrito = new JSONObject(jsonObject.get("inscrito").toString());
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectIdInscrito = new JSONObject(jsonObject.get("inscrito").toString());
 
-                        values = new ContentValues();
-                        values.put("idAsistencia", jsonObject.getInt("idAsistencia"));
-                        values.put("fechaInscrito", jsonObject.getString("fechaAsistencia"));
-                        values.put("estadoAsistencia", jsonObject.getBoolean("estadoAsistencia"));
-                        values.put("observacionAsistencia", jsonObject.getString("observacionAsistencia"));
-                        values.put("idInscrito", jsonObjectIdInscrito.getInt("idInscrito"));
+                            values = new ContentValues();
+                            values.put("idAsistencia", jsonObject.getInt("idAsistencia"));
+                            values.put("fechaInscrito", jsonObject.getString("fechaAsistencia"));
+                            values.put("estadoAsistencia", jsonObject.getBoolean("estadoAsistencia"));
+                            values.put("observacionAsistencia", jsonObject.getString("observacionAsistencia"));
+                            values.put("idInscrito", jsonObjectIdInscrito.getInt("idInscrito"));
 
-                        long resultado = db.insert(Atributos.table_asistencia, null, values);
-                        resultados.add(resultado);
+                            long resultado = db.insert(Atributos.table_asistencia, null, values);
 
-                        System.out.println(resultado + " ASISTENCIA ALMACENADA CORRECTAMENTE");
-                    } catch (JSONException e) {
-                        System.out.println("ERROR CATH ASISTENCIA............................");
-                        throw new RuntimeException(e);
+                            System.out.println(resultado + " ASISTENCIA ALMACENADA CORRECTAMENTE");
+
+                            resultados.add(resultado);
+
+                            boolean exito = true;
+                            for (long result : resultados) {
+                                if (result == -1) {
+                                    exito = false;
+                                    break;
+                                }
+                            }
+
+                            if (exito) {
+                                listener.onImportExito(response.length());
+                            } else {
+                                listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
                     }
+                } else {
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -554,6 +692,7 @@ public class ImportData extends DataBaseTemporal {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("ERROR FINAL ASISTENCIA............................");
                 error.printStackTrace();
+                listener.onImportError();
             }
         });
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -561,15 +700,10 @@ public class ImportData extends DataBaseTemporal {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(jsonArrayRequest);
 
-        for (long resultado : resultados) {
-            if (resultado == -1) {
-                return false;
-            }
-        }
-
-        return true;
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
     }
 
     public void cargarDatosTemporales(){
