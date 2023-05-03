@@ -22,6 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -137,13 +140,15 @@ public class ImportData extends DataBaseTemporal {
                         try {
                             JSONObject jsonObject = new JSONObject(response.get(a).toString());
                             JSONObject jsonObjectIdPersona = new JSONObject(jsonObject.get("persona").toString());
+                            JSONObject jsonObjectRol = new JSONObject(jsonObject.get("rol").toString());
 
                             values = new ContentValues();
                             values.put("idUsuario", jsonObject.getInt("idUsuario"));
                             values.put("username", jsonObject.getString("username"));
                             values.put("password", jsonObject.getString("password"));
-                            //values.put("fotoPerfil", jsonObject.getString("fotoPerfil"));
+                            values.put("fotoPerfil", jsonObject.getString("fotoPerfil"));
                             values.put("estadoUsuarioActivo", jsonObject.getBoolean("estadoUsuarioActivo"));
+                            values.put("nombreRol", jsonObjectRol.getString("nombreRol"));
                             values.put("idPersona", jsonObjectIdPersona.getInt("idPersona"));
 
                             long resultado = db.insert(Atributos.table_usuarios, null, values);
@@ -360,7 +365,7 @@ public class ImportData extends DataBaseTemporal {
                             values = new ContentValues();
                             values.put("idCurso", jsonObject.getInt("idCurso"));
                             values.put("nombreCurso", jsonObject.getString("nombreCurso"));
-                            //values.put("fotoCurso", jsonObject.getString("fotoCurso"));
+                            values.put("fotoCurso", jsonObject.getString("fotoCurso"));
                             values.put("duracionCurso", jsonObject.getInt("duracionCurso"));
                             values.put("observacionCurso", jsonObject.getString("observacionCurso"));
                             values.put("estadoCurso", jsonObject.getBoolean("estadoCurso"));
@@ -446,8 +451,8 @@ public class ImportData extends DataBaseTemporal {
 
                             values = new ContentValues();
                             values.put("idPrerequisitoCurso", jsonObject.getInt("idPrerequisitoCurso"));
-                            values.put("nombrePrerequisitoCurso", jsonObject.getString("nombrePrerequisitoCurso"));
                             values.put("estadoPrerequisitoCurso", jsonObject.getBoolean("estadoPrerequisitoCurso"));
+                            values.put("nombrePrerequisitoCurso", jsonObject.getString("nombrePrerequisitoCurso"));
                             values.put("idCurso", jsonObjectIdCurso.getInt("idCurso"));
 
                             long resultado = db.insert(Atributos.table_prerequisitos, null, values);
@@ -514,8 +519,9 @@ public class ImportData extends DataBaseTemporal {
                             values = new ContentValues();
                             values.put("idInscrito", jsonObject.getInt("idInscrito"));
                             values.put("fechaInscrito", jsonObject.getString("fechaInscrito"));
+                            values.put("estadoInscrito", jsonObject.getBoolean("estadoInscrito"));
                             values.put("estadoInscritoActivo", jsonObject.getBoolean("estadoInscritoActivo"));
-                            values.put("estadoParticipanteAprobacion", "cur");
+                            values.put("estadoParticipanteAprobacion", "p");
                             values.put("estadoParticipanteActivo", false);
 
                             values.put("idCurso", jsonObject.getInt("idCurso"));
@@ -748,6 +754,7 @@ public class ImportData extends DataBaseTemporal {
             values.put("username", "admin" + a);
             values.put("password", "root" + a);
             //values.put("fotoPerfil", "fotoPerfil " + a);
+            values.put("nombreRol", "fotoPerfil " + a);
             if(a > 9500) {
                 values.put("estadoUsuarioActivo", false);
             } else {
@@ -781,7 +788,7 @@ public class ImportData extends DataBaseTemporal {
     public void cargarDatosTemporalesCapacitadores(){
         SQLiteDatabase db = (new DataBase(conection)).getWritableDatabase();
         Random random = new Random();
-        for (int a = 1; a < 200; a++) {
+        for (int a = 1; a < 5; a++) {
 
 
             values = new ContentValues();
@@ -797,23 +804,24 @@ public class ImportData extends DataBaseTemporal {
     public void cargarDatosTemporalesCursos(){
         SQLiteDatabase db = (new DataBase(conection)).getWritableDatabase();
         Random random = new Random();
-        for (int a = 1; a < 1000; a++) {
+        for (int a = 1; a < 50; a++) {
 
 
             values = new ContentValues();
+            String fec[] = fechasAleatorias();
             values.put("idCurso", a);
             values.put("nombreCurso", "nombreCurso " + a);
             values.put("fotoCurso", "fotoCurso " + a);
-            values.put("duracionCurso", a);
+            values.put("duracionCurso", Integer.parseInt(fec[2]));
             values.put("observacionCurso", "observacionCurso " + a);
             values.put("estadoCurso", true);
-            values.put("estadoAprovacionCurso", true);
+            values.put("estadoAprovacionCurso", "p");
             values.put("estadoPublicasionCurso", true);
             values.put("descripcionCurso", "descripcionCurso " + a);
             values.put("objetivoGeneralesCurso", "objetivoGeneralesCurso " + a);
             values.put("numeroCuposCurso", a);
-            values.put("fechaInicioCurso", "fechaInicioCurso " + a);
-            values.put("fechaFinalizacionCurso", "fechaFinalizacionCurso " + a);
+            values.put("fechaInicioCurso", fec[0]);
+            values.put("fechaFinalizacionCurso", fec[1]);
 
             values.put("nombreEspecialidad", "nombreEspecialidad " + a);
             values.put("nombreArea", "nombreArea " + a);
@@ -824,16 +832,45 @@ public class ImportData extends DataBaseTemporal {
 
 
             values.put("idPrograma", random.nextInt(10) + 1);
-            values.put("idCapacitador", random.nextInt(200) + 1);
+            values.put("idCapacitador", random.nextInt(5) + 1);
             System.out.println(String.valueOf(db.insert(Atributos.table_cursos, null, values)) + " CURSO ALMACENADA CORRECTAMENTE");
         }
     }
 
+    public String[] fechasAleatorias(){
+        String fech[] = new String[3];
+        Random random = new Random();
+        LocalDate fecha1, fecha2;
+        do {
+            int year1 = random.nextInt(3) + 2021;
+            int year2 = random.nextInt(3) + 2022;
+            int month1 = random.nextInt(12) + 1;
+            int month2 = random.nextInt(12) + 1;
+            int maxDay1 = YearMonth.of(year1, month1).lengthOfMonth();
+            int maxDay2 = YearMonth.of(year2, month2).lengthOfMonth();
+            int day1 = random.nextInt(maxDay1) + 1;
+            int day2 = random.nextInt(maxDay2) + 1;
+            fecha1 = LocalDate.of(year1, month1, day1);
+            fecha2 = LocalDate.of(year2, month2, day2);
+        } while (fecha1.compareTo(fecha2) <= 0);
+
+        long diasFaltantes = ChronoUnit.DAYS.between(fecha2, fecha1);
+
+        fech[0] = String.valueOf(fecha1);
+        fech[1] = String.valueOf(fecha2);
+        fech[2] = String.valueOf(diasFaltantes);
+
+        System.out.println(fech[0] + "  fffffffffffffffffffffffffff");
+        System.out.println(fech[1] + "  fffffffffffffffffffffffffff");
+        System.out.println(fech[2] + "  fffffffffffffffffffffffffff");
+
+        return fech;
+    }
 
     public void cargarDatosTemporalesPrerequisitos(){
         SQLiteDatabase db = (new DataBase(conection)).getWritableDatabase();
         Random random = new Random();
-        for (int a = 1; a < 3000; a++) {
+        for (int a = 1; a < 1000; a++) {
 
 
             values = new ContentValues();
@@ -841,7 +878,7 @@ public class ImportData extends DataBaseTemporal {
             values.put("estadoPrerequisitoCurso", true);
             values.put("nombrePrerequisitoCurso", "nombrePrerequisitoCurso " + a);
 
-            values.put("idCurso", random.nextInt(1000) + 1);
+            values.put("idCurso", random.nextInt(50) + 1);
             System.out.println(String.valueOf(db.insert(Atributos.table_prerequisitos, null, values)) + " PREREQUISITOS ALMACENADA CORRECTAMENTE");
         }
     }
@@ -850,20 +887,21 @@ public class ImportData extends DataBaseTemporal {
         SQLiteDatabase db = (new DataBase(conection)).getWritableDatabase();
         Random random = new Random();
 
-        int cont = 1;
+        int cont = 6;
 
-        for (int a = 1; a < 1000; a++) {
+        for (int a = 1; a < 50; a++) {
 
-            int[] numeros = random.ints(200, 10000) // Genera números aleatorios entre 200 (inclusive) y 301 (exclusivo)
+            int[] numeros = random.ints(6, 10000)
                     .distinct()
                     .limit(20)
                     .toArray();
 
             for (int e = 1; e < 20; e++) {
-                if (cont <= 1800) {
+                if (cont <= 10000) {
                     values = new ContentValues();
                     values.put("idInscrito", cont);
                     values.put("fechaInscrito", "fechaInscrito " + a);
+                    values.put("estadoInscrito", true);
                     values.put("estadoInscritoActivo", true);
                     values.put("estadoParticipanteAprobacion", "cur");
                     values.put("estadoParticipanteActivo", true); //(random.nextInt(2) + 1) == 1 ? true : false));

@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity{
         if //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
             // control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_asistencia) == true) {
 
-        (control(Atributos.table_persona) == false && control(Atributos.table_usuarios) == false && control(Atributos.table_programas) == false && control(Atributos.table_capacitador) == false && control(Atributos.table_prerequisitos) == false) {
-            t();
+        (control(Atributos.table_persona) == false && control(Atributos.table_usuarios) == false && control(Atributos.table_programas) == false && control(Atributos.table_capacitador) == false) {
+            //t();
         }
 
         btninicio.setOnClickListener(new View.OnClickListener() {
@@ -93,47 +93,51 @@ public class MainActivity extends AppCompatActivity{
     public void pasa() {
         SQLiteDatabase db = conection1.getReadableDatabase();
 
-        Cursor cursor1 = db.rawQuery("SELECT " + Atributos.atr_usu_id +
+        Cursor cursor1 = db.rawQuery("SELECT " + Atributos.atr_usu_id + ", " + Atributos.atr_usu_rol +
                         " FROM " + Atributos.table_usuarios +
                         " WHERE " + Atributos.atr_usu_user + " = ? AND " + Atributos.atr_usu_paswork + " = ? AND " + Atributos.atr_usu_estado_activo + " = '1';",
                 new String[]{edtusername.getText().toString(), edtpassword.getText().toString()});
 
-        if (cursor1.moveToFirst()) {
-            int id_usu = cursor1.getInt(0);
 
-            Cursor cursor2 = db.rawQuery("SELECT " + Atributos.atr_cap_id + ", " + Atributos.atr_cap_estado_capacitador +
-                            " FROM " + Atributos.table_capacitador +
-                            " WHERE " + Atributos.atr_usu_id + " = ? ;",
-                    new String[]{String.valueOf(id_usu)});
+            if (cursor1.moveToFirst()) {
+                int id_usu = cursor1.getInt(0);
 
-            if (cursor2.moveToFirst()) {
-
-                if (cursor2.getInt(1) == 1) {
-                    Toast.makeText(this, "Bienvenido Capacitador", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(this, Programas.class);
-                    intent.putExtra("id", cursor2.getInt(0));
-                    intent.putExtra("rol", "capacitador");
-                    startActivity(intent);
+                if (cursor1.getString(1).equals("Administrador")){
+                    Toast.makeText(this, "Acceso denegado", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Usted esta bloqueado", Toast.LENGTH_SHORT).show();
+
+                    Cursor cursor2 = db.rawQuery("SELECT " + Atributos.atr_cap_id + ", " + Atributos.atr_cap_estado_capacitador + " FROM " + Atributos.table_capacitador +
+                                    " WHERE " + Atributos.atr_usu_id + " = ?;",
+                            new String[]{String.valueOf(id_usu)});
+
+                    if (cursor2.moveToFirst()) {
+
+                        if (cursor2.getInt(1) == 1) {
+                            Toast.makeText(this, "Bienvenido Capacitador", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(this, Programas.class);
+                            intent.putExtra("id", cursor2.getInt(0));
+                            intent.putExtra("rol", "capacitador");
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(this, "Usted esta bloqueado", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(this, "Bienvenido Alumno", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(this, Programas.class);
+                        intent.putExtra("id", id_usu);
+                        intent.putExtra("rol", "alumno");
+                        startActivity(intent);
+                    }
+
+                    cursor2.close();
                 }
 
             } else {
-                Toast.makeText(this, "Bienvenido Alumno", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(this, Programas.class);
-                intent.putExtra("id", id_usu);
-                intent.putExtra("rol", "alumno");
-                startActivity(intent);
+                Toast.makeText(this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
             }
-
-            cursor2.close();
-
-        } else {
-            Toast.makeText(this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
-        }
-
         cursor1.close();
         db.close();
     }

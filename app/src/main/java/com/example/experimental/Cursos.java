@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.widget.SearchView;
 
 import com.example.experimental.Adaptadores.CursosAdaptador;
 import com.example.experimental.DB.DataBase;
@@ -26,7 +27,7 @@ public class Cursos extends AppCompatActivity {
 
     //vista
     private RecyclerView recycleViewCursos;
-
+    private SearchView svcursos;
 
     //use database
     private DataBase conection;
@@ -48,9 +49,49 @@ public class Cursos extends AppCompatActivity {
 
         //vista
         recycleViewCursos = (RecyclerView) findViewById(R.id.recicleCursos);
+        svcursos = (SearchView) findViewById(R.id.svcursos);
 
 
         consultarListaCursos(idProgramas, id, rol);
+
+        svcursos.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String sa) {
+                filder(sa, id, rol);
+                return false;
+            }
+        });
+
+    }
+
+    public void filder(String sa, int id, String rol){
+        ArrayList<MCursos> filtered = new ArrayList<>();
+        for (MCursos item : listaCursos){
+            if (item.getNombreCurso().toLowerCase().contains(sa.toLowerCase())) {
+                filtered.add(item);
+            }
+        }
+
+        CursosAdaptador cursosAdaptador = new CursosAdaptador(filtered, this, new CursosAdaptador.OnItemClickListener() {
+            @Override
+            public void onItemClick(MCursos item) {
+                moveToDescription(item, rol);
+            }
+
+            @Override
+            public void onItemClickDetalle(int id) {
+                moveToDescriptionDetalle(id);
+            }
+        });
+
+        recycleViewCursos.setHasFixedSize(true);
+        recycleViewCursos.setLayoutManager(new LinearLayoutManager(this));
+        recycleViewCursos.setAdapter(cursosAdaptador);
     }
 
     private void consultarListaCursos(int idProgramas, int id, String rol) {
@@ -61,7 +102,7 @@ public class Cursos extends AppCompatActivity {
 
             Cursor cursor = db.rawQuery("SELECT c.idCurso, c.nombreCurso, c.duracionCurso, c.nombreModalidadCurso, c.nombreTipoCurso, c.nombreEspecialidad, c.nombreArea, c.fechaInicioCurso, c.fechaFinalizacionCurso " +
                             "FROM cursos c INNER JOIN inscritos i ON i.idCurso = c.idCurso " +
-                            "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso = '1' AND c.estadoCurso = '1' ORDER BY c.nombreCurso DESC;",
+                            "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso != 'O' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = '1' ORDER BY c.nombreCurso DESC;",
                     new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
             while (cursor.moveToNext()) {
@@ -83,7 +124,7 @@ public class Cursos extends AppCompatActivity {
             listaCursos = new ArrayList<>();
 
             Cursor cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso " +
-                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso = 1 AND estadoCurso = 1 ORDER BY nombreCurso DESC;",
+                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso != 'o' AND estadoCurso = '1' AND estadoPublicasionCurso = '1' ORDER BY nombreCurso DESC;",
                     new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
             while (cursor.moveToNext()) {

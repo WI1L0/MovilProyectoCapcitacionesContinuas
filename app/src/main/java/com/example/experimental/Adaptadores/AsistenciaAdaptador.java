@@ -79,17 +79,17 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
 
             txtnombres.setText(item.getmUsuario().getmPersona().getNombre1() + ", " + item.getmUsuario().getmPersona().getNombre2());
             txtapellidos.setText(item.getmUsuario().getmPersona().getApellido1() + ", " + item.getmUsuario().getmPersona().getApellido2());
-            edtobservaciones.setText(item.getmAsistenciaList().get(0).getObservacionAsistencia());
-
-            btnasiste.setEnabled(true);
-            btnnoasiste.setEnabled(true);
 
             if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
+                edtobservaciones.setText(item.getmAsistenciaList().get(0).getObservacionAsistencia());
                 if (item.getmAsistenciaList().get(0).getEstadoAsistencia() == true) {
                     btnasiste.setEnabled(false);
                 } else {
                     btnnoasiste.setEnabled(false);
                 }
+            } else {
+                btnasiste.setEnabled(true);
+                btnnoasiste.setEnabled(true);
             }
 
             btnasiste.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +103,8 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     mInscritos.setIdInscrito(item.getIdInscrito());
 
                     mAsistencia.setEstadoAsistencia(true);
-                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
+                    String observ = edtobservaciones.getText().toString();
+                    mAsistencia.setObservacionAsistencia(observ);
                     mAsistencia.setmInscritos(mInscritos);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
@@ -129,7 +130,8 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     mInscritos.setIdInscrito(item.getIdInscrito());
 
                     mAsistencia.setEstadoAsistencia(false);
-                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
+                    String observ = edtobservaciones.getText().toString();
+                    mAsistencia.setObservacionAsistencia(observ);
                     mAsistencia.setmInscritos(mInscritos);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {

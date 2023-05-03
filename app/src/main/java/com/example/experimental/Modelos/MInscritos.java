@@ -7,9 +7,10 @@ import java.util.List;
 public class MInscritos implements Serializable {
 
     private int idInscrito;
-    private Boolean estadoInscritoActivo;
     private String fechaInscrito;
-    private Boolean estadoParticipanteAprobacion;
+    private Boolean estadoInscrito;
+    private Boolean estadoInscritoActivo;
+    private String estadoParticipanteAprobacion;
     private Boolean estadoParticipanteActivo;
 
 
@@ -20,10 +21,11 @@ public class MInscritos implements Serializable {
     public MInscritos() {
     }
 
-    public MInscritos(int idInscrito, Boolean estadoInscritoActivo, String fechaInscrito, Boolean estadoParticipanteAprobacion, Boolean estadoParticipanteActivo, List<MAsistencia> mAsistenciaList, MUsuario mUsuario, MCursos mCursos) {
+    public MInscritos(int idInscrito, String fechaInscrito, Boolean estadoInscrito, Boolean estadoInscritoActivo, String estadoParticipanteAprobacion, Boolean estadoParticipanteActivo, List<MAsistencia> mAsistenciaList, MUsuario mUsuario, MCursos mCursos) {
         this.idInscrito = idInscrito;
-        this.estadoInscritoActivo = estadoInscritoActivo;
         this.fechaInscrito = fechaInscrito;
+        this.estadoInscrito = estadoInscrito;
+        this.estadoInscritoActivo = estadoInscritoActivo;
         this.estadoParticipanteAprobacion = estadoParticipanteAprobacion;
         this.estadoParticipanteActivo = estadoParticipanteActivo;
         this.mAsistenciaList = mAsistenciaList;
@@ -39,14 +41,6 @@ public class MInscritos implements Serializable {
         this.idInscrito = idInscrito;
     }
 
-    public Boolean getEstadoInscritoActivo() {
-        return estadoInscritoActivo;
-    }
-
-    public void setEstadoInscritoActivo(Boolean estadoInscritoActivo) {
-        this.estadoInscritoActivo = estadoInscritoActivo;
-    }
-
     public String getFechaInscrito() {
         return fechaInscrito;
     }
@@ -55,11 +49,27 @@ public class MInscritos implements Serializable {
         this.fechaInscrito = fechaInscrito;
     }
 
-    public Boolean getEstadoParticipanteAprobacion() {
+    public Boolean getEstadoInscrito() {
+        return estadoInscrito;
+    }
+
+    public void setEstadoInscrito(Boolean estadoInscrito) {
+        this.estadoInscrito = estadoInscrito;
+    }
+
+    public Boolean getEstadoInscritoActivo() {
+        return estadoInscritoActivo;
+    }
+
+    public void setEstadoInscritoActivo(Boolean estadoInscritoActivo) {
+        this.estadoInscritoActivo = estadoInscritoActivo;
+    }
+
+    public String getEstadoParticipanteAprobacion() {
         return estadoParticipanteAprobacion;
     }
 
-    public void setEstadoParticipanteAprobacion(Boolean estadoParticipanteAprobacion) {
+    public void setEstadoParticipanteAprobacion(String estadoParticipanteAprobacion) {
         this.estadoParticipanteAprobacion = estadoParticipanteAprobacion;
     }
 

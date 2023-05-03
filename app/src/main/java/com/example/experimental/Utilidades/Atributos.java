@@ -10,9 +10,9 @@ public class Atributos {
     public static final String atr_per_nombre2 = "nombre2";
     public static final String atr_per_apellido1 = "apellido1";
     public static final String atr_per_apellido2 = "apellido2";
+    public static final String atr_per_correo = "correo";
     public static final String atr_per_telefono = "telefono";
     public static final String atr_per_celular = "celular";
-    public static final String atr_per_correo = "correo";
     public static final String atr_per_genero = "genero";
     public static final String atr_per_etnia = "etnia";
 
@@ -26,11 +26,11 @@ public class Atributos {
     public static final String table_programas = "programas";
     public static final String atr_pro_id = "idPrograma";
     public static final String atr_pro_nombre = "nombrePrograma";
-    public static final String atr_pro_periodo = "nombrePeriodoPrograma";
-    public static final String atr_pro_f_inicio = "fechaInicioPeriodoPrograma";
-    public static final String atr_pro_f_fin = "fechaFinPeriodoPrograma";
     public static final String atr_pro_estado_activo = "estadoProgramaActivo";
     public static final String atr_pro_estado = "estadoPeriodoPrograma";
+    public static final String atr_pro_f_inicio = "fechaInicioPeriodoPrograma";
+    public static final String atr_pro_f_fin = "fechaFinPeriodoPrograma";
+    public static final String atr_pro_periodo = "nombrePeriodoPrograma";
 
     public static final String table_capacitador = "capacitador";
     public static final String atr_cap_id = "idCapacitador";
@@ -43,21 +43,22 @@ public class Atributos {
     public static final String atr_usu_paswork = "password";
     public static final String atr_usu_foto = "fotoPerfil";
     public static final String atr_usu_estado_activo = "estadoUsuarioActivo";
+    public static final String atr_usu_rol = "nombreRol";
 
     public static final String table_cursos = "cursos";
     public static final String atr_cur_id = "idCurso";
     public static final String atr_cur_nombre = "nombreCurso";
     public static final String atr_cur_foto = "fotoCurso";
     public static final String atr_cur_duracion = "duracionCurso";
-    public static final String atr_cur_f_inicio = "fechaInicioCurso";
-    public static final String atr_cur_f_fin = "fechaFinalizacionCurso";
-    public static final String atr_cur_observadores = "observacionCurso";
-    public static final String atr_cur_descripcion = "descripcionCurso";
-    public static final String atr_cur_cupos = "numeroCuposCurso";
-    public static final String atr_cur_objetivos = "objetivoGeneralesCurso";
+    public static final String atr_cur_observaciones = "observacionCurso";
     public static final String atr_cur_estado = "estadoCurso";
     public static final String atr_cur_estado_aprobacion = "estadoAprovacionCurso";
     public static final String atr_cur_estado_publicacion = "estadoPublicasionCurso";
+    public static final String atr_cur_descripcion = "descripcionCurso";
+    public static final String atr_cur_objetivos = "objetivoGeneralesCurso";
+    public static final String atr_cur_cupos = "numeroCuposCurso";
+    public static final String atr_cur_f_inicio = "fechaInicioCurso";
+    public static final String atr_cur_f_fin = "fechaFinalizacionCurso";
     public static final String atr_cur_especialidad = "nombreEspecialidad";
     public static final String atr_cur_area = "nombreArea";
     public static final String atr_cur_tipo = "nombreTipoCurso";
@@ -68,6 +69,7 @@ public class Atributos {
     public static final String table_inscritos = "inscritos";
     public static final String atr_ins_id = "idInscrito";
     public static final String atr_ins_fecha= "fechaInscrito";
+    public static final String atr_ins_estado = "estadoInscrito";
     public static final String atr_ins_estado_activo = "estadoInscritoActivo";
     public static final String atr_ins_estado_aprobado = "estadoParticipanteAprobacion";
     public static final String atr_ins_estado_participante = "estadoParticipanteActivo";
@@ -87,22 +89,23 @@ public class Atributos {
 
     public static final String CREAR_TABLA_PERSONAS = "CREATE TABLE " + table_persona + " (" +
             atr_per_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_per_identificador + " TEXT NOT NULL, " +
-            atr_per_nombre1 + " TEXT, " + atr_per_nombre2 + " TEXT, " +
-            atr_per_apellido1 + " TEXT, " + atr_per_apellido2 + " TEXT, " +
-            atr_per_telefono + " TEXT, "  + atr_per_celular + " TEXT NOT NULL, " +
-            atr_per_correo + " TEXT NOT NULL, " + atr_per_genero + " TEXT NOT NULL, " +
-            atr_per_etnia + " TEXT NOT NULL);";
+            atr_per_nombre1 + " TEXT NOT NULL, " + atr_per_nombre2 + " TEXT, " +
+            atr_per_apellido1 + " TEXT NOT NULL, " + atr_per_apellido2 + " TEXT, " +
+            atr_per_correo + " TEXT NOT NULL, "  + atr_per_telefono+ " TEXT, " +
+            atr_per_celular + " TEXT NOT NULL, " + atr_per_genero + " TEXT NOT NULL, " +
+            atr_per_etnia + " TEXT);";
 
     public static final String CREAR_TABLA_PROGRAMAS = "CREATE TABLE " + table_programas + " (" +
             atr_pro_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_pro_nombre + " TEXT NOT NULL, " +
-            atr_pro_periodo + " TEXT NOT NULL, " + atr_pro_f_inicio + " TEXT NOT NULL, " +
-            atr_pro_f_fin + " TEXT NOT NULL, " + atr_pro_estado_activo + " BOOLEAN NOT NULL, " +
-            atr_pro_estado + " BOOLEAN NOT NULL);";
+            atr_pro_estado_activo + " BOOLEAN NOT NULL, " + atr_pro_estado + " BOOLEAN NOT NULL, " +
+            atr_pro_f_inicio + " TEXT NOT NULL, " + atr_pro_f_fin + " TEXT NOT NULL, " +
+            atr_pro_periodo + " TEXT NOT NULL);";
 
     public static final String CREAR_TABLA_USUARIOS = "CREATE TABLE " + table_usuarios + " (" +
             atr_usu_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_per_id + " INTEGER NOT NULL, " +
             atr_usu_user + " TEXT NOT NULL, " + atr_usu_paswork + " TEXT NOT NULL, " +
-            atr_usu_foto + " TEXT, " + atr_usu_estado_activo + " BOOLEAN NOT NULL, " +
+            atr_usu_foto + " TEXT, " + atr_usu_rol + " TEXT NOT NULL, " +
+            atr_usu_estado_activo + " BOOLEAN NOT NULL, " +
             "FOREIGN KEY(" + atr_per_id + ") REFERENCES " + table_persona + " (" + atr_per_id + "));";
 
     public static final String CREAR_TABLA_CAPACITADOR = "CREATE TABLE " + table_capacitador + " (" +
@@ -114,11 +117,11 @@ public class Atributos {
             atr_cur_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_pro_id + " INTEGER NOT NULL, " +
             atr_cap_id + " INTEGER NOT NULL, " + atr_cur_nombre + " TEXT NOT NULL, " +
             atr_cur_foto + " TEXT, " + atr_cur_duracion + " INTEGER NOT NULL, " +
-            atr_cur_f_inicio + " TEXT NOT NULL, " + atr_cur_f_fin + " TEXT NOT NULL, " +
-            atr_cur_observadores + " TEXT, " + atr_cur_descripcion + " TEXT, " +
-            atr_cur_cupos + " INTEGER NOT NULL, " + atr_cur_objetivos + " TEXT, " +
-            atr_cur_estado + " BOOLEAN NOT NULL, " + atr_cur_estado_aprobacion + " TEXT NOT NULL, " +
-            atr_cur_estado_publicacion + " BOOLEAN NOT NULL, " + atr_cur_especialidad + " TEXT NOT NULL, " +
+            atr_cur_observaciones + " TEXT, " + atr_cur_estado + " BOOLEAN NOT NULL, " +
+            atr_cur_estado_aprobacion + " TEXT, " + atr_cur_estado_publicacion + " BOOLEAN, " +
+            atr_cur_descripcion + " TEXT, " + atr_cur_objetivos + " TEXT, " +
+            atr_cur_cupos + " INTEGER NOT NULL, " + atr_cur_f_inicio + " TEXT NOT NULL, " +
+            atr_cur_f_fin + " TEXT NOT NULL, " + atr_cur_especialidad + " TEXT NOT NULL, " +
             atr_cur_area + " TEXT NOT NULL, " + atr_cur_tipo + " TEXT NOT NULL, " +
             atr_cur_modalidad + " TEXT NOT NULL, " + atr_cur_horario_inicio + " TEXT NOT NULL, " +
             atr_cur_horario_fin + " TEXT NOT NULL, " +
@@ -133,8 +136,8 @@ public class Atributos {
     public static final String CREAR_TABLA_INSCRITOS = "CREATE TABLE " + table_inscritos + " (" +
             atr_ins_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_usu_id + " INTEGER NOT NULL, " +
             atr_cur_id + " INTEGER NOT NULL, " + atr_ins_fecha + " TEXT NOT NULL, " +
-            atr_ins_estado_activo + " BOOLEAN NOT NULL, " + atr_ins_estado_aprobado + " TEXT NOT NULL, " +
-            atr_ins_estado_participante + " BOOLEAN NOT NULL, " +
+            atr_ins_estado + " BOOLEAN NOT NULL, " + atr_ins_estado_activo + " BOOLEAN NOT NULL, " +
+            atr_ins_estado_aprobado + " TEXT NOT NULL, " + atr_ins_estado_participante + " BOOLEAN NOT NULL, " +
             "FOREIGN KEY(" + atr_usu_id + ") REFERENCES " + table_usuarios + " (" + atr_usu_id + "));";
 
     public static final String CREAR_TABLA_ASISTENCIAS = "CREATE TABLE " + table_asistencia + " (" +

@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.experimental.Adaptadores.ProgramasAdaptador;
 import com.example.experimental.DB.DataBase;
 import com.example.experimental.Modelos.MProgramas;
 import com.example.experimental.Utilidades.Atributos;
-import com.google.android.material.search.SearchView;
+import android.widget.SearchView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class Programas extends AppCompatActivity {
 
     //vista
     private RecyclerView recycleViewProgramas;
-    //private SearchView svprogramas;
+    private SearchView svprogramas;
 
 
     //use database
@@ -47,11 +49,44 @@ public class Programas extends AppCompatActivity {
 
         //vista
         recycleViewProgramas = (RecyclerView) findViewById(R.id.recicleProgramas);
-        //svprogramas = (SearchView) findViewById(R.id.svprogramas);
+        svprogramas = (SearchView) findViewById(R.id.svprogramas);
 
 
         consultarListaProgramas(id, rol);
 
+        svprogramas.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String sa) {
+                filder(sa, id, rol);
+                return false;
+            }
+        });
+
+    }
+
+    public void filder(String sa, int id, String rol){
+        ArrayList<MProgramas> filtered = new ArrayList<>();
+        for (MProgramas item : listaProgramas){
+            if (item.getNombrePrograma().toLowerCase().contains(sa.toLowerCase())) {
+                filtered.add(item);
+            }
+        }
+
+        ProgramasAdaptador programasAdaptador = new ProgramasAdaptador(filtered, this, new ProgramasAdaptador.OnItemClickListener() {
+            @Override
+            public void onItemClick(MProgramas item) {
+                moveToDescription(item, id, rol);
+            }
+        });
+
+        recycleViewProgramas.setHasFixedSize(true);
+        recycleViewProgramas.setLayoutManager(new LinearLayoutManager(this));
+        recycleViewProgramas.setAdapter(programasAdaptador);
     }
 
     private void consultarListaProgramas(int id, String rol) {
@@ -61,8 +96,9 @@ public class Programas extends AppCompatActivity {
             listaProgramas = new ArrayList<>();
 
             Cursor cursor = db.rawQuery("SELECT p.idPrograma, p.nombrePrograma, p.nombrePeriodoPrograma, p.fechaInicioPeriodoPrograma, p.fechaFinPeriodoPrograma " +
-                            "                FROM programas p INNER JOIN cursos c ON c.idPrograma = p.idPrograma INNER JOIN inscritos i ON idUsuario = ? AND i.idCurso = c.idCurso " +
-                            "              GROUP BY p.idPrograma ORDER BY p.fechaInicioPeriodoPrograma DESC;",
+                            "FROM programas p INNER JOIN cursos c ON c.idPrograma = p.idPrograma INNER JOIN inscritos i ON idUsuario = ? AND i.idCurso = c.idCurso " +
+                            "WHERE p.estadoProgramaActivo = '1' AND p.estadoPeriodoPrograma = '1' " +
+                            "GROUP BY p.idPrograma ORDER BY p.fechaInicioPeriodoPrograma DESC;",
                     new String[]{String.valueOf(id)});
 
             while (cursor.moveToNext()){
@@ -80,8 +116,9 @@ public class Programas extends AppCompatActivity {
             listaProgramas = new ArrayList<>();
 
             Cursor cursor = db.rawQuery("SELECT p.idPrograma, p.nombrePrograma, p.nombrePeriodoPrograma, p.fechaInicioPeriodoPrograma, p.fechaFinPeriodoPrograma " +
-                            "                FROM programas p INNER JOIN cursos c ON c.idCapacitador = ? AND c.idPrograma = p.idPrograma GROUP BY p.idPrograma " +
-                            "                ORDER BY p.fechaInicioPeriodoPrograma DESC;",
+                            "FROM programas p INNER JOIN cursos c ON c.idCapacitador = ? AND c.idPrograma = p.idPrograma " +
+                            "WHERE p.estadoProgramaActivo = '1' AND p.estadoPeriodoPrograma = '1' GROUP BY p.idPrograma " +
+                            "ORDER BY p.fechaInicioPeriodoPrograma DESC;",
                     new String[]{String.valueOf(id)});
 
             while (cursor.moveToNext()){

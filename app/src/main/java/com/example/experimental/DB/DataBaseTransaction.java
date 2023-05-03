@@ -1,11 +1,14 @@
 package com.example.experimental.DB;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.experimental.Import;
@@ -23,11 +26,14 @@ public class DataBaseTransaction {
     private DataBase conectionFinal;
     private DataBaseTemporal conectionTemporal;
 
+    private Import anImport = new Import();
+
+    private int progreso = 80;
     public DataBaseTransaction(Context mcontext) {
         context = mcontext;
     }
 
-    public void newControl() {
+    public void newControl(final OnImportListener listenerMein) {
 
         conectionFinal = new DataBase(context);
         conectionTemporal = new DataBaseTemporal(context);
@@ -38,12 +44,9 @@ public class DataBaseTransaction {
 
         if (verificarAll()){
             Toast.makeText(context, "Datos fin almacenados", Toast.LENGTH_SHORT).show();
-            //context.deleteDatabase("db_final_temp");
-
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-
+            context.deleteDatabase("db_final_temp");
+            progreso = progreso + 2;
+            listenerMein.onImportExito(progreso);
         } else {
             if (control(Atributos.table_persona) == false) {
 
@@ -56,6 +59,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos personas fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_persona);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -63,6 +68,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin personas", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_persona);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -79,6 +85,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos usuarios fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_usuarios);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -86,6 +94,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin usuarios", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_usuarios);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -102,6 +111,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos programas fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_programas);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -109,6 +120,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin programas", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_programas);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -125,6 +137,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos capacitadores fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_capacitador);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -132,6 +146,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin capacitadores", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_capacitador);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -148,6 +163,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos cursos fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_cursos);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -155,6 +172,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin cursos", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_cursos);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -171,6 +189,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos prerequisitos fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_prerequisitos);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -178,6 +198,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin prerequisitos", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_prerequisitos);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -194,6 +215,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos inscritos fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_inscritos);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -201,6 +224,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin inscritos", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_inscritos);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -217,6 +241,8 @@ public class DataBaseTransaction {
                         if (cont[0] == leng) {
                             Toast.makeText(context, "Datos asistencias fin descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_asistencia);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
                         }
                     }
 
@@ -224,6 +250,7 @@ public class DataBaseTransaction {
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin asistencias", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_asistencia);
+                        listenerMein.onImportError();
                     }
                 });
 
@@ -231,11 +258,9 @@ public class DataBaseTransaction {
 
             if (verificarAll()){
                 Toast.makeText(context, "Datos fin almacenados", Toast.LENGTH_SHORT).show();
-                //context.deleteDatabase("db_final_temp");
-
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                context.deleteDatabase("db_final_temp");
+                progreso = progreso + 2;
+                listenerMein.onImportExito(progreso);
             }
         }
     }
@@ -291,7 +316,7 @@ public class DataBaseTransaction {
         SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
         final List<Long> resultados = new ArrayList<>();
 
-        Cursor cursor = sdbTemporal.rawQuery("SELECT idUsuario, username, password, fotoPerfil, estadoUsuarioActivo, idPersona FROM " + Atributos.table_usuarios, null);
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idUsuario, username, password, fotoPerfil, estadoUsuarioActivo, nombreRol, idPersona FROM " + Atributos.table_usuarios, null);
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
@@ -301,7 +326,8 @@ public class DataBaseTransaction {
                 values.put("password", cursor.getString(2));
                 values.put("fotoPerfil", cursor.getString(3));
                 values.put("estadoUsuarioActivo", cursor.getInt(4));
-                values.put("idPersona", cursor.getInt(5));
+                values.put("nombreRol", cursor.getString(5));
+                values.put("idPersona", cursor.getInt(6));
 
                 long resultado = sdbFinal.insert(Atributos.table_usuarios, null, values);
 
@@ -473,14 +499,14 @@ public class DataBaseTransaction {
         SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
         final List<Long> resultados = new ArrayList<>();
 
-        Cursor cursor = sdbTemporal.rawQuery("SELECT idPrerequisitoCurso, nombrePrerequisitoCurso, estadoPrerequisitoCurso, idCurso FROM " + Atributos.table_prerequisitos, null);
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idPrerequisitoCurso, estadoPrerequisitoCurso, nombrePrerequisitoCurso, idCurso FROM " + Atributos.table_prerequisitos, null);
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 values = new ContentValues();
                 values.put("idPrerequisitoCurso", cursor.getInt(0));
-                values.put("nombrePrerequisitoCurso", cursor.getString(1));
-                values.put("estadoPrerequisitoCurso", cursor.getInt(2));
+                values.put("estadoPrerequisitoCurso", cursor.getInt(1));
+                values.put("nombrePrerequisitoCurso", cursor.getString(2));
                 values.put("idCurso", cursor.getInt(3));
 
                 long resultado = sdbFinal.insert(Atributos.table_prerequisitos, null, values);
@@ -512,17 +538,18 @@ public class DataBaseTransaction {
         SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
         final List<Long> resultados = new ArrayList<>();
 
-        Cursor cursor = sdbTemporal.rawQuery("SELECT idInscrito, fechaInscrito, estadoInscritoActivo, estadoParticipanteAprobacion, estadoParticipanteActivo, idCurso FROM " + Atributos.table_inscritos, null);
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idInscrito, fechaInscrito, estadoInscrito, estadoInscritoActivo, estadoParticipanteAprobacion, estadoParticipanteActivo, idCurso FROM " + Atributos.table_inscritos, null);
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 values = new ContentValues();
                 values.put("idInscrito", cursor.getInt(0));
                 values.put("fechaInscrito", cursor.getString(1));
-                values.put("estadoInscritoActivo", cursor.getInt(2));
-                values.put("estadoParticipanteAprobacion", cursor.getString(3));
-                values.put("estadoParticipanteActivo", cursor.getInt(4));
-                values.put("idCurso", cursor.getInt(5));
+                values.put("estadoInscrito", cursor.getInt(2));
+                values.put("estadoInscritoActivo", cursor.getInt(3));
+                values.put("estadoParticipanteAprobacion", cursor.getString(4));
+                values.put("estadoParticipanteActivo", cursor.getInt(5));
+                values.put("idCurso", cursor.getInt(6));
 
                 long resultado = sdbFinal.insert(Atributos.table_inscritos, null, values);
 
@@ -635,13 +662,37 @@ public class DataBaseTransaction {
         if //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
             // control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_asistencia) == true) {
 
-        (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true && control(Atributos.table_prerequisitos) == true) {
+        (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
 
+            progreso = progreso + barActualizar();
 
+            try {
+                Thread.sleep(10*1000);
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } catch (InterruptedException e) {
+                Log.d(TAG, "onCreate: +++++++++++++++++++++++++++++++++++++++++");
+            }
             return true;
         } else {
+
+            progreso = progreso + barActualizar();
             return false;
         }
+    }
+
+    public int barActualizar(){
+        SQLiteDatabase db = conectionFinal.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Atributos.table_control + " WHERE estado = '1'", null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+
+        return count * 2;
     }
 
 }

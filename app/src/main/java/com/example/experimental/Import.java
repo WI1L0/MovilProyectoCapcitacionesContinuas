@@ -23,6 +23,7 @@ import com.example.experimental.DB.DataBaseTemporal;
 import com.example.experimental.DB.DataBaseTransaction;
 import com.example.experimental.DB.ImportData;
 import com.example.experimental.DB.OnImportListener;
+import com.example.experimental.Progresst_Bar.ManejoProgressBar;
 import com.example.experimental.Utilidades.Atributos;
 
 import java.util.Timer;
@@ -30,16 +31,20 @@ import java.util.TimerTask;
 
 public class Import extends AppCompatActivity {
 
-    ImportData importData;
+    private ImportData importData;
 
-    ImageView imgimport;
-    ProgressBar pgsimport;
-    Button btnimport, btnfinalizar;
-    AsyncTask tarea;
+    private ImageView imgimport;
+    private ProgressBar pgsimport;
+    private Button btnimport, btnfinalizar;
+    private AsyncTask tarea;
+
+    private ManejoProgressBar manejoProgressBar;
 
     //use database
     private DataBaseTemporal conection;
     private ContentValues values;
+
+    private int progreso = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,29 +63,37 @@ public class Import extends AppCompatActivity {
             conection.insercontrol();
         }
 
-        if (verificarAll()) {
-
-
-            btnimport.setVisibility(View.INVISIBLE);
-            btnfinalizar.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "Datos almacenados", Toast.LENGTH_SHORT).show();
-        }
+        verificarAll();
 
         btnimport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 btnimport.setEnabled(false);
+                manejoProgressBar = new ManejoProgressBar(pgsimport);
+                manejoProgressBar.execute();
 
+                final int[] a = {0};
                 cargar(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+                        a[0]++;
+                        if (a[0] == 8){
+                            verificarAll();
+                            btnimport.setEnabled(true);
+                        }
                     }
 
                     @Override
                     public void onImportError() {
-                        btnimport.setText("REINTENTAR");
+                        a[0]++;
+                        if (a[0] == 8){
+                            verificarAll();
+                            btnimport.setEnabled(true);
+                            btnimport.setText("REINTENTAR");
+                        }
                     }
                 });
+
             }
         });
 
@@ -89,7 +102,17 @@ public class Import extends AppCompatActivity {
             public void onClick(View view) {
                 //importBase();
                 DataBaseTransaction dataBaseTransaction = new DataBaseTransaction(getApplicationContext());
-                dataBaseTransaction.newControl();
+                dataBaseTransaction.newControl(new OnImportListener() {
+                    @Override
+                    public void onImportExito(int leng) {
+                        pgsimport.setProgress(leng);
+                    }
+
+                    @Override
+                    public void onImportError() {
+                        btnfinalizar.setText("REINTENTAR");
+                    }
+                });
                 //cargar base final
             }
         });
@@ -100,16 +123,19 @@ public class Import extends AppCompatActivity {
 
 
             if (control(Atributos.table_persona) == false) {
-
                 //PERSONA
                 final int[] cont = {0};
                 importData.importarPersonas(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos personas descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_persona);
+                            progreso = progreso + 10;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -130,10 +156,14 @@ public class Import extends AppCompatActivity {
                 importData.importarUsuarios(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos usuarios descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_usuarios);
+                            progreso = progreso + 10;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -154,10 +184,14 @@ public class Import extends AppCompatActivity {
                 importData.importarProgramas(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos programas descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_programas);
+                            progreso = progreso + 10;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -178,10 +212,14 @@ public class Import extends AppCompatActivity {
                 importData.importarCapacitador(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos capacitadores descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_capacitador);
+                            progreso = progreso + 10;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -202,10 +240,14 @@ public class Import extends AppCompatActivity {
                 importData.importarCursos(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos cursos descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_cursos);
+                            progreso = progreso + 10;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -226,10 +268,14 @@ public class Import extends AppCompatActivity {
                 importData.importarPrerequisitos(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos prerequisitos descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_prerequisitos);
+                            progreso = progreso + 10;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -244,12 +290,14 @@ public class Import extends AppCompatActivity {
             }
 
             if (control(Atributos.table_inscritos) == false) {
+                final double[] progresoInterno = {0};
 
                 //INSCRITO
                 final int[] cont = {0};
                 importData.importarInscrito(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos inscritos descargados", Toast.LENGTH_SHORT).show();
@@ -263,6 +311,9 @@ public class Import extends AppCompatActivity {
                                     if (cont1[0] == leng) {
                                         Toast.makeText(Import.this, "Datos matriculados descargados", Toast.LENGTH_SHORT).show();
                                         updatecontrol(Atributos.table_inscritos);
+                                        progreso = progreso + 10;
+                                        pgsimport.setProgress(progreso);
+                                        listenerMein.onImportExito(0);
                                     }
                                 }
 
@@ -294,10 +345,14 @@ public class Import extends AppCompatActivity {
                 importData.importarAsistencia(new OnImportListener() {
                     @Override
                     public void onImportExito(int leng) {
+
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos asistencias descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_asistencia);
+                            progreso = progreso + 10;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -310,55 +365,7 @@ public class Import extends AppCompatActivity {
                 });
 
             }
-
-            if (verificarAll()) {
-
-                Toast.makeText(this, "Datos almacenados", Toast.LENGTH_SHORT).show();
-                btnimport.setVisibility(View.INVISIBLE);
-                btnfinalizar.setVisibility(View.VISIBLE);
-
-            }
-
-            btnimport.setEnabled(true);
-
     }
-
-    /*public void importBase(){
-
-        final Timer t = new Timer();
-
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                int progreso = 0;
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa");
-                importData = new ImportData(getApplicationContext());
-
-                //PERSONA
-                if (importData.importarPersonas() == true){
-                    progreso = progreso + 12;
-                    pgsimport.setProgress(progreso);
-                    Toast.makeText(Import.this, "Datos personas descargados", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Import.this, "Error en descargar personas", Toast.LENGTH_SHORT).show();
-                    importData.limpiartable(Atributos.table_persona);
-                    if (importData.importarPersonas() == true){
-                        progreso = progreso + 12;
-                        pgsimport.setProgress(progreso);
-                        Toast.makeText(Import.this, "Error solucionado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(Import.this, "Intentelo nuevamente mas tarde", Toast.LENGTH_SHORT).show();
-                        importData.limpiartable(Atributos.table_persona);
-                    }
-                }
-
-                if (progreso == 12){
-                    t.cancel();
-                }
-            }
-        };
-        t.schedule(timerTask, 0, 100);
-    }*/
 
     public boolean limpiartable(String table){
         SQLiteDatabase db = conection.getWritableDatabase();
@@ -402,16 +409,35 @@ public class Import extends AppCompatActivity {
         return estado;
     }
 
-    public boolean verificarAll(){
+    public void verificarAll(){
         if //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
             // control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_asistencia) == true) {
 
-        (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true && control(Atributos.table_prerequisitos) == true) {
+        (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
 
+            progreso = barActualizar();
+            pgsimport.setProgress(progreso);
 
-            return true;
+            Toast.makeText(this, "Datos almacenados", Toast.LENGTH_SHORT).show();
+            btnimport.setVisibility(View.INVISIBLE);
+            btnfinalizar.setVisibility(View.VISIBLE);
         } else {
-            return false;
+
+            progreso = barActualizar();
+            pgsimport.setProgress(progreso);
         }
+    }
+
+    public int barActualizar(){
+        SQLiteDatabase db = conection.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Atributos.table_control + " WHERE estado = '1'", null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+
+        return count * 10;
     }
 }

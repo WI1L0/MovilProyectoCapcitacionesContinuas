@@ -10,15 +10,15 @@ public class MCursos implements Serializable {
     private String nombreCurso;
     private String fotoCurso;
     private int duracionCurso;
+    private String observacionCurso;
+    private Boolean estadoCurso;
+    private String estadoAprovacionCurso;
+    private Boolean estadoPublicasionCurso;
+    private String descripcionCurso;
+    private String objetivoGeneralesCurso;
+    private int numeroCuposCurso;
     private String fechaInicioCurso;
     private String fechaFinalizacionCurso;
-    private String observacionCurso;
-    private String descripcionCurso;
-    private int numeroCuposCurso;
-    private String objetivoGeneralesCurso;
-    private Boolean estadoCurso;
-    private Boolean estadoAprovacionCurso;
-    private Boolean estadoPublicasionCurso;
     private String nombreEspecialidad;
     private String nombreArea;
     private String nombreTipoCurso;
@@ -33,20 +33,20 @@ public class MCursos implements Serializable {
     public MCursos() {
     }
 
-    public MCursos(int idCurso, String nombreCurso, String fotoCurso, int duracionCurso, String fechaInicioCurso, String fechaFinalizacionCurso, String observacionCurso, String descripcionCurso, int numeroCuposCurso, String objetivoGeneralesCurso, Boolean estadoCurso, Boolean estadoAprovacionCurso, Boolean estadoPublicasionCurso, String nombreEspecialidad, String nombreArea, String nombreTipoCurso, String nombreModalidadCurso, String horaInicio, String horaFin, List<MPrerequisitos> mPrerequisitosList, List<MUsuario> mUsuarioList) {
+    public MCursos(int idCurso, String nombreCurso, String fotoCurso, int duracionCurso, String observacionCurso, Boolean estadoCurso, String estadoAprovacionCurso, Boolean estadoPublicasionCurso, String descripcionCurso, String objetivoGeneralesCurso, int numeroCuposCurso, String fechaInicioCurso, String fechaFinalizacionCurso, String nombreEspecialidad, String nombreArea, String nombreTipoCurso, String nombreModalidadCurso, String horaInicio, String horaFin, List<MPrerequisitos> mPrerequisitosList, List<MUsuario> mUsuarioList) {
         this.idCurso = idCurso;
         this.nombreCurso = nombreCurso;
         this.fotoCurso = fotoCurso;
         this.duracionCurso = duracionCurso;
-        this.fechaInicioCurso = fechaInicioCurso;
-        this.fechaFinalizacionCurso = fechaFinalizacionCurso;
         this.observacionCurso = observacionCurso;
-        this.descripcionCurso = descripcionCurso;
-        this.numeroCuposCurso = numeroCuposCurso;
-        this.objetivoGeneralesCurso = objetivoGeneralesCurso;
         this.estadoCurso = estadoCurso;
         this.estadoAprovacionCurso = estadoAprovacionCurso;
         this.estadoPublicasionCurso = estadoPublicasionCurso;
+        this.descripcionCurso = descripcionCurso;
+        this.objetivoGeneralesCurso = objetivoGeneralesCurso;
+        this.numeroCuposCurso = numeroCuposCurso;
+        this.fechaInicioCurso = fechaInicioCurso;
+        this.fechaFinalizacionCurso = fechaFinalizacionCurso;
         this.nombreEspecialidad = nombreEspecialidad;
         this.nombreArea = nombreArea;
         this.nombreTipoCurso = nombreTipoCurso;
@@ -89,6 +89,62 @@ public class MCursos implements Serializable {
         this.duracionCurso = duracionCurso;
     }
 
+    public String getObservacionCurso() {
+        return observacionCurso;
+    }
+
+    public void setObservacionCurso(String observacionCurso) {
+        this.observacionCurso = observacionCurso;
+    }
+
+    public Boolean getEstadoCurso() {
+        return estadoCurso;
+    }
+
+    public void setEstadoCurso(Boolean estadoCurso) {
+        this.estadoCurso = estadoCurso;
+    }
+
+    public String getEstadoAprovacionCurso() {
+        return estadoAprovacionCurso;
+    }
+
+    public void setEstadoAprovacionCurso(String estadoAprovacionCurso) {
+        this.estadoAprovacionCurso = estadoAprovacionCurso;
+    }
+
+    public Boolean getEstadoPublicasionCurso() {
+        return estadoPublicasionCurso;
+    }
+
+    public void setEstadoPublicasionCurso(Boolean estadoPublicasionCurso) {
+        this.estadoPublicasionCurso = estadoPublicasionCurso;
+    }
+
+    public String getDescripcionCurso() {
+        return descripcionCurso;
+    }
+
+    public void setDescripcionCurso(String descripcionCurso) {
+        this.descripcionCurso = descripcionCurso;
+    }
+
+    public String getObjetivoGeneralesCurso() {
+        return objetivoGeneralesCurso;
+    }
+
+    public void setObjetivoGeneralesCurso(String objetivoGeneralesCurso) {
+        this.objetivoGeneralesCurso = objetivoGeneralesCurso;
+    }
+
+    public int getNumeroCuposCurso() {
+        return numeroCuposCurso;
+    }
+
+    public void setNumeroCuposCurso(int numeroCuposCurso) {
+        this.numeroCuposCurso = numeroCuposCurso;
+    }
+
     public String getFechaInicioCurso() {
         return fechaInicioCurso;
     }
@@ -103,62 +159,6 @@ public class MCursos implements Serializable {
 
     public void setFechaFinalizacionCurso(String fechaFinalizacionCurso) {
         this.fechaFinalizacionCurso = fechaFinalizacionCurso;
-    }
-
-    public String getObservacionCurso() {
-        return observacionCurso;
-    }
-
-    public void setObservacionCurso(String observacionCurso) {
-        this.observacionCurso = observacionCurso;
-    }
-
-    public String getDescripcionCurso() {
-        return descripcionCurso;
-    }
-
-    public void setDescripcionCurso(String descripcionCurso) {
-        this.descripcionCurso = descripcionCurso;
-    }
-
-    public int getNumeroCuposCurso() {
-        return numeroCuposCurso;
-    }
-
-    public void setNumeroCuposCurso(int numeroCuposCurso) {
-        this.numeroCuposCurso = numeroCuposCurso;
-    }
-
-    public String getObjetivoGeneralesCurso() {
-        return objetivoGeneralesCurso;
-    }
-
-    public void setObjetivoGeneralesCurso(String objetivoGeneralesCurso) {
-        this.objetivoGeneralesCurso = objetivoGeneralesCurso;
-    }
-
-    public Boolean getEstadoCurso() {
-        return estadoCurso;
-    }
-
-    public void setEstadoCurso(Boolean estadoCurso) {
-        this.estadoCurso = estadoCurso;
-    }
-
-    public Boolean getEstadoAprovacionCurso() {
-        return estadoAprovacionCurso;
-    }
-
-    public void setEstadoAprovacionCurso(Boolean estadoAprovacionCurso) {
-        this.estadoAprovacionCurso = estadoAprovacionCurso;
-    }
-
-    public Boolean getEstadoPublicasionCurso() {
-        return estadoPublicasionCurso;
-    }
-
-    public void setEstadoPublicasionCurso(Boolean estadoPublicasionCurso) {
-        this.estadoPublicasionCurso = estadoPublicasionCurso;
     }
 
     public String getNombreEspecialidad() {

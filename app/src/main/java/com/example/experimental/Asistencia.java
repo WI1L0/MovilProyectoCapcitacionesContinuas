@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class Asistencia extends AppCompatActivity {
     private RecyclerView recycleViewListado;
     private Button btnguardar, btnfecha;
     private TextView txtfecha;
+    private SearchView svasistencia;
 
 
     //use database
@@ -79,14 +81,13 @@ public class Asistencia extends AppCompatActivity {
         btnguardar = (Button) findViewById(R.id.btnguardarasistencia);
         btnfecha = (Button) findViewById(R.id.btnfecha);
         txtfecha = (TextView) findViewById(R.id.txtvfecha);
+        svasistencia = (SearchView) findViewById(R.id.svasistencia);
 
 
         //fecha seleccionar
         //MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select Date").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
         obtenerFechaActual();
-
-        consultarListaInscritos(idCurso);
 
         btnguardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +110,7 @@ public class Asistencia extends AppCompatActivity {
                             db.update(Atributos.table_asistencia, values, Atributos.atr_asi_id + " = ?", new String[]{String.valueOf(listaasistencia.get(i).getIdAsistencia())});
                         }
                         finish();
-                        //moveToProgramas(id, rol);
+                        // (id, rol);
                     } else {
                         if (listInscritos.size() == listaasistencia.size()) {
                             for (int i = 0; i < listaasistencia.size(); i++) {
@@ -146,17 +147,56 @@ public class Asistencia extends AppCompatActivity {
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         LocalDate selectedDate = LocalDate.of(year, month + 1, day);
                         txtfecha.setText(selectedDate.toString());
+                        recargarListaAsistencia(idCurso);
                     }
                 }, year, month, dayOfMonth);
 
                 datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
-                consultarListaInscritos(idCurso);
             }
         });
 
+        consultarListaInscritos(idCurso);
 
+        svasistencia.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String sa) {
+                filder(sa);
+                return false;
+            }
+        });
+
+    }
+
+    public void filder(String sa){
+        ArrayList<MInscritos> filtered = new ArrayList<>();
+        for (MInscritos item : listInscritos){
+            if (item.getmUsuario().getmPersona().getApellido1().toLowerCase().contains(sa.toLowerCase())) {
+                filtered.add(item);
+            }
+        }
+
+        AsistenciaAdaptador asistenciaAdaptador = new AsistenciaAdaptador(filtered, this, new AsistenciaAdaptador.OnItemClickListener() {
+            @Override
+            public void onItemClick(MInscritos item) {
+
+            }
+
+            @Override
+            public void obtenList(MAsistencia item) {
+
+                crearArrayAsistencia(item);
+            }
+        });
+
+        recycleViewListado.setHasFixedSize(true);
+        recycleViewListado.setLayoutManager(new LinearLayoutManager(this));
+        recycleViewListado.setAdapter(asistenciaAdaptador);
     }
 
     public void obtenerFechaActual(){
@@ -181,15 +221,14 @@ public class Asistencia extends AppCompatActivity {
         Boolean actualisarOCrear = false;
 
         if (cursor2.moveToFirst()) {
-            cursor = db.rawQuery("SELECT i.idInscrito, i.estadoParticipanteActivo, p.nombre1, p.nombre2, p.apellido1, p.apellido2, idAsistencia, fechaAsistencia, estadoAsistencia, observacionAsistencia " +
-                            "FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario INNER JOIN asistencia a ON a.idInscrito = i.idInscrito " +
-                            "WHERE i.idCurso = ? AND a.fechaAsistencia = ? AND estadoInscritoActivo = '1' ORDER BY apellido1 DESC;",
+            cursor = db.rawQuery("SELECT i.idInscrito, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo, i.estadoParticipanteAprobacion, a.idAsistencia, a.fechaAsistencia, a.estadoAsistencia, a.observacionAsistencia FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario INNER JOIN asistencia a ON a.idInscrito = i.idInscrito " +
+                            "WHERE i.idCurso = ? AND a.fechaAsistencia = ? AND i.estadoInscrito = '1' AND i.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC",
                     new String[]{String.valueOf(id), String.valueOf(txtfecha.getText())});
             actualisarOCrear = true;
         } else {
-            cursor = db.rawQuery("SELECT i.idInscrito, i.estadoParticipanteActivo, p.nombre1, p.nombre2, p.apellido1, p.apellido2 " +
+            cursor = db.rawQuery("SELECT i.idInscrito, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo, i.estadoParticipanteAprobacion " +
                             "FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario " +
-                            "WHERE i.idCurso = ? AND estadoInscritoActivo = '1' ORDER BY apellido1 DESC;",
+                            "WHERE i.idCurso = ? AND i.estadoInscrito = '1' AND i.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC;",
                     new String[]{String.valueOf(id)});
         }
 
@@ -202,24 +241,28 @@ public class Asistencia extends AppCompatActivity {
             if (actualisarOCrear == true){
                 ArrayList<MAsistencia> arrayList = new ArrayList<>();
 
-                mAsistencia.setIdAsistencia(cursor.getInt(6));
-                mAsistencia.setFechaAsistencia(cursor.getString(7));
-                mAsistencia.setEstadoAsistencia(cursor.getInt(8) == 1 ? true : false);
-                mAsistencia.setObservacionAsistencia(cursor.getString(9));
+                mAsistencia.setIdAsistencia(cursor.getInt(7));
+                mAsistencia.setFechaAsistencia(cursor.getString(8));
+                mAsistencia.setEstadoAsistencia(cursor.getInt(9) == 1 ? true : false);
+                mAsistencia.setObservacionAsistencia(cursor.getString(10));
 
                 arrayList.add(mAsistencia);
                 mInscritos.setmAsistenciaList(arrayList);
             }
 
-            mInscritos.setIdInscrito(cursor.getInt(0));
-            mInscritos.setEstadoParticipanteActivo(cursor.getInt(1) == 1 ? true : false);
 
-            mPersona.setNombre1(cursor.getString(2));
-            mPersona.setNombre2(cursor.getString(3));
-            mPersona.setApellido1(cursor.getString(4));
-            mPersona.setApellido2(cursor.getString(5));
+
+            mPersona.setNombre1(cursor.getString(1));
+            mPersona.setNombre2(cursor.getString(2));
+            mPersona.setApellido1(cursor.getString(3));
+            mPersona.setApellido2(cursor.getString(4));
 
             mUsuario.setmPersona(mPersona);
+
+            mInscritos.setIdInscrito(cursor.getInt(0));
+            mInscritos.setEstadoInscritoActivo(cursor.getInt(5) == 1 ? true : false);
+            mInscritos.setEstadoParticipanteAprobacion(cursor.getString(6));
+
             mInscritos.setmUsuario(mUsuario);
 
             listInscritos.add(mInscritos);
@@ -229,7 +272,7 @@ public class Asistencia extends AppCompatActivity {
     }
 
     public void init() {
-        AsistenciaAdaptador asistenciaAdaptador = new AsistenciaAdaptador(listInscritos, this, new AsistenciaAdaptador.OnItemClickListener() {
+            AsistenciaAdaptador asistenciaAdaptador = new AsistenciaAdaptador(listInscritos, this, new AsistenciaAdaptador.OnItemClickListener() {
             @Override
             public void onItemClick(MInscritos item) {
 
@@ -237,6 +280,7 @@ public class Asistencia extends AppCompatActivity {
 
             @Override
             public void obtenList(MAsistencia item) {
+
                 crearArrayAsistencia(item);
             }
         });
@@ -272,6 +316,12 @@ public class Asistencia extends AppCompatActivity {
             System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeee");
             listaasistencia.add(mAsistencia);
         }
+    }
+
+    public void recargarListaAsistencia(int id) {
+        consultarListaInscritos(id);
+        AsistenciaAdaptador adaptador = (AsistenciaAdaptador)recycleViewListado.getAdapter();
+        adaptador.notifyDataSetChanged();
     }
 
     /*public void moveToProgramas(int id, String rol) {

@@ -5,13 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.experimental.Modelos.MCursos;
+import com.example.experimental.Progresst_Bar.ManejoProgressBar;
 import com.example.experimental.R;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHolder> {
@@ -59,6 +63,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
 
         Button btndetalles;
 
+        ProgressBar pgcursos;
+
         ViewHolder(View itemView){
             super(itemView);
             txtnombre = itemView.findViewById(R.id.txtvnombrecurso);
@@ -69,6 +75,7 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             txtarea = itemView.findViewById(R.id.txtvareacurso);
             txtfinicio = itemView.findViewById(R.id.txtvfechainiciocurso);
             txtffin = itemView.findViewById(R.id.txtvfechafincurso);
+            pgcursos = itemView.findViewById(R.id.progressBarCurso);
 
             btndetalles = itemView.findViewById(R.id.btnDetallesCurso);
         }
@@ -83,6 +90,18 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             txtarea.setText(item.getNombreArea());
             txtfinicio.setText(String.valueOf(item.getFechaInicioCurso()));
             txtffin.setText(String.valueOf(item.getFechaFinalizacionCurso()));
+
+            ManejoProgressBar manejoProgressBar = new ManejoProgressBar(pgcursos);
+            pgcursos.setProgress(0);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    pgcursos.setProgress(porcentajeCurso(item.getFechaFinalizacionCurso(), item.getDuracionCurso()));
+                }
+            }).start();
+
+
 
             btndetalles.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,5 +119,24 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
         }
     }
 
+    public int porcentajeCurso(String date2, int total){
+        LocalDate fecha1 = LocalDate.now();
+        LocalDate fecha2 = LocalDate.parse(date2);
+
+        System.out.println(fecha1 + "sssssssssssssssssssssssssssssssss");
+        System.out.println(fecha2 + "sssssssssssssssssssssssssssssssssdddd");
+        long diasFaltantes = ChronoUnit.DAYS.between(fecha2, fecha1);
+
+        int progreso = 0;
+        if (diasFaltantes > 0) {
+            System.out.println(diasFaltantes + "ddddddddddddddddd");
+
+            progreso = (int) ((diasFaltantes * 100) / total);
+            progreso = progreso - 100;
+        } else {
+            progreso = 100;
+        }
+        return progreso;
+    }
 
 }

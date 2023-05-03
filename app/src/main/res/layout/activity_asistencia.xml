@@ -18,21 +18,13 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
+            <SearchView
+                android:id="@+id/svasistencia"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView" />
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/editTextBuscar"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:inputType="textEmailAddress"
-                    android:hint="."
-                    app:expandedHintEnabled="false"/>
+                android:ems="10"
+                android:hint="@string/app_name"
+                android:inputType="textPersonName"/>
 
         </LinearLayout>
 

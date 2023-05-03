@@ -8,11 +8,11 @@ public class MProgramas implements Serializable {
 
     private int idPrograma;
     private String nombrePrograma;
-    private String nombrePeriodoPrograma;
-    private String fechaInicioPeriodoPrograma;
-    private String fechaFinPeriodoPrograma;
     private Boolean estadoProgramaActivo;
     private Boolean estadoPeriodoPrograma;
+    private String fechaInicioPeriodoPrograma;
+    private String fechaFinPeriodoPrograma;
+    private String nombrePeriodoPrograma;
 
 
     private List<MCursos> mCursosList;
