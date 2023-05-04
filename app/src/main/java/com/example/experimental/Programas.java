@@ -1,6 +1,10 @@
 package com.example.experimental;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,6 +12,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,15 +21,26 @@ import com.example.experimental.Adaptadores.ProgramasAdaptador;
 import com.example.experimental.DB.DataBase;
 import com.example.experimental.Modelos.MProgramas;
 import com.example.experimental.Utilidades.Atributos;
+import com.google.android.material.navigation.NavigationView;
+
 import android.widget.SearchView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Programas extends AppCompatActivity {
+public class Programas extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    //Navegation Drawer
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
 
     MProgramas mProgramas;
     ArrayList<MProgramas> listaProgramas;
+
+    private int idda;
+    private Boolean cursosAll = false;
+    private String rol;
 
     //vista
     private RecyclerView recycleViewProgramas;
@@ -43,16 +60,18 @@ public class Programas extends AppCompatActivity {
 
 
         //datos de main
-        int id = (int) getIntent().getSerializableExtra("id");
-        String rol = (String) getIntent().getSerializableExtra("rol");
-
+        idda = (int) getIntent().getSerializableExtra("id");
+        rol = (String) getIntent().getSerializableExtra("rol");
 
         //vista
         recycleViewProgramas = (RecyclerView) findViewById(R.id.recicleProgramas);
         svprogramas = (SearchView) findViewById(R.id.svprogramas);
 
+        //Navegation Drawer
+        drawerLayout = findViewById(R.id.my_drawer_layout);
 
-        consultarListaProgramas(id, rol);
+
+        consultarListaProgramas(idda, rol, false);
 
         svprogramas.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -62,11 +81,94 @@ public class Programas extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String sa) {
-                filder(sa, id, rol);
+                filder(sa, idda, rol);
                 return false;
             }
         });
 
+        //Navegation Drawer
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+
+        navigationView = drawerLayout.findViewById(R.id.navi);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        Menu navigationMenu = navigationView.getMenu();
+        MenuItem menuItem1 = navigationMenu.findItem(R.id.activity1);
+        MenuItem menuItem2 = navigationMenu.findItem(R.id.activity2);
+        MenuItem menuItem3 = navigationMenu.findItem(R.id.activity3);
+        MenuItem menuItem4 = navigationMenu.findItem(R.id.activity4);
+
+        if (rol.equals("alumno")){
+            menuItem1.setTitle("MIS CURSOS");
+            menuItem2.setTitle("CURSOS");
+            menuItem3.setTitle("PERFIL");
+            menuItem1.setChecked(true);
+            menuItem4.setVisible(false);
+        } else {
+            menuItem1.setTitle("ASISTENCIA");
+            menuItem3.setTitle("PERFIL");
+            menuItem1.setChecked(true);
+            menuItem2.setVisible(false);
+        }
+    }
+
+    //Navegation Drawer
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.activity1: {
+                consultarListaProgramas(idda, rol, false);
+                cursosAll = false;
+                break;
+            }
+            case R.id.activity2: {
+                consultarListaProgramas(idda, rol, true);
+               cursosAll = true;
+                break;
+            }
+            case R.id.activity3: {
+                Intent intent = new Intent(Programas.this, Perfil.class);
+                intent.putExtra("idPerfil", idda);
+                startActivity(intent);
+                break;
+            }
+
+            //EXPORT
+            /*case R.id.activity4: {
+                Intent galleryIntent = new Intent(MainActivity.this, act2.class);
+                startActivity(galleryIntent);
+                break;
+            }*/
+            case R.id.activity5: {
+                Intent intent = new Intent(Programas.this, Import.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.activity6: {
+                Intent intent = new Intent(Programas.this, MainActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void filder(String sa, int id, String rol){
@@ -89,29 +191,59 @@ public class Programas extends AppCompatActivity {
         recycleViewProgramas.setAdapter(programasAdaptador);
     }
 
-    private void consultarListaProgramas(int id, String rol) {
+    private void consultarListaProgramas(int id, String rol, Boolean est) {
         SQLiteDatabase db = conection.getReadableDatabase();
 
         if (rol.equals("alumno")){
-            listaProgramas = new ArrayList<>();
+            if (est == false) {
 
-            Cursor cursor = db.rawQuery("SELECT p.idPrograma, p.nombrePrograma, p.nombrePeriodoPrograma, p.fechaInicioPeriodoPrograma, p.fechaFinPeriodoPrograma " +
-                            "FROM programas p INNER JOIN cursos c ON c.idPrograma = p.idPrograma INNER JOIN inscritos i ON idUsuario = ? AND i.idCurso = c.idCurso " +
-                            "WHERE p.estadoProgramaActivo = '1' AND p.estadoPeriodoPrograma = '1' " +
-                            "GROUP BY p.idPrograma ORDER BY p.fechaInicioPeriodoPrograma DESC;",
-                    new String[]{String.valueOf(id)});
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                System.out.println(id + "dddddddddddddddddddddddddddddddddddddddddddddddd");
+                listaProgramas = new ArrayList<>();
 
-            while (cursor.moveToNext()){
-                mProgramas = new MProgramas();
-                mProgramas.setIdPrograma(cursor.getInt(0));
-                mProgramas.setNombrePrograma(cursor.getString(1));
-                mProgramas.setNombrePeriodoPrograma(cursor.getString(2));
-                mProgramas.setFechaInicioPeriodoPrograma(cursor.getString(3));
-                mProgramas.setFechaFinPeriodoPrograma(cursor.getString(4));
+                Cursor cursor = db.rawQuery("SELECT p.idPrograma, p.nombrePrograma, p.nombrePeriodoPrograma, p.fechaInicioPeriodoPrograma, p.fechaFinPeriodoPrograma " +
+                                "FROM programas p INNER JOIN cursos c ON c.idPrograma = p.idPrograma INNER JOIN inscritos i ON idUsuario = ? AND i.idCurso = c.idCurso " +
+                                "WHERE p.estadoProgramaActivo = '1' AND p.estadoPeriodoPrograma = '1' " +
+                                "GROUP BY p.idPrograma ORDER BY p.fechaInicioPeriodoPrograma DESC;",
+                        new String[]{String.valueOf(id)});
+                System.out.println(cursor.getCount() + "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                while (cursor.moveToNext()){
+                    mProgramas = new MProgramas();
+                    mProgramas.setIdPrograma(cursor.getInt(0));
+                    mProgramas.setNombrePrograma(cursor.getString(1));
+                    mProgramas.setNombrePeriodoPrograma(cursor.getString(2));
+                    mProgramas.setFechaInicioPeriodoPrograma(cursor.getString(3));
+                    mProgramas.setFechaFinPeriodoPrograma(cursor.getString(4));
 
-                listaProgramas.add(mProgramas);
+                    listaProgramas.add(mProgramas);
+                }
+                init(id, rol);
+
+            } else {
+                System.out.println("ssssssssssssssssssssssssssssssssssssss");
+                listaProgramas = new ArrayList<>();
+
+                String[] projection = { "idPrograma","nombrePrograma", "nombrePeriodoPrograma", "fechaInicioPeriodoPrograma", "fechaFinPeriodoPrograma"};
+                String selection = "estadoProgramaActivo = ? AND estadoPeriodoPrograma = ?";
+                String[] selectionArgs = { "1", "1" };
+
+                String groupBy = "idPrograma";
+                String orderBy = "fechaInicioPeriodoPrograma DESC";
+
+                Cursor cursor = db.query(Atributos.table_programas, projection, selection, selectionArgs, groupBy, null, orderBy );
+                System.out.println(cursor.getCount() + "ssssssssssssaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                while (cursor.moveToNext()){
+                    mProgramas = new MProgramas();
+                    mProgramas.setIdPrograma(cursor.getInt(0));
+                    mProgramas.setNombrePrograma(cursor.getString(1));
+                    mProgramas.setNombrePeriodoPrograma(cursor.getString(2));
+                    mProgramas.setFechaInicioPeriodoPrograma(cursor.getString(3));
+                    mProgramas.setFechaFinPeriodoPrograma(cursor.getString(4));
+
+                    listaProgramas.add(mProgramas);
+                }
+                init(id, rol);
             }
-            init(id, rol);
         } else {
             listaProgramas = new ArrayList<>();
 
@@ -151,6 +283,7 @@ public class Programas extends AppCompatActivity {
     public void moveToDescription(MProgramas item, int id, String rol) {
         Intent intent = new Intent(this, Cursos.class);
         intent.putExtra("idPrograma", item.getIdPrograma());
+        intent.putExtra("cursosAll", cursosAll);
         intent.putExtra("id", id);
         intent.putExtra("rol", rol);
         startActivity(intent);

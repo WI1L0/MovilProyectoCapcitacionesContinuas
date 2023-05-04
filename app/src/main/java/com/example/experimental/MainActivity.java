@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity{
 
 
             if (cursor1.moveToFirst()) {
-                int id_usu = cursor1.getInt(0);
+                int id_usu = 0;
+                id_usu = cursor1.getInt(0);
 
                 if (cursor1.getString(1).equals("Administrador")){
                     Toast.makeText(this, "Acceso denegado", Toast.LENGTH_SHORT).show();
@@ -116,6 +117,8 @@ public class MainActivity extends AppCompatActivity{
                             Toast.makeText(this, "Bienvenido Capacitador", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(this, Programas.class);
+
+                            intent.putExtra("idusu", id_usu);
                             intent.putExtra("id", cursor2.getInt(0));
                             intent.putExtra("rol", "capacitador");
                             startActivity(intent);
@@ -128,6 +131,7 @@ public class MainActivity extends AppCompatActivity{
 
                         Intent intent = new Intent(this, Programas.class);
                         intent.putExtra("id", id_usu);
+                        intent.putExtra("idusu", id_usu);
                         intent.putExtra("rol", "alumno");
                         startActivity(intent);
                     }

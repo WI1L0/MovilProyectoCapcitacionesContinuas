@@ -24,7 +24,6 @@ public class Cursos extends AppCompatActivity {
     MCursos mCursos;
     ArrayList<MCursos> listaCursos;
 
-
     //vista
     private RecyclerView recycleViewCursos;
     private SearchView svcursos;
@@ -45,6 +44,7 @@ public class Cursos extends AppCompatActivity {
         int idProgramas = (int) getIntent().getSerializableExtra("idPrograma");
         int id = (int) getIntent().getSerializableExtra("id");
         String rol = (String) getIntent().getSerializableExtra("rol");
+        Boolean cursosAll = (Boolean) getIntent().getSerializableExtra("cursosAll");
 
 
         //vista
@@ -52,7 +52,7 @@ public class Cursos extends AppCompatActivity {
         svcursos = (SearchView) findViewById(R.id.svcursos);
 
 
-        consultarListaCursos(idProgramas, id, rol);
+        consultarListaCursos(idProgramas, id, rol, cursosAll);
 
         svcursos.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -94,55 +94,49 @@ public class Cursos extends AppCompatActivity {
         recycleViewCursos.setAdapter(cursosAdaptador);
     }
 
-    private void consultarListaCursos(int idProgramas, int id, String rol) {
+    private void consultarListaCursos(int idProgramas, int id, String rol, Boolean est) {
+        listaCursos = new ArrayList<>();
         SQLiteDatabase db = conection.getReadableDatabase();
+        Cursor cursor;
 
         if (rol.equals("alumno")) {
-            listaCursos = new ArrayList<>();
+            if (est == false){
 
-            Cursor cursor = db.rawQuery("SELECT c.idCurso, c.nombreCurso, c.duracionCurso, c.nombreModalidadCurso, c.nombreTipoCurso, c.nombreEspecialidad, c.nombreArea, c.fechaInicioCurso, c.fechaFinalizacionCurso " +
-                            "FROM cursos c INNER JOIN inscritos i ON i.idCurso = c.idCurso " +
-                            "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso != 'O' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = '1' ORDER BY c.nombreCurso DESC;",
-                    new String[]{String.valueOf(id), String.valueOf(idProgramas)});
+                cursor = db.rawQuery("SELECT c.idCurso, c.nombreCurso, c.duracionCurso, c.nombreModalidadCurso, c.nombreTipoCurso, c.nombreEspecialidad, c.nombreArea, c.fechaInicioCurso, c.fechaFinalizacionCurso " +
+                                "FROM cursos c INNER JOIN inscritos i ON i.idCurso = c.idCurso " +
+                                "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso != 'O' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = '1' ORDER BY c.nombreCurso DESC;",
+                        new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
-            while (cursor.moveToNext()) {
-                mCursos = new MCursos();
-                mCursos.setIdCurso(cursor.getInt(0));
-                mCursos.setNombreCurso(cursor.getString(1));
-                mCursos.setDuracionCurso(cursor.getInt(2));
-                mCursos.setNombreModalidadCurso(cursor.getString(3));
-                mCursos.setNombreTipoCurso(cursor.getString(4));
-                mCursos.setNombreEspecialidad(cursor.getString(5));
-                mCursos.setNombreArea(cursor.getString(6));
-                mCursos.setFechaInicioCurso(cursor.getString(7));
-                mCursos.setFechaFinalizacionCurso(cursor.getString(8));
+            } else {
 
-                listaCursos.add(mCursos);
+                cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso " +
+                                "FROM cursos WHERE idPrograma = ? AND estadoAprovacionCurso != 'O' AND estadoCurso = '1' AND estadoPublicasionCurso = '1' ORDER BY nombreCurso DESC;",
+                        new String[]{String.valueOf(idProgramas)});
+
             }
-            init(rol);
         } else {
-            listaCursos = new ArrayList<>();
 
-            Cursor cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso " +
+            cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso " +
                             "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso != 'o' AND estadoCurso = '1' AND estadoPublicasionCurso = '1' ORDER BY nombreCurso DESC;",
                     new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
-            while (cursor.moveToNext()) {
-                mCursos = new MCursos();
-                mCursos.setIdCurso(cursor.getInt(0));
-                mCursos.setNombreCurso(cursor.getString(1));
-                mCursos.setDuracionCurso(cursor.getInt(2));
-                mCursos.setNombreModalidadCurso(cursor.getString(3));
-                mCursos.setNombreTipoCurso(cursor.getString(4));
-                mCursos.setNombreEspecialidad(cursor.getString(5));
-                mCursos.setNombreArea(cursor.getString(6));
-                mCursos.setFechaInicioCurso(cursor.getString(7));
-                mCursos.setFechaFinalizacionCurso(cursor.getString(8));
-
-                listaCursos.add(mCursos);
-            }
-            init(rol);
         }
+
+        while (cursor.moveToNext()) {
+            mCursos = new MCursos();
+            mCursos.setIdCurso(cursor.getInt(0));
+            mCursos.setNombreCurso(cursor.getString(1));
+            mCursos.setDuracionCurso(cursor.getInt(2));
+            mCursos.setNombreModalidadCurso(cursor.getString(3));
+            mCursos.setNombreTipoCurso(cursor.getString(4));
+            mCursos.setNombreEspecialidad(cursor.getString(5));
+            mCursos.setNombreArea(cursor.getString(6));
+            mCursos.setFechaInicioCurso(cursor.getString(7));
+            mCursos.setFechaFinalizacionCurso(cursor.getString(8));
+            listaCursos.add(mCursos);
+        }
+        init(rol);
+
     }
 
     public void init(String rol) {

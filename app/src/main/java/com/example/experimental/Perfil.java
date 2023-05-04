@@ -27,7 +27,7 @@ public class Perfil extends AppCompatActivity {
 
 
         //datos de programas
-        int id = (int) getIntent().getSerializableExtra("idCurso");
+        int id = (int) getIntent().getSerializableExtra("idPerfil");
 
 
         //vista
@@ -41,11 +41,11 @@ public class Perfil extends AppCompatActivity {
 
         SQLiteDatabase db = conection.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, c.tituloCapacitador FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE u.idUsuario = ?;",
+        Cursor cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, c.tituloCapacitador, u.nombreRol FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE u.idUsuario = ?;",
                 new String[]{String.valueOf(id)});
 
         while (cursor.moveToNext()) {
-            txtvrol.setText(cursor.getString(0) + "rol");
+            txtvrol.setText(cursor.getString(0) + " : " + cursor.getString(7));
             txtvcedula.setText(cursor.getString(1));
             txtvtelefono.setText(cursor.getString(2));
             txtvcelular.setText(cursor.getString(3));
