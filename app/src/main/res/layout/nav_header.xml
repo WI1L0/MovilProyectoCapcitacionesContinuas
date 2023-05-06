@@ -19,7 +19,7 @@
 
 
     <TextView
-        android:id="@+id/txtvnombreApellidoLateral"
+        android:id="@+id/txtvusuLateral"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small.Inverse" />

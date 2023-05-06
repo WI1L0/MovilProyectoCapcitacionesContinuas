@@ -456,8 +456,8 @@ public class Import extends AppCompatActivity {
 
     public void verificarAllAsistencia(){
         if (controlAsistencia() == true) {
-            Export export = new Export(Import.this);
-            export.exportAll(false);
+            Export export = new Export();
+            export.exportAll(false, Import.this);
             System.out.println("sssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaa");
         }
     }

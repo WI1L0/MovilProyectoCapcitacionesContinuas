@@ -106,14 +106,14 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                 public void onClick(View view) {
                     //Toast.makeText(context, "ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
 
+                    //String contenido = edtobservaciones.getText().toString();
                     mAsistencia = new MAsistencia();
                     mParticipante = new MParticipante();
 
                     mParticipante.setIdParticipanteMatriculado(item.getIdParticipanteMatriculado());
 
                     mAsistencia.setEstadoAsistencia(true);
-                    String observ = edtobservaciones.getText().toString();
-                    mAsistencia.setObservacionAsistencia(observ);
+                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
                     mAsistencia.setmParticipante(mParticipante);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
@@ -139,8 +139,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     mParticipante.setIdParticipanteMatriculado(item.getIdParticipanteMatriculado());
 
                     mAsistencia.setEstadoAsistencia(false);
-                    String observ = edtobservaciones.getText().toString();
-                    mAsistencia.setObservacionAsistencia(observ);
+                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
                     mAsistencia.setmParticipante(mParticipante);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {

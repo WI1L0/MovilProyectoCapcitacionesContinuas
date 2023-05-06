@@ -40,6 +40,7 @@ public class Export extends AppCompatActivity {
     private int idasi;
 
     private int progreso = 0, count = 0;
+    private String host = "192.168.100.31";
 
     private ManejoProgressBar manejoProgressBar;
 
@@ -49,10 +50,6 @@ public class Export extends AppCompatActivity {
     private Button btnexport;
 
     private Context mContext;
-
-    public Export(Context context) {
-        mContext = context;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +68,13 @@ public class Export extends AppCompatActivity {
                 manejoProgressBar = new ManejoProgressBar(pgsexport);
                 manejoProgressBar.execute();
 
-                exportAll(true);
+                exportAll(true, Export.this);
             }
         });
     }
 
-    public void exportAll(Boolean est) {
+    public void exportAll(Boolean est, Context context) {
+        mContext = context;
         DataBase conection = new DataBase(mContext);
         SQLiteDatabase db = conection.getReadableDatabase();
 
@@ -123,7 +121,7 @@ public class Export extends AppCompatActivity {
     }
 
     public void bayNew(int aid, Boolean est){
-        String url = "http://192.168.100.31:8080/api/asistencia/save";
+        String url = "http://" + host + ":8080/api/asistencia/save";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -162,7 +160,7 @@ public class Export extends AppCompatActivity {
     }
 
     public void bayPut(int aid, Boolean est){
-        String url = "http://192.168.100.31:8080/api/asistencia/actualizar/" + aid;
+        String url = "http://" + host + ":8080/api/asistencia/actualizar/" + aid;
 
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 new Response.Listener<String>() {

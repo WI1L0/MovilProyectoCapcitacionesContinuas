@@ -55,11 +55,11 @@ public class MainActivity extends AppCompatActivity{
         edtusername = (EditText) findViewById(R.id.editTextUserName);
         edtpassword = (EditText) findViewById(R.id.editTextPassword);
 
-        if //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
-            // control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_asistencia) == true) {
+        if (control(Atributos.table_persona) == false || control(Atributos.table_usuarios) == false || control(Atributos.table_programas) == false || control(Atributos.table_capacitador) == false ||
+            control(Atributos.table_cursos) == false || control(Atributos.table_prerequisitos) == false || control(Atributos.table_inscritos) == false || control(Atributos.table_participante) == false || control(Atributos.table_asistencia) == false) {
 
-        (control(Atributos.table_persona) == false && control(Atributos.table_usuarios) == false && control(Atributos.table_programas) == false && control(Atributos.table_capacitador) == false) {
-            //t();
+        //(control(Atributos.table_persona) == false && control(Atributos.table_usuarios) == false && control(Atributos.table_programas) == false && control(Atributos.table_capacitador) == false) {
+            t();
         }
 
         btninicio.setOnClickListener(new View.OnClickListener() {

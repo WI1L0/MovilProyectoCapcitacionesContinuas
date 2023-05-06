@@ -136,7 +136,8 @@ tools:context=".MainActivity">
             android:text="cargar datos temporales"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5" />
+            app:layout_constraintBottom_toTopOf="@+id/guideline5"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/textView"
@@ -145,7 +146,8 @@ tools:context=".MainActivity">
             android:text="al dar en cargar datos temporales debe esperar y revisar en la consola que se allan ingresado todos los datos esto esta de forma temporal"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/btndatos" />
+            app:layout_constraintTop_toBottomOf="@+id/btndatos"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btndatabasetemporal"
@@ -154,7 +156,8 @@ tools:context=".MainActivity">
             android:text="Database Temporal"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

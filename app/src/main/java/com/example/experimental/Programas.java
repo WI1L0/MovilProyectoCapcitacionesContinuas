@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -102,6 +105,8 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         View naheaderview = navigationView.getHeaderView(0);
+        imgheader = (ImageView) naheaderview.findViewById(R.id.imgusuariolateral);
+        txtvheader = (TextView) naheaderview.findViewById(R.id.txtvusuLateral);
 
         Menu navigationMenu = navigationView.getMenu();
         MenuItem menuItem1 = navigationMenu.findItem(R.id.activity1);
@@ -115,11 +120,32 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
             menuItem3.setTitle("PERFIL");
             menuItem1.setChecked(true);
             menuItem4.setVisible(false);
+
+            SQLiteDatabase db = conection.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery("SELECT fotoPerfil, username FROM usuarios WHERE idUsuario = ?;",
+                    new String[]{String.valueOf(idda)});
+
+            if (cursor.moveToFirst()) {
+                imgheader.setImageBitmap(ImgBitmap(cursor.getString(0)));
+                txtvheader.setText(cursor.getString(1));
+            }
+
         } else {
             menuItem1.setTitle("ASISTENCIA");
             menuItem3.setTitle("PERFIL");
             menuItem1.setChecked(true);
             menuItem2.setVisible(false);
+
+            SQLiteDatabase db = conection.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery("SELECT u.fotoPerfil, u.username FROM usuarios u INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE c.idCapacitador = ?;",
+                    new String[]{String.valueOf(idda)});
+
+            if (cursor.moveToFirst()) {
+                imgheader.setImageBitmap(ImgBitmap(cursor.getString(0)));
+                txtvheader.setText(cursor.getString(1));
+            }
         }
     }
 
@@ -291,5 +317,10 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
         intent.putExtra("id", id);
         intent.putExtra("rol", rol);
         startActivity(intent);
+    }
+
+    public Bitmap ImgBitmap(String img){
+        byte[] bitmapBytes = Base64.decode(img, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
     }
 }
