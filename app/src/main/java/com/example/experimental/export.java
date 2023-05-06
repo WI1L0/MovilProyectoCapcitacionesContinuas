@@ -2,13 +2,213 @@ package com.example.experimental;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-public class export extends AppCompatActivity {
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.experimental.DB.DataBase;
+import com.example.experimental.Modelos.MAsistencia;
+import com.example.experimental.Modelos.MInscritos;
+import com.example.experimental.Progresst_Bar.ManejoProgressBar;
+import com.example.experimental.Utilidades.Atributos;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+public class Export extends AppCompatActivity {
+
+    private JSONObject postData;
+
+    private int idasi;
+
+    private int progreso = 0, count = 0;
+
+    private ManejoProgressBar manejoProgressBar;
+
+    //VISTA
+    private ImageView imgexport;
+    private ProgressBar pgsexport;
+    private Button btnexport;
+
+    private Context mContext;
+
+    public Export(Context context) {
+        mContext = context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
+
+        //VISTA
+        imgexport = (ImageView) findViewById(R.id.imgexporttdata);
+        pgsexport = (ProgressBar) findViewById(R.id.pgbexportdata);
+        btnexport = (Button) findViewById(R.id.btnexportdata);
+
+        btnexport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                manejoProgressBar = new ManejoProgressBar(pgsexport);
+                manejoProgressBar.execute();
+
+                exportAll(true);
+            }
+        });
+    }
+
+    public void exportAll(Boolean est) {
+        DataBase conection = new DataBase(mContext);
+        SQLiteDatabase db = conection.getReadableDatabase();
+
+        String[] projection = {"idAsistencia", "fechaAsistencia", "estadoAsistencia", "observacionAsistencia", "estadoActual", "idParticipanteMatriculado"};
+        String selection = "estadoSubida = ?";
+        String[] selectionArgs = {"0"};
+
+        Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
+
+
+        if (est == true) {
+            count = cursor.getCount();
+        }
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                postData = new JSONObject();
+
+                try {
+                    postData.put("idAsistencia", cursor.getInt(0));
+                    postData.put("fechaAsistencia", cursor.getString(1));
+                    postData.put("estadoAsistencia", cursor.getInt(2) == 1 ? true : false);
+                    postData.put("observacionAsistencia", cursor.getString(3));
+
+                    JSONObject participantesMatriculados = new JSONObject();
+                    participantesMatriculados.put("idParticipanteMatriculado", cursor.getInt(5));
+
+                    postData.put("partipantesMatriculados", participantesMatriculados);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (cursor.getString(4).equals("Actualizado")) {
+                    bayPut(cursor.getInt(0), est);
+                }
+
+                if (cursor.getString(4).equals("Creado")) {
+                    bayNew(cursor.getInt(0), est);
+                }
+            }
+        } else {
+            Toast.makeText(mContext, "No hay datos para exportar", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void bayNew(int aid, Boolean est){
+        String url = "http://192.168.100.31:8080/api/asistencia/save";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (est == true) {
+                            progreso++;
+                            int pg = (progreso * 100) / count;
+                            pgsexport.setProgress(pg);
+                        }
+                        System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
+                        System.out.println(response);
+                        actualizar(aid);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error);
+                Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return postData.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        queue.add(request);
+    }
+
+    public void bayPut(int aid, Boolean est){
+        String url = "http://192.168.100.31:8080/api/asistencia/actualizar/" + aid;
+
+        StringRequest request = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (est == true) {
+                            progreso++;
+                            int pg = (progreso * 100) / count;
+                            pgsexport.setProgress(pg);
+                        }
+                        System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
+                        System.out.println(response);
+                        actualizar(aid);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error);
+                Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return postData.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(mContext);
+        queue.add(request);
+    }
+
+    public void actualizar(int aid){
+        DataBase conection = new DataBase(mContext);
+        SQLiteDatabase db = conection.getWritableDatabase();
+
+        String sql = "UPDATE asistencia SET estadoSubida = ?, estadoActual = ? WHERE idAsistencia = ?";
+        SQLiteStatement statement = db.compileStatement(sql);
+        statement.bindLong(1, 1);
+        statement.bindString(2, "Descargado");
+        statement.bindLong(3, aid);
+        long resultado = statement.executeUpdateDelete();
+        System.out.println("PARTICIPANTE ALMACENADA CORRECTAMENTE....................................." + aid);
     }
 }

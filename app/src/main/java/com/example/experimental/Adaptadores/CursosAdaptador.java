@@ -1,10 +1,14 @@
 package com.example.experimental.Adaptadores;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -65,6 +69,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
 
         ProgressBar pgcursos;
 
+        ImageView imgcurso;
+
         ViewHolder(View itemView){
             super(itemView);
             txtnombre = itemView.findViewById(R.id.txtvnombrecurso);
@@ -76,6 +82,7 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             txtfinicio = itemView.findViewById(R.id.txtvfechainiciocurso);
             txtffin = itemView.findViewById(R.id.txtvfechafincurso);
             pgcursos = itemView.findViewById(R.id.progressBarCurso);
+            imgcurso = itemView.findViewById(R.id.imgcurso);
 
             btndetalles = itemView.findViewById(R.id.btnDetallesCurso);
         }
@@ -90,6 +97,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             txtarea.setText(item.getNombreArea());
             txtfinicio.setText(String.valueOf(item.getFechaInicioCurso()));
             txtffin.setText(String.valueOf(item.getFechaFinalizacionCurso()));
+
+            imgcurso.setImageBitmap(ImgBitmap(item.getFotoCurso()));
 
             ManejoProgressBar manejoProgressBar = new ManejoProgressBar(pgcursos);
             pgcursos.setProgress(0);
@@ -139,4 +148,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
         return progreso;
     }
 
+    public Bitmap ImgBitmap(String img){
+        byte[] bitmapBytes = Base64.decode(img, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+    }
 }

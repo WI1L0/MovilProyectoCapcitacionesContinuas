@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -63,36 +64,34 @@ public class Import extends AppCompatActivity {
             conection.insercontrol();
         }
 
+        verificarAllAsistencia();
         verificarAll();
 
         btnimport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnimport.setEnabled(false);
+                //btnimport.setEnabled(false);
                 manejoProgressBar = new ManejoProgressBar(pgsimport);
                 manejoProgressBar.execute();
 
-                final int[] a = {0};
-                cargar(new OnImportListener() {
-                    @Override
-                    public void onImportExito(int leng) {
-                        a[0]++;
-                        if (a[0] == 8){
+                if (controlAsistencia() == false) {
+                    cargar(new OnImportListener() {
+                        @Override
+                        public void onImportExito(int leng) {
                             verificarAll();
-                            btnimport.setEnabled(true);
+                            //btnimport.setEnabled(true);
                         }
-                    }
 
-                    @Override
-                    public void onImportError() {
-                        a[0]++;
-                        if (a[0] == 8){
+                        @Override
+                        public void onImportError() {
                             verificarAll();
                             btnimport.setEnabled(true);
                             btnimport.setText("REINTENTAR");
                         }
-                    }
-                });
+                    });
+                } else {
+                    verificarAllAsistencia();
+                }
 
             }
         });
@@ -100,6 +99,7 @@ public class Import extends AppCompatActivity {
         btnfinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getApplicationContext().deleteDatabase("db_final");
                 //importBase();
                 DataBaseTransaction dataBaseTransaction = new DataBaseTransaction(getApplicationContext());
                 dataBaseTransaction.newControl(new OnImportListener() {
@@ -113,7 +113,6 @@ public class Import extends AppCompatActivity {
                         btnfinalizar.setText("REINTENTAR");
                     }
                 });
-                //cargar base final
             }
         });
     }
@@ -301,29 +300,10 @@ public class Import extends AppCompatActivity {
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos inscritos descargados", Toast.LENGTH_SHORT).show();
-
-                            //MATRICULADO
-                            final int[] cont1 = {0};
-                            importData.importarParticipanteMatriculado(new OnImportListener() {
-                                @Override
-                                public void onImportExito(int leng) {
-                                    cont1[0]++;
-                                    if (cont1[0] == leng) {
-                                        Toast.makeText(Import.this, "Datos matriculados descargados", Toast.LENGTH_SHORT).show();
                                         updatecontrol(Atributos.table_inscritos);
                                         progreso = progreso + 10;
                                         pgsimport.setProgress(progreso);
                                         listenerMein.onImportExito(0);
-                                    }
-                                }
-
-                                @Override
-                                public void onImportError() {
-                                    Toast.makeText(Import.this, "Error en descargar matriculados", Toast.LENGTH_SHORT).show();
-                                    limpiartable(Atributos.table_inscritos);
-                                    listenerMein.onImportError();
-                                }
-                            });
 
                         }
                     }
@@ -332,6 +312,35 @@ public class Import extends AppCompatActivity {
                     public void onImportError() {
                         Toast.makeText(Import.this, "Error en descargar inscritos", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_inscritos);
+                        listenerMein.onImportError();
+                    }
+                });
+
+            }
+
+            if (control(Atributos.table_participante) == false) {
+                final double[] progresoInterno = {0};
+
+                //PARTICIPANTE
+                final int[] cont = {0};
+                importData.importarParticipanteMatriculado(new OnImportListener() {
+                    @Override
+                    public void onImportExito(int leng) {
+
+                        cont[0]++;
+                        if (cont[0] == leng) {
+                            Toast.makeText(Import.this, "Datos participante descargados", Toast.LENGTH_SHORT).show();
+                                        updatecontrol(Atributos.table_participante);
+                                        progreso = progreso + 10;
+                                        pgsimport.setProgress(progreso);
+                                        listenerMein.onImportExito(0);
+                        }
+                    }
+
+                    @Override
+                    public void onImportError() {
+                        Toast.makeText(Import.this, "Error en descargar participante", Toast.LENGTH_SHORT).show();
+                        limpiartable(Atributos.table_participante);
                         listenerMein.onImportError();
                     }
                 });
@@ -409,11 +418,28 @@ public class Import extends AppCompatActivity {
         return estado;
     }
 
-    public void verificarAll(){
-        if //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
-            // control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_asistencia) == true) {
+    public Boolean controlAsistencia(){
+        SQLiteDatabase db = conection.getWritableDatabase();
+        String[] projection = {"idAsistencia"};
+        String selection = "estadoSubida = ?";
+        String[] selectionArgs = {"0"};
 
-        (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
+        Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
+
+        if (cursor.moveToFirst()){
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1");
+            return true;
+        } else {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
+            return false;
+        }
+    }
+
+    public void verificarAll(){
+        if (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
+             control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_participante) == true && control(Atributos.table_asistencia) == true) {
+
+        //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
 
             progreso = barActualizar();
             pgsimport.setProgress(progreso);
@@ -425,6 +451,14 @@ public class Import extends AppCompatActivity {
 
             progreso = barActualizar();
             pgsimport.setProgress(progreso);
+        }
+    }
+
+    public void verificarAllAsistencia(){
+        if (controlAsistencia() == true) {
+            Export export = new Export(Import.this);
+            export.exportAll(false);
+            System.out.println("sssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaa");
         }
     }
 

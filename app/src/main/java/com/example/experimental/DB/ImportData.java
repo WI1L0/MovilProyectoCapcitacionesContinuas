@@ -370,7 +370,7 @@ public class ImportData extends DataBaseTemporal {
                             values.put("observacionCurso", jsonObject.getString("observacionCurso"));
                             values.put("estadoCurso", jsonObject.getBoolean("estadoCurso"));
                             values.put("estadoAprovacionCurso", jsonObject.getString("estadoAprovacionCurso"));
-                            values.put("estadoPublicasionCurso", jsonObject.getBoolean("estadoPublicasionCurso"));
+                            values.put("estadoPublicasionCurso", jsonObject.getString("estadoPublicasionCurso"));
                             values.put("descripcionCurso", jsonObject.getString("descripcionCurso"));
                             values.put("objetivoGeneralesCurso", jsonObject.getString("objetivoGeneralesCurso"));
                             values.put("numeroCuposCurso", jsonObject.getInt("numeroCuposCurso"));
@@ -515,16 +515,17 @@ public class ImportData extends DataBaseTemporal {
                     for (int a = 0; a < response.length(); a++) {
                         try {
                             JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectIdUsuario = new JSONObject(jsonObject.get("usuario").toString());
+                            JSONObject jsonObjectIdCursos = new JSONObject(jsonObject.get("curso").toString());
 
                             values = new ContentValues();
                             values.put("idInscrito", jsonObject.getInt("idInscrito"));
                             values.put("fechaInscrito", jsonObject.getString("fechaInscrito"));
                             values.put("estadoInscrito", jsonObject.getBoolean("estadoInscrito"));
                             values.put("estadoInscritoActivo", jsonObject.getBoolean("estadoInscritoActivo"));
-                            values.put("estadoParticipanteAprobacion", "p");
-                            values.put("estadoParticipanteActivo", false);
 
-                            values.put("idCurso", jsonObject.getInt("idCurso"));
+                            values.put("idUsuario", jsonObjectIdUsuario.getInt("idUsuario"));
+                            values.put("idCurso", jsonObjectIdCursos.getInt("idCurso"));
 
                             long resultado = db.insert(Atributos.table_inscritos, null, values);
 
@@ -586,18 +587,18 @@ public class ImportData extends DataBaseTemporal {
                     for (int a = 0; a < response.length(); a++) {
                         try {
                             JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                            JSONObject jsonObjectIdInscrito = new JSONObject(jsonObject.get("inscrito").toString());
+                            JSONObject jsonObjectIdUsuario = new JSONObject(jsonObject.get("inscrito").toString());
 
-                            Boolean est = jsonObject.getBoolean("estadoParticipanteActivo");
-                            int estint = est ? 1 : 0;
+                            values = new ContentValues();
+                            values.put("idParticipanteMatriculado", jsonObject.getInt("idParticipanteMatriculado"));
+                            values.put("estadoParticipanteAprobacion", jsonObject.getString("estadoParticipanteAprobacion"));
+                            values.put("estadoParticipanteActivo", jsonObject.getBoolean("estadoParticipanteActivo"));
 
-                            String sql = "UPDATE inscritos SET estadoParticipanteAprobacion = ?, estadoParticipanteActivo = ? WHERE idInscrito = ?";
-                            SQLiteStatement statement = db.compileStatement(sql);
-                            statement.bindString(1, jsonObject.getString("estadoParticipanteAprobacion"));
-                            statement.bindLong(2, estint);
-                            statement.bindLong(3, jsonObjectIdInscrito.getInt("idInscrito"));
-                            long resultado = statement.executeUpdateDelete();
-                            System.out.println("PARTICIPANTE ALMACENADA CORRECTAMENTE.....................................");
+                            values.put("idInscrito", jsonObjectIdUsuario.getInt("idInscrito"));
+
+                            long resultado = db.insert(Atributos.table_participante, null, values);
+
+                            System.out.println(resultado + " PARTICIPANTE ALMACENADA CORRECTAMENTE");
 
                             resultados.add(resultado);
 
@@ -614,7 +615,6 @@ public class ImportData extends DataBaseTemporal {
                             } else {
                                 listener.onImportError();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             listener.onImportError();
@@ -655,14 +655,16 @@ public class ImportData extends DataBaseTemporal {
                     for (int a = 0; a < response.length(); a++) {
                         try {
                             JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                            JSONObject jsonObjectIdInscrito = new JSONObject(jsonObject.get("inscrito").toString());
+                            JSONObject jsonObjectIdParticipante = new JSONObject(jsonObject.get("partipantesMatriculados").toString());
 
                             values = new ContentValues();
                             values.put("idAsistencia", jsonObject.getInt("idAsistencia"));
-                            values.put("fechaInscrito", jsonObject.getString("fechaAsistencia"));
+                            values.put("fechaAsistencia", jsonObject.getString("fechaAsistencia"));
                             values.put("estadoAsistencia", jsonObject.getBoolean("estadoAsistencia"));
                             values.put("observacionAsistencia", jsonObject.getString("observacionAsistencia"));
-                            values.put("idInscrito", jsonObjectIdInscrito.getInt("idInscrito"));
+                            values.put("estadoSubida", true);
+                            values.put("estadoActual", "Descargado");
+                            values.put("idParticipanteMatriculado", jsonObjectIdParticipante.getInt("idParticipanteMatriculado"));
 
                             long resultado = db.insert(Atributos.table_asistencia, null, values);
 
@@ -712,6 +714,7 @@ public class ImportData extends DataBaseTemporal {
         requestunit.start();
     }
 
+
     public void cargarDatosTemporales(){
         cargarDatosTemporalesPersona();
         cargarDatosTemporalesUsuarios();
@@ -745,6 +748,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void cargarDatosTemporalesUsuarios(){
+        Random random = new Random();
         SQLiteDatabase db = (new DataBase(conection)).getWritableDatabase();
         for (int a = 1; a < 10000; a++) {
 
@@ -753,7 +757,7 @@ public class ImportData extends DataBaseTemporal {
             values.put("idUsuario", a);
             values.put("username", "admin" + a);
             values.put("password", "root" + a);
-            //values.put("fotoPerfil", "fotoPerfil " + a);
+            //values.put("fotoPerfil", "imgusuarios" + random.nextInt(5) + 1);
             values.put("nombreRol", "fotoPerfil " + a);
             if(a > 9500) {
                 values.put("estadoUsuarioActivo", false);
@@ -811,12 +815,13 @@ public class ImportData extends DataBaseTemporal {
             String fec[] = fechasAleatorias();
             values.put("idCurso", a);
             values.put("nombreCurso", "nombreCurso " + a);
+            values.put("fotoCurso", "imgcurso" + random.nextInt(5) + 1);
             values.put("fotoCurso", "fotoCurso " + a);
             values.put("duracionCurso", Integer.parseInt(fec[2]));
-            values.put("observacionCurso", "observacionCurso " + a);
+            values.put("observacionCurso", "");
             values.put("estadoCurso", true);
-            values.put("estadoAprovacionCurso", "p");
-            values.put("estadoPublicasionCurso", true);
+            values.put("estadoAprovacionCurso", "A");
+            values.put("estadoPublicasionCurso", "V");
             values.put("descripcionCurso", "descripcionCurso " + a);
             values.put("objetivoGeneralesCurso", "objetivoGeneralesCurso " + a);
             values.put("numeroCuposCurso", a);

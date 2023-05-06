@@ -14,21 +14,21 @@ public class MInscritos implements Serializable {
     private Boolean estadoParticipanteActivo;
 
 
-    private List<MAsistencia> mAsistenciaList;
+    private List<MParticipante> mParticipanteList;
     private MUsuario mUsuario;
     private MCursos mCursos;
 
     public MInscritos() {
     }
 
-    public MInscritos(int idInscrito, String fechaInscrito, Boolean estadoInscrito, Boolean estadoInscritoActivo, String estadoParticipanteAprobacion, Boolean estadoParticipanteActivo, List<MAsistencia> mAsistenciaList, MUsuario mUsuario, MCursos mCursos) {
+    public MInscritos(int idInscrito, String fechaInscrito, Boolean estadoInscrito, Boolean estadoInscritoActivo, String estadoParticipanteAprobacion, Boolean estadoParticipanteActivo, List<MParticipante> mParticipanteList, MUsuario mUsuario, MCursos mCursos) {
         this.idInscrito = idInscrito;
         this.fechaInscrito = fechaInscrito;
         this.estadoInscrito = estadoInscrito;
         this.estadoInscritoActivo = estadoInscritoActivo;
         this.estadoParticipanteAprobacion = estadoParticipanteAprobacion;
         this.estadoParticipanteActivo = estadoParticipanteActivo;
-        this.mAsistenciaList = mAsistenciaList;
+        this.mParticipanteList = mParticipanteList;
         this.mUsuario = mUsuario;
         this.mCursos = mCursos;
     }
@@ -81,12 +81,12 @@ public class MInscritos implements Serializable {
         this.estadoParticipanteActivo = estadoParticipanteActivo;
     }
 
-    public List<MAsistencia> getmAsistenciaList() {
-        return mAsistenciaList;
+    public List<MParticipante> getmParticipanteList() {
+        return mParticipanteList;
     }
 
-    public void setmAsistenciaList(List<MAsistencia> mAsistenciaList) {
-        this.mAsistenciaList = mAsistenciaList;
+    public void setmParticipanteList(List<MParticipante> mParticipanteList) {
+        this.mParticipanteList = mParticipanteList;
     }
 
     public MUsuario getmUsuario() {

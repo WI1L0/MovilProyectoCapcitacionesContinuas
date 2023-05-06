@@ -103,10 +103,7 @@ public class MainActivity extends AppCompatActivity{
                 int id_usu = 0;
                 id_usu = cursor1.getInt(0);
 
-                if (cursor1.getString(1).equals("Administrador")){
-                    Toast.makeText(this, "Acceso denegado", Toast.LENGTH_SHORT).show();
-                } else {
-
+                if (cursor1.getString(1).equals("DocenteCapacitador")){
                     Cursor cursor2 = db.rawQuery("SELECT " + Atributos.atr_cap_id + ", " + Atributos.atr_cap_estado_capacitador + " FROM " + Atributos.table_capacitador +
                                     " WHERE " + Atributos.atr_usu_id + " = ?;",
                             new String[]{String.valueOf(id_usu)});
@@ -118,7 +115,6 @@ public class MainActivity extends AppCompatActivity{
 
                             Intent intent = new Intent(this, Programas.class);
 
-                            intent.putExtra("idusu", id_usu);
                             intent.putExtra("id", cursor2.getInt(0));
                             intent.putExtra("rol", "capacitador");
                             startActivity(intent);
@@ -127,16 +123,24 @@ public class MainActivity extends AppCompatActivity{
                         }
 
                     } else {
-                        Toast.makeText(this, "Bienvenido Alumno", Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(this, Programas.class);
-                        intent.putExtra("id", id_usu);
-                        intent.putExtra("idusu", id_usu);
-                        intent.putExtra("rol", "alumno");
-                        startActivity(intent);
+                        Toast.makeText(this, "Acceso denegado", Toast.LENGTH_SHORT).show();
                     }
 
                     cursor2.close();
+                }
+                if (cursor1.getString(1).equals("Participante")) {
+
+
+                    Toast.makeText(this, "Bienvenido Alumno", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(this, Programas.class);
+                    intent.putExtra("id", id_usu);
+                    intent.putExtra("rol", "alumno");
+                    startActivity(intent);
+                }
+
+                if (cursor1.getString(1).equals("Administrador")) {
+                    Toast.makeText(this, "Administrador sin acceso", Toast.LENGTH_SHORT).show();
                 }
 
             } else {

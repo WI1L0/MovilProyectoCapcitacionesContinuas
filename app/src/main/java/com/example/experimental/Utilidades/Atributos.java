@@ -71,14 +71,20 @@ public class Atributos {
     public static final String atr_ins_fecha= "fechaInscrito";
     public static final String atr_ins_estado = "estadoInscrito";
     public static final String atr_ins_estado_activo = "estadoInscritoActivo";
-    public static final String atr_ins_estado_aprobado = "estadoParticipanteAprobacion";
-    public static final String atr_ins_estado_participante = "estadoParticipanteActivo";
 
     public static final String table_asistencia = "asistencia";
     public static final String atr_asi_id = "idAsistencia";
     public static final String atr_asi_fecha = "fechaAsistencia";
     public static final String atr_asi_estado = "estadoAsistencia";
     public static final String atr_asi_observaciones = "observacionAsistencia";
+    public static final String atr_asi_est_sub = "estadoSubida";
+    public static final String atr_asi_est_act = "estadoActual";
+
+
+    public static final String table_participante = "participante";
+    public static final String atr_par_id = "idParticipanteMatriculado";
+    public static final String atr_par_estado_aprobado = "estadoParticipanteAprobacion";
+    public static final String atr_par_estado_participante = "estadoParticipanteActivo";
 
     public static final String table_control = "control";
     public static final String atr_con_table = "nametable";
@@ -118,7 +124,7 @@ public class Atributos {
             atr_cap_id + " INTEGER NOT NULL, " + atr_cur_nombre + " TEXT NOT NULL, " +
             atr_cur_foto + " TEXT, " + atr_cur_duracion + " INTEGER NOT NULL, " +
             atr_cur_observaciones + " TEXT, " + atr_cur_estado + " BOOLEAN NOT NULL, " +
-            atr_cur_estado_aprobacion + " TEXT, " + atr_cur_estado_publicacion + " BOOLEAN, " +
+            atr_cur_estado_aprobacion + " TEXT, " + atr_cur_estado_publicacion + " TEXT, " +
             atr_cur_descripcion + " TEXT, " + atr_cur_objetivos + " TEXT, " +
             atr_cur_cupos + " INTEGER NOT NULL, " + atr_cur_f_inicio + " TEXT NOT NULL, " +
             atr_cur_f_fin + " TEXT NOT NULL, " + atr_cur_especialidad + " TEXT NOT NULL, " +
@@ -137,14 +143,20 @@ public class Atributos {
             atr_ins_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_usu_id + " INTEGER NOT NULL, " +
             atr_cur_id + " INTEGER NOT NULL, " + atr_ins_fecha + " TEXT NOT NULL, " +
             atr_ins_estado + " BOOLEAN NOT NULL, " + atr_ins_estado_activo + " BOOLEAN NOT NULL, " +
-            atr_ins_estado_aprobado + " TEXT NOT NULL, " + atr_ins_estado_participante + " BOOLEAN NOT NULL, " +
             "FOREIGN KEY(" + atr_usu_id + ") REFERENCES " + table_usuarios + " (" + atr_usu_id + "));";
 
-    public static final String CREAR_TABLA_ASISTENCIAS = "CREATE TABLE " + table_asistencia + " (" +
-            atr_asi_id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + atr_ins_id + " INTEGER NOT NULL, " +
-            atr_asi_fecha + " TEXT NOT NULL, " + atr_asi_estado + " BOOLEAN NOT NULL, " +
-            atr_asi_observaciones + " TEXT, " +
+    public static final String CREAR_TABLA_PARTICIPANTES = "CREATE TABLE " + table_participante + " (" +
+            atr_par_id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + atr_ins_id + " INTEGER NOT NULL, " +
+            atr_par_estado_aprobado + " TEXT NOT NULL, " + atr_par_estado_participante + " BOOLEAN NOT NULL, " +
             "FOREIGN KEY(" + atr_ins_id + ") REFERENCES " + table_inscritos + " (" + atr_ins_id + "));";
+
+    public static final String CREAR_TABLA_ASISTENCIAS = "CREATE TABLE " + table_asistencia + " (" +
+            atr_asi_id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + atr_par_id + " INTEGER NOT NULL, " +
+            atr_asi_fecha + " TEXT NOT NULL, " + atr_asi_estado + " BOOLEAN NOT NULL, " +
+            atr_asi_observaciones + " TEXT, " + atr_asi_est_sub + " BOOLEAN NOT NULL, " +
+            atr_asi_est_act + " TEXT NOT NULL, " +
+            "FOREIGN KEY(" + atr_par_id + ") REFERENCES " + table_participante + " (" + atr_par_id + "));";
+
 
     public static final String CREAR_TABLA_CONTROL = "CREATE TABLE " + table_control + " (" +
             atr_con_table + " TEXT PRIMARY KEY, " + atr_con_estado + " BOOLEAN NOT NULL);";

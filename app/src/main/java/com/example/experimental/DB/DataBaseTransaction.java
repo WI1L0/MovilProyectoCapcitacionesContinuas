@@ -42,6 +42,8 @@ public class DataBaseTransaction {
             conectionFinal.insercontrol();
         }
 
+        //context.deleteDatabase("db_final");
+
         if (verificarAll()){
             Toast.makeText(context, "Datos fin almacenados", Toast.LENGTH_SHORT).show();
             context.deleteDatabase("db_final_temp");
@@ -230,6 +232,32 @@ public class DataBaseTransaction {
 
             }
 
+            if (control(Atributos.table_participante) == false) {
+
+                //PARTICIPANTE
+                final int[] cont = {0};
+                newParticipante(new OnImportListener() {
+                    @Override
+                    public void onImportExito(int leng) {
+                        cont[0]++;
+                        if (cont[0] == leng) {
+                            Toast.makeText(context, "Datos participante fin descargados", Toast.LENGTH_SHORT).show();
+                            updatecontrol(Atributos.table_participante);
+                            progreso = progreso + 2;
+                            listenerMein.onImportExito(progreso);
+                        }
+                    }
+
+                    @Override
+                    public void onImportError() {
+                        Toast.makeText(context, "Error en descargar fin participante", Toast.LENGTH_SHORT).show();
+                        limpiartable(Atributos.table_participante);
+                        listenerMein.onImportError();
+                    }
+                });
+
+            }
+
             if (control(Atributos.table_asistencia) == false) {
 
                 //ASISTENCIA
@@ -364,9 +392,9 @@ public class DataBaseTransaction {
             while (cursor.moveToNext()) {
                 values = new ContentValues();
                 values.put("idCapacitador", cursor.getInt(0));
-                values.put("estadoActivoCapacitador", cursor.getInt(0));
-                values.put("tituloCapacitador", cursor.getString(0));
-                values.put("idUsuario", cursor.getInt(0));
+                values.put("estadoActivoCapacitador", cursor.getInt(1));
+                values.put("tituloCapacitador", cursor.getString(2));
+                values.put("idUsuario", cursor.getInt(3));
 
                 long resultado = sdbFinal.insert(Atributos.table_capacitador, null, values);
 
@@ -455,7 +483,7 @@ public class DataBaseTransaction {
                 values.put("observacionCurso", cursor.getString(4));
                 values.put("estadoCurso", cursor.getInt(5));
                 values.put("estadoAprovacionCurso", cursor.getString(6));
-                values.put("estadoPublicasionCurso", cursor.getInt(7));
+                values.put("estadoPublicasionCurso", cursor.getString(7));
                 values.put("descripcionCurso", cursor.getString(8));
                 values.put("objetivoGeneralesCurso", cursor.getString(9));
                 values.put("numeroCuposCurso", cursor.getInt(10));
@@ -538,7 +566,7 @@ public class DataBaseTransaction {
         SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
         final List<Long> resultados = new ArrayList<>();
 
-        Cursor cursor = sdbTemporal.rawQuery("SELECT idInscrito, fechaInscrito, estadoInscrito, estadoInscritoActivo, estadoParticipanteAprobacion, estadoParticipanteActivo, idCurso FROM " + Atributos.table_inscritos, null);
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idInscrito, fechaInscrito, estadoInscrito, estadoInscritoActivo, idUsuario, idCurso FROM " + Atributos.table_inscritos, null);
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
@@ -547,11 +575,51 @@ public class DataBaseTransaction {
                 values.put("fechaInscrito", cursor.getString(1));
                 values.put("estadoInscrito", cursor.getInt(2));
                 values.put("estadoInscritoActivo", cursor.getInt(3));
-                values.put("estadoParticipanteAprobacion", cursor.getString(4));
-                values.put("estadoParticipanteActivo", cursor.getInt(5));
-                values.put("idCurso", cursor.getInt(6));
+
+                values.put("idUsuario", cursor.getInt(4));
+                values.put("idCurso", cursor.getInt(5));
 
                 long resultado = sdbFinal.insert(Atributos.table_inscritos, null, values);
+
+                resultados.add(resultado);
+
+                boolean exito = true;
+                for (long result : resultados) {
+                    if (result == -1) {
+                        exito = false;
+                        break;
+                    }
+                }
+
+                if (exito) {
+                    listener.onImportExito(cursor.getCount());
+                } else {
+                    listener.onImportError();
+                }
+
+            }
+        } else {
+            listener.onImportError();
+        }
+    }
+
+    public void newParticipante(final OnImportListener listener){
+        SQLiteDatabase sdbFinal = conectionFinal.getWritableDatabase();
+        SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
+        final List<Long> resultados = new ArrayList<>();
+
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idParticipanteMatriculado, estadoParticipanteAprobacion, estadoParticipanteActivo, idInscrito FROM " + Atributos.table_participante, null);
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                values = new ContentValues();
+                values.put("idParticipanteMatriculado", cursor.getInt(0));
+                values.put("estadoParticipanteAprobacion", cursor.getString(1));
+                values.put("estadoParticipanteActivo", cursor.getInt(2));
+
+                values.put("idInscrito", cursor.getInt(3));
+
+                long resultado = sdbFinal.insert(Atributos.table_participante, null, values);
 
                 resultados.add(resultado);
 
@@ -580,16 +648,18 @@ public class DataBaseTransaction {
         SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
         final List<Long> resultados = new ArrayList<>();
 
-        Cursor cursor = sdbTemporal.rawQuery("SELECT idAsistencia, fechaAsistencia, estadoAsistencia, observacionAsistencia, idInscrito FROM " + Atributos.table_asistencia, null);
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idAsistencia, fechaAsistencia, estadoAsistencia, observacionAsistencia, estadoSubida, estadoActual, idParticipanteMatriculado FROM " + Atributos.table_asistencia, null);
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 values = new ContentValues();
                 values.put("idAsistencia", cursor.getInt(0));
-                values.put("fechaInscrito", cursor.getString(1));
+                values.put("fechaAsistencia", cursor.getString(1));
                 values.put("estadoAsistencia", cursor.getInt(2));
                 values.put("observacionAsistencia", cursor.getString(3));
-                values.put("idInscrito", cursor.getInt(4));
+                values.put("estadoSubida", cursor.getInt(4));
+                values.put("estadoActual", cursor.getString(5));
+                values.put("idParticipanteMatriculado", cursor.getInt(6));
 
                 long resultado = sdbFinal.insert(Atributos.table_asistencia, null, values);
 
@@ -659,13 +729,14 @@ public class DataBaseTransaction {
     }
 
     public boolean verificarAll(){
-        if //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
-            // control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_asistencia) == true) {
+        if (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
+             control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_participante) == true && control(Atributos.table_asistencia) == true) {
 
-        (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
+        //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
 
             progreso = progreso + barActualizar();
 
+            context.deleteDatabase("db_final_temp");
             try {
                 Thread.sleep(10*1000);
                 Intent intent = new Intent(context, MainActivity.class);

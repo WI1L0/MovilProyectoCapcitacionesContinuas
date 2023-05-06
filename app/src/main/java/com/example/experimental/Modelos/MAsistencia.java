@@ -9,19 +9,23 @@ public class MAsistencia implements Serializable {
     private String fechaAsistencia;
     private Boolean estadoAsistencia;
     private String observacionAsistencia;
+    private Boolean estadoSubida;
+    private String estadoActual;
 
 
-    private MInscritos mInscritos;
+    private MParticipante mParticipante;
 
     public MAsistencia() {
     }
 
-    public MAsistencia(int idAsistencia, String fechaAsistencia, Boolean estadoAsistencia, String observacionAsistencia, MInscritos mInscritos) {
+    public MAsistencia(int idAsistencia, String fechaAsistencia, Boolean estadoAsistencia, String observacionAsistencia, Boolean estadoSubida, String estadoActual, MParticipante mParticipante) {
         this.idAsistencia = idAsistencia;
         this.fechaAsistencia = fechaAsistencia;
         this.estadoAsistencia = estadoAsistencia;
         this.observacionAsistencia = observacionAsistencia;
-        this.mInscritos = mInscritos;
+        this.estadoSubida = estadoSubida;
+        this.estadoActual = estadoActual;
+        this.mParticipante = mParticipante;
     }
 
     public int getIdAsistencia() {
@@ -56,11 +60,27 @@ public class MAsistencia implements Serializable {
         this.observacionAsistencia = observacionAsistencia;
     }
 
-    public MInscritos getmInscritos() {
-        return mInscritos;
+    public Boolean getEstadoSubida() {
+        return estadoSubida;
     }
 
-    public void setmInscritos(MInscritos mInscritos) {
-        this.mInscritos = mInscritos;
+    public void setEstadoSubida(Boolean estadoSubida) {
+        this.estadoSubida = estadoSubida;
+    }
+
+    public String getEstadoActual() {
+        return estadoActual;
+    }
+
+    public void setEstadoActual(String estadoActual) {
+        this.estadoActual = estadoActual;
+    }
+
+    public MParticipante getmParticipante() {
+        return mParticipante;
+    }
+
+    public void setmParticipante(MParticipante mParticipante) {
+        this.mParticipante = mParticipante;
     }
 }

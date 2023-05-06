@@ -22,6 +22,7 @@ import com.example.experimental.DB.DataBase;
 import com.example.experimental.Modelos.MAsistencia;
 import com.example.experimental.Modelos.MCursos;
 import com.example.experimental.Modelos.MInscritos;
+import com.example.experimental.Modelos.MParticipante;
 import com.example.experimental.Modelos.MPersona;
 import com.example.experimental.Modelos.MUsuario;
 import com.example.experimental.Utilidades.Atributos;
@@ -41,10 +42,11 @@ import java.util.Locale;
 public class Asistencia extends AppCompatActivity {
 
     MAsistencia mAsistencia;
+    MParticipante mParticipante;
     MInscritos mInscritos;
     MUsuario mUsuario;
     MPersona mPersona;
-    ArrayList<MInscritos> listInscritos;
+    ArrayList<MParticipante> listParticipantes;
     ArrayList<MAsistencia> listaasistencia = new ArrayList<>();
 
 
@@ -98,27 +100,39 @@ public class Asistencia extends AppCompatActivity {
 
                 if (listaasistencia.size() != 0){
 
-                    Cursor cursor = db.rawQuery("SELECT a.idAsistencia FROM asistencia a INNER JOIN inscritos i ON i.idInscrito = a.idInscrito WHERE a.fechaAsistencia = ? AND i.idCurso = ?;",
+                    Cursor cursor = db.rawQuery("SELECT a.idAsistencia FROM asistencia a INNER JOIN participante pa ON pa.idParticipanteMatriculado = a.idParticipanteMatriculado INNER JOIN inscritos i ON i.idInscrito = pa.idInscrito WHERE a.fechaAsistencia = ? AND i.idCurso = ?;",
                             new String[]{String.valueOf(txtfecha.getText()), String.valueOf(idCurso)});
 
                     if (cursor.moveToFirst()) {
                         for (int i = 0; i < listaasistencia.size(); i++) {
+
+                            Cursor cursor1 = db.rawQuery("SELECT estadoActual FROM asistencia WHERE idAsistencia = ?;",
+                                    new String[]{String.valueOf(cursor.getInt(0))});
+
                             ContentValues values = new ContentValues();
                             values.put("fechaAsistencia", listaasistencia.get(i).getFechaAsistencia());
                             values.put("estadoAsistencia", listaasistencia.get(i).getEstadoAsistencia());
                             values.put("observacionAsistencia", listaasistencia.get(i).getObservacionAsistencia());
+                            values.put("estadoSubida", false);
+                            while (cursor1.moveToNext()) {
+                                if (cursor1.getString(0).equals("Descargado")) {
+                                    values.put("estadoActual", "Actualizado");
+                                }
+                            }
                             db.update(Atributos.table_asistencia, values, Atributos.atr_asi_id + " = ?", new String[]{String.valueOf(listaasistencia.get(i).getIdAsistencia())});
                         }
                         finish();
                         // (id, rol);
                     } else {
-                        if (listInscritos.size() == listaasistencia.size()) {
+                        if (listParticipantes.size() == listaasistencia.size()) {
                             for (int i = 0; i < listaasistencia.size(); i++) {
                                 ContentValues values = new ContentValues();
                                 values.put("fechaAsistencia", String.valueOf(txtfecha.getText()));
                                 values.put("estadoAsistencia", listaasistencia.get(i).getEstadoAsistencia());
                                 values.put("observacionAsistencia", listaasistencia.get(i).getObservacionAsistencia());
-                                values.put("idInscrito", listaasistencia.get(i).getmInscritos().getIdInscrito());
+                                values.put("estadoSubida", false);
+                                values.put("estadoActual", "Creado");
+                                values.put("idParticipanteMatriculado", listaasistencia.get(i).getmParticipante().getIdParticipanteMatriculado());
                                 db.insert(Atributos.table_asistencia, null, values);
                             }
                             finish();
@@ -174,16 +188,16 @@ public class Asistencia extends AppCompatActivity {
     }
 
     public void filder(String sa){
-        ArrayList<MInscritos> filtered = new ArrayList<>();
-        for (MInscritos item : listInscritos){
-            if (item.getmUsuario().getmPersona().getApellido1().toLowerCase().contains(sa.toLowerCase())) {
+        ArrayList<MParticipante> filtered = new ArrayList<>();
+        for (MParticipante item : listParticipantes){
+            if (item.getmInscritos().getmUsuario().getmPersona().getApellido1().toLowerCase().contains(sa.toLowerCase())) {
                 filtered.add(item);
             }
         }
 
         AsistenciaAdaptador asistenciaAdaptador = new AsistenciaAdaptador(filtered, this, new AsistenciaAdaptador.OnItemClickListener() {
             @Override
-            public void onItemClick(MInscritos item) {
+            public void onItemClick(MParticipante item) {
 
             }
 
@@ -212,27 +226,29 @@ public class Asistencia extends AppCompatActivity {
 
     public void consultarListaInscritos(int id){
         SQLiteDatabase db = conection.getReadableDatabase();
-        listInscritos = new ArrayList<>();
+        listParticipantes = new ArrayList<>();
 
-        Cursor cursor2 = db.rawQuery("SELECT a.idAsistencia FROM asistencia a INNER JOIN inscritos i ON i.idInscrito = a.idInscrito WHERE a.fechaAsistencia = ? AND i.idCurso = ?;",
+        Cursor cursor2 = db.rawQuery("SELECT a.idAsistencia FROM asistencia a INNER JOIN participante pa ON pa.idParticipanteMatriculado = a.idParticipanteMatriculado INNER JOIN inscritos i ON i.idInscrito = pa.idInscrito WHERE a.fechaAsistencia = ? AND i.idCurso = ?;",
                 new String[]{String.valueOf(txtfecha.getText()), String.valueOf(id)});
 
         Cursor cursor;
         Boolean actualisarOCrear = false;
 
         if (cursor2.moveToFirst()) {
-            cursor = db.rawQuery("SELECT i.idInscrito, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo, i.estadoParticipanteAprobacion, a.idAsistencia, a.fechaAsistencia, a.estadoAsistencia, a.observacionAsistencia FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario INNER JOIN asistencia a ON a.idInscrito = i.idInscrito " +
-                            "WHERE i.idCurso = ? AND a.fechaAsistencia = ? AND i.estadoInscrito = '1' AND i.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC",
+            cursor = db.rawQuery("SELECT pa.idParticipanteMatriculado, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo,  pa.estadoParticipanteActivo, u.fotoPerfil, a.idAsistencia, a.fechaAsistencia, a.estadoAsistencia, a.observacionAsistencia " +
+                            "FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario INNER JOIN participante pa ON pa.idInscrito = i.idInscrito INNER JOIN asistencia a ON a.idParticipanteMatriculado = pa.idParticipanteMatriculado " +
+                            "wHERE i.idCurso = ? AND a.fechaAsistencia = ? AND i.estadoInscrito = '1' AND pa.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC;",
                     new String[]{String.valueOf(id), String.valueOf(txtfecha.getText())});
             actualisarOCrear = true;
         } else {
-            cursor = db.rawQuery("SELECT i.idInscrito, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo, i.estadoParticipanteAprobacion " +
-                            "FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario " +
-                            "WHERE i.idCurso = ? AND i.estadoInscrito = '1' AND i.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC;",
+            cursor = db.rawQuery("SELECT pa.idParticipanteMatriculado, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo,  pa.estadoParticipanteActivo, u.fotoPerfil " +
+                            "FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario INNER JOIN participante pa ON pa.idInscrito = i.idInscrito " +
+                            "wHERE i.idCurso = ? AND i.estadoInscrito = '1' AND pa.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC;",
                     new String[]{String.valueOf(id)});
         }
 
         while (cursor.moveToNext()) {
+            mParticipante = new MParticipante();
             mInscritos = new MInscritos();
             mUsuario = new MUsuario();
             mPersona = new MPersona();
@@ -241,13 +257,13 @@ public class Asistencia extends AppCompatActivity {
             if (actualisarOCrear == true){
                 ArrayList<MAsistencia> arrayList = new ArrayList<>();
 
-                mAsistencia.setIdAsistencia(cursor.getInt(7));
-                mAsistencia.setFechaAsistencia(cursor.getString(8));
-                mAsistencia.setEstadoAsistencia(cursor.getInt(9) == 1 ? true : false);
-                mAsistencia.setObservacionAsistencia(cursor.getString(10));
+                mAsistencia.setIdAsistencia(cursor.getInt(8));
+                mAsistencia.setFechaAsistencia(cursor.getString(9));
+                mAsistencia.setEstadoAsistencia(cursor.getInt(10) == 1 ? true : false);
+                mAsistencia.setObservacionAsistencia(cursor.getString(11));
 
                 arrayList.add(mAsistencia);
-                mInscritos.setmAsistenciaList(arrayList);
+                mParticipante.setmAsistenciaList(arrayList);
             }
 
 
@@ -257,24 +273,29 @@ public class Asistencia extends AppCompatActivity {
             mPersona.setApellido1(cursor.getString(3));
             mPersona.setApellido2(cursor.getString(4));
 
-            mUsuario.setmPersona(mPersona);
 
-            mInscritos.setIdInscrito(cursor.getInt(0));
-            mInscritos.setEstadoInscritoActivo(cursor.getInt(5) == 1 ? true : false);
-            mInscritos.setEstadoParticipanteAprobacion(cursor.getString(6));
+            mUsuario.setmPersona(mPersona);
+            mUsuario.setFotoPerfil(cursor.getString(7));
+
 
             mInscritos.setmUsuario(mUsuario);
+            mInscritos.setEstadoInscritoActivo(cursor.getInt(5) == 1 ? true : false);
 
-            listInscritos.add(mInscritos);
+            mParticipante.setmInscritos(mInscritos);
+            mParticipante.setIdParticipanteMatriculado(cursor.getInt(0));
+            mParticipante.setEstadoParticipanteAprobacion(cursor.getString(6));
+
+
+            listParticipantes.add(mParticipante);
         }
 
         init();
     }
 
     public void init() {
-            AsistenciaAdaptador asistenciaAdaptador = new AsistenciaAdaptador(listInscritos, this, new AsistenciaAdaptador.OnItemClickListener() {
+            AsistenciaAdaptador asistenciaAdaptador = new AsistenciaAdaptador(listParticipantes, this, new AsistenciaAdaptador.OnItemClickListener() {
             @Override
-            public void onItemClick(MInscritos item) {
+            public void onItemClick(MParticipante item) {
 
             }
 
@@ -299,7 +320,7 @@ public class Asistencia extends AppCompatActivity {
             System.out.println("aaaaaaaaa");
             for (int a = 0 ; a < listaasistencia.size() ; a++){
                 System.out.println("bbbbbbbbbbbbbbb");
-                if (listaasistencia.get(a).getmInscritos().getIdInscrito() == mAsistencia.getmInscritos().getIdInscrito()){
+                if (listaasistencia.get(a).getmParticipante().getIdParticipanteMatriculado() == mAsistencia.getmParticipante().getIdParticipanteMatriculado()){
                     System.out.println("ccccccccccccccccc");
                     ingreso = true;
                     listaasistencia.get(a).setEstadoAsistencia(mAsistencia.getEstadoAsistencia());

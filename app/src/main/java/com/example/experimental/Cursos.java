@@ -102,22 +102,25 @@ public class Cursos extends AppCompatActivity {
         if (rol.equals("alumno")) {
             if (est == false){
 
-                cursor = db.rawQuery("SELECT c.idCurso, c.nombreCurso, c.duracionCurso, c.nombreModalidadCurso, c.nombreTipoCurso, c.nombreEspecialidad, c.nombreArea, c.fechaInicioCurso, c.fechaFinalizacionCurso " +
+                cursor = db.rawQuery("SELECT c.idCurso, c.nombreCurso, c.duracionCurso, c.nombreModalidadCurso, c.nombreTipoCurso, c.nombreEspecialidad, c.nombreArea, c.fechaInicioCurso, c.fechaFinalizacionCurso, c.fotoCurso " +
                                 "FROM cursos c INNER JOIN inscritos i ON i.idCurso = c.idCurso " +
-                                "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso != 'O' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = '1' ORDER BY c.nombreCurso DESC;",
+                                //"WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso != 'N' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = 'V' ORDER BY c.nombreCurso DESC;",
+                                "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso = 'P' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = 'O' ORDER BY c.nombreCurso DESC;",
                         new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
             } else {
 
-                cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso " +
-                                "FROM cursos WHERE idPrograma = ? AND estadoAprovacionCurso != 'O' AND estadoCurso = '1' AND estadoPublicasionCurso = '1' ORDER BY nombreCurso DESC;",
+                cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso, fotoCurso " +
+                                //"FROM cursos WHERE idPrograma = ? AND estadoAprovacionCurso != 'N' AND estadoCurso = '1' AND estadoPublicasionCurso = 'V' ORDER BY nombreCurso DESC;",
+                                "FROM cursos WHERE idPrograma = ? AND estadoAprovacionCurso = 'P' AND estadoCurso = '1' AND estadoPublicasionCurso = 'O' ORDER BY nombreCurso DESC;",
                         new String[]{String.valueOf(idProgramas)});
 
             }
         } else {
 
-            cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso " +
-                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso != 'o' AND estadoCurso = '1' AND estadoPublicasionCurso = '1' ORDER BY nombreCurso DESC;",
+            cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso, fotoCurso " +
+                            //"FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso != 'N' AND estadoCurso = '1' AND estadoPublicasionCurso = 'V' ORDER BY nombreCurso DESC;",
+                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso = 'P' AND estadoCurso = '1' AND estadoPublicasionCurso = 'O' ORDER BY nombreCurso DESC;",
                     new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
         }
@@ -133,6 +136,7 @@ public class Cursos extends AppCompatActivity {
             mCursos.setNombreArea(cursor.getString(6));
             mCursos.setFechaInicioCurso(cursor.getString(7));
             mCursos.setFechaFinalizacionCurso(cursor.getString(8));
+            mCursos.setFotoCurso(cursor.getString(9));
             listaCursos.add(mCursos);
         }
         init(rol);

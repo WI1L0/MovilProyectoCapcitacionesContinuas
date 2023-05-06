@@ -1,11 +1,15 @@
 package com.example.experimental.Adaptadores;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.experimental.Modelos.MAsistencia;
 import com.example.experimental.Modelos.MInscritos;
+import com.example.experimental.Modelos.MParticipante;
 import com.example.experimental.R;
 
 import java.util.List;
@@ -20,20 +25,20 @@ import java.util.List;
 public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptador.ViewHolder> {
 
     MAsistencia mAsistencia;
-    MInscritos mInscritos;
+    MParticipante mParticipante;
 
-    private List<MInscritos> mData;
+    private List<MParticipante> mData;
     private LayoutInflater mInflater;
     private Context context;
     final AsistenciaAdaptador.OnItemClickListener listener;
 
     public interface OnItemClickListener{
-        void onItemClick(MInscritos item);
+        void onItemClick(MParticipante item);
 
         void obtenList(MAsistencia item);
     }
 
-    public AsistenciaAdaptador(List<MInscritos> itemList, Context context, AsistenciaAdaptador.OnItemClickListener listener){
+    public AsistenciaAdaptador(List<MParticipante> itemList, Context context, AsistenciaAdaptador.OnItemClickListener listener){
         this.mInflater = LayoutInflater.from(context);
         this.context = context;
         this.mData = itemList;
@@ -56,7 +61,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
         holder.bindData(mData.get(position), position);
     }
 
-    public void setItems(List<MInscritos> items){
+    public void setItems(List<MParticipante> items){
         mData = items;
     }
 
@@ -64,6 +69,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
         TextView txtnombres, txtapellidos;
         Button btnasiste, btnnoasiste, btnobservacione;
         EditText edtobservaciones;
+        ImageView imgasistencia;
 
         ViewHolder(View itemView){
             super(itemView);
@@ -73,12 +79,15 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
             btnnoasiste = itemView.findViewById(R.id.btnnoasisteasistencia);
             btnobservacione = itemView.findViewById(R.id.btnobservacionesasistencia);
             edtobservaciones = itemView.findViewById(R.id.editTextobservaciones);
+            imgasistencia = itemView.findViewById(R.id.imgasistencia);
         }
 
-        void bindData(final MInscritos item, int position){
+        void bindData(final MParticipante item, int position){
 
-            txtnombres.setText(item.getmUsuario().getmPersona().getNombre1() + ", " + item.getmUsuario().getmPersona().getNombre2());
-            txtapellidos.setText(item.getmUsuario().getmPersona().getApellido1() + ", " + item.getmUsuario().getmPersona().getApellido2());
+            txtnombres.setText(item.getmInscritos().getmUsuario().getmPersona().getNombre1() + ", " + item.getmInscritos().getmUsuario().getmPersona().getNombre2());
+            txtapellidos.setText(item.getmInscritos().getmUsuario().getmPersona().getApellido1() + ", " + item.getmInscritos().getmUsuario().getmPersona().getApellido2());
+
+            imgasistencia.setImageBitmap(ImgBitmap(item.getmInscritos().getmUsuario().getFotoPerfil()));
 
             if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
                 edtobservaciones.setText(item.getmAsistenciaList().get(0).getObservacionAsistencia());
@@ -98,14 +107,14 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     //Toast.makeText(context, "ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
 
                     mAsistencia = new MAsistencia();
-                    mInscritos = new MInscritos();
+                    mParticipante = new MParticipante();
 
-                    mInscritos.setIdInscrito(item.getIdInscrito());
+                    mParticipante.setIdParticipanteMatriculado(item.getIdParticipanteMatriculado());
 
                     mAsistencia.setEstadoAsistencia(true);
                     String observ = edtobservaciones.getText().toString();
                     mAsistencia.setObservacionAsistencia(observ);
-                    mAsistencia.setmInscritos(mInscritos);
+                    mAsistencia.setmParticipante(mParticipante);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
                         mAsistencia.setIdAsistencia(item.getmAsistenciaList().get(0).getIdAsistencia());
@@ -125,14 +134,14 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     //Toast.makeText(context, "NO ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
 
                     mAsistencia = new MAsistencia();
-                    mInscritos = new MInscritos();
+                    mParticipante = new MParticipante();
 
-                    mInscritos.setIdInscrito(item.getIdInscrito());
+                    mParticipante.setIdParticipanteMatriculado(item.getIdParticipanteMatriculado());
 
                     mAsistencia.setEstadoAsistencia(false);
                     String observ = edtobservaciones.getText().toString();
                     mAsistencia.setObservacionAsistencia(observ);
-                    mAsistencia.setmInscritos(mInscritos);
+                    mAsistencia.setmParticipante(mParticipante);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
                         mAsistencia.setIdAsistencia(item.getmAsistenciaList().get(0).getIdAsistencia());
@@ -157,5 +166,10 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                 }
             });
         }
+    }
+
+    public Bitmap ImgBitmap(String img){
+        byte[] bitmapBytes = Base64.decode(img, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
     }
 }

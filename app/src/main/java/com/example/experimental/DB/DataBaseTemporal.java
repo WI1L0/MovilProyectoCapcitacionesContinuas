@@ -22,12 +22,14 @@ public class DataBaseTemporal extends SQLiteOpenHelper {
         db.execSQL(Atributos.CREAR_TABLA_CURSOS);
         db.execSQL(Atributos.CREAR_TABLA_PREREQUISITOS);
         db.execSQL(Atributos.CREAR_TABLA_INSCRITOS);
+        db.execSQL(Atributos.CREAR_TABLA_PARTICIPANTES);
         db.execSQL(Atributos.CREAR_TABLA_ASISTENCIAS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int versionAntigua, int versionNueva) {
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_ASISTENCIAS);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PARTICIPANTES);
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_INSCRITOS);
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PREREQUISITOS);
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_CURSOS);
@@ -50,6 +52,7 @@ public class DataBaseTemporal extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_cursos + "', " + false + ")");
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_prerequisitos + "', " + false + ")");
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_inscritos + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_participante + "', " + false + ")");
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_asistencia + "', " + false + ")");
     }
 }

@@ -23,7 +23,9 @@ import com.example.experimental.Modelos.MProgramas;
 import com.example.experimental.Utilidades.Atributos;
 import com.google.android.material.navigation.NavigationView;
 
+import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
+    private ImageView imgheader;
+    private TextView txtvheader;
 
     MProgramas mProgramas;
     ArrayList<MProgramas> listaProgramas;
@@ -97,6 +101,7 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        View naheaderview = navigationView.getHeaderView(0);
 
         Menu navigationMenu = navigationView.getMenu();
         MenuItem menuItem1 = navigationMenu.findItem(R.id.activity1);
@@ -145,16 +150,15 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
             case R.id.activity3: {
                 Intent intent = new Intent(Programas.this, Perfil.class);
                 intent.putExtra("idPerfil", idda);
+                intent.putExtra("rol", rol);
                 startActivity(intent);
                 break;
             }
-
-            //EXPORT
-            /*case R.id.activity4: {
-                Intent galleryIntent = new Intent(MainActivity.this, act2.class);
+            case R.id.activity4: {
+                Intent galleryIntent = new Intent(Programas.this, Export.class);
                 startActivity(galleryIntent);
                 break;
-            }*/
+            }
             case R.id.activity5: {
                 Intent intent = new Intent(Programas.this, Import.class);
                 startActivity(intent);

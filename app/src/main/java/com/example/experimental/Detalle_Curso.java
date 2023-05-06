@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.experimental.DB.DataBase;
@@ -19,7 +23,7 @@ public class Detalle_Curso extends AppCompatActivity {
 
     //vista
     private TextView txtnombre, txtduracion, txthorario, txtmodalidad, txttipo, txtespecialidad, txtarea, txtfinicio, txtffin, txtdescripcion, txtobjetivos, txtrequisitos;
-
+    private ImageView imgdtcurso;
 
     //use database
     private DataBase conection;
@@ -50,13 +54,14 @@ public class Detalle_Curso extends AppCompatActivity {
         txtdescripcion = (TextView) findViewById(R.id.txtvdescripciondtcurso);
         txtobjetivos = (TextView) findViewById(R.id.txtvobjetivosdtcurso);
         txtrequisitos = (TextView) findViewById(R.id.txtvrequisitosdtcurso);
+        imgdtcurso = (ImageView) findViewById(R.id.imgdtcurso);
 
 
         SQLiteDatabase db = conection.getReadableDatabase();
 
         String requisitos = null;
 
-        Cursor cursor = db.rawQuery("SELECT nombreCurso, duracionCurso, fechaInicioCurso, fechaFinalizacionCurso, descripcionCurso, objetivoGeneralesCurso,  nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, horaInicio, horaFin " +
+        Cursor cursor = db.rawQuery("SELECT nombreCurso, duracionCurso, fechaInicioCurso, fechaFinalizacionCurso, descripcionCurso, objetivoGeneralesCurso,  nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, horaInicio, horaFin, fotoCurso " +
                         "FROM cursos WHERE idCurso = ? AND estadoCurso = '1' ORDER BY nombreCurso DESC;",
                 new String[]{String.valueOf(id)});
 
@@ -79,9 +84,16 @@ public class Detalle_Curso extends AppCompatActivity {
             txtespecialidad.setText(cursor.getString(8));
             txtarea.setText(cursor.getString(9));
             txthorario.setText(cursor.getString(10) + ", " + cursor.getString(11));
+            imgdtcurso.setImageBitmap(ImgBitmap(cursor.getString(12)));
+
 
         }
 
         txtrequisitos.setText(requisitos);
+    }
+
+    public Bitmap ImgBitmap(String img){
+        byte[] bitmapBytes = Base64.decode(img, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
     }
 }
