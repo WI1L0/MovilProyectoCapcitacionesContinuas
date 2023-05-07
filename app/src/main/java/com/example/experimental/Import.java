@@ -420,17 +420,13 @@ public class Import extends AppCompatActivity {
 
     public Boolean controlAsistencia(){
         SQLiteDatabase db = conection.getWritableDatabase();
-        String[] projection = {"idAsistencia"};
-        String selection = "estadoSubida = ?";
-        String[] selectionArgs = {"0"};
 
-        Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
-
-        if (cursor.moveToFirst()){
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1");
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM asistencia WHERE estadoSubida = '0';", null);
+        if (cursor.moveToFirst()) {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeee1");
             return true;
         } else {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeee2");
             return false;
         }
     }
