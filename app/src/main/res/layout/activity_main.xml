@@ -136,8 +136,7 @@ tools:context=".MainActivity">
             android:text="cargar datos temporales"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5"
-            android:visibility="gone" />
+            app:layout_constraintBottom_toTopOf="@+id/guideline5" />
 
         <TextView
             android:id="@+id/textView"

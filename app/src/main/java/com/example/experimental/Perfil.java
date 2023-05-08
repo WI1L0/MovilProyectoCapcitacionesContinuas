@@ -82,7 +82,7 @@ public class Perfil extends AppCompatActivity {
             if (usu == false) {
                 txtvtitulo.setText(cursor.getString(8));
             }
-            imgperfil.setImageBitmap(ImgBitmap(cursor.getString(7)));
+            //imgperfil.setImageBitmap(ImgBitmap(cursor.getString(7)));
         }
     }
 

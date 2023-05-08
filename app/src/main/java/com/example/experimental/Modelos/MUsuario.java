@@ -12,6 +12,7 @@ public class MUsuario implements Serializable {
     private Boolean estadoUsuarioActivo;
     private Boolean estadoActivoCapacitador;
     private String tituloCapacitador;
+    private String nombreRol;
 
 
     private MPersona mPersona;
@@ -20,7 +21,7 @@ public class MUsuario implements Serializable {
     public MUsuario() {
     }
 
-    public MUsuario(int idUsuario, String username, String password, String fotoPerfil, Boolean estadoUsuarioActivo, Boolean estadoActivoCapacitador, String tituloCapacitador, MPersona mPersona, List<MCursos> mCursosList) {
+    public MUsuario(int idUsuario, String username, String password, String fotoPerfil, Boolean estadoUsuarioActivo, Boolean estadoActivoCapacitador, String tituloCapacitador, String nombreRol, MPersona mPersona, List<MCursos> mCursosList) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.password = password;
@@ -28,6 +29,7 @@ public class MUsuario implements Serializable {
         this.estadoUsuarioActivo = estadoUsuarioActivo;
         this.estadoActivoCapacitador = estadoActivoCapacitador;
         this.tituloCapacitador = tituloCapacitador;
+        this.nombreRol = nombreRol;
         this.mPersona = mPersona;
         this.mCursosList = mCursosList;
     }
@@ -86,6 +88,14 @@ public class MUsuario implements Serializable {
 
     public void setTituloCapacitador(String tituloCapacitador) {
         this.tituloCapacitador = tituloCapacitador;
+    }
+
+    public String getNombreRol() {
+        return nombreRol;
+    }
+
+    public void setNombreRol(String nombreRol) {
+        this.nombreRol = nombreRol;
     }
 
     public MPersona getmPersona() {

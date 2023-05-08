@@ -723,6 +723,7 @@ public class ImportData extends DataBaseTemporal {
         cargarDatosTemporalesCursos();
         cargarDatosTemporalesPrerequisitos();
         cargarDatosTemporalesInscritos();
+        cargarDatosTemporalesParticipantes();
     }
 
     public void cargarDatosTemporalesPersona(){
@@ -758,7 +759,11 @@ public class ImportData extends DataBaseTemporal {
             values.put("username", "admin" + a);
             values.put("password", "root" + a);
             //values.put("fotoPerfil", "imgusuarios" + random.nextInt(5) + 1);
-            values.put("nombreRol", "fotoPerfil " + a);
+            if (a <= 5) {
+                values.put("nombreRol", "DocenteCapacitador");
+            } else {
+                values.put("nombreRol", "Participante");
+            }
             if(a > 9500) {
                 values.put("estadoUsuarioActivo", false);
             } else {
@@ -815,13 +820,12 @@ public class ImportData extends DataBaseTemporal {
             String fec[] = fechasAleatorias();
             values.put("idCurso", a);
             values.put("nombreCurso", "nombreCurso " + a);
-            values.put("fotoCurso", "imgcurso" + random.nextInt(5) + 1);
-            values.put("fotoCurso", "fotoCurso " + a);
+            //values.put("fotoCurso", "imgcurso" + random.nextInt(5) + 1)
             values.put("duracionCurso", Integer.parseInt(fec[2]));
             values.put("observacionCurso", "");
             values.put("estadoCurso", true);
-            values.put("estadoAprovacionCurso", "A");
-            values.put("estadoPublicasionCurso", "V");
+            values.put("estadoAprovacionCurso", "P");
+            values.put("estadoPublicasionCurso", "O");
             values.put("descripcionCurso", "descripcionCurso " + a);
             values.put("objetivoGeneralesCurso", "objetivoGeneralesCurso " + a);
             values.put("numeroCuposCurso", a);
@@ -908,8 +912,8 @@ public class ImportData extends DataBaseTemporal {
                     values.put("fechaInscrito", "fechaInscrito " + a);
                     values.put("estadoInscrito", true);
                     values.put("estadoInscritoActivo", true);
-                    values.put("estadoParticipanteAprobacion", "cur");
-                    values.put("estadoParticipanteActivo", true); //(random.nextInt(2) + 1) == 1 ? true : false));
+                    //values.put("estadoParticipanteAprobacion", "cur");
+                    //values.put("estadoParticipanteActivo", true); //(random.nextInt(2) + 1) == 1 ? true : false));
 
                     values.put("idUsuario", numeros[e]);
                     values.put("idCurso", a);
@@ -918,6 +922,22 @@ public class ImportData extends DataBaseTemporal {
                 }
                 e++;
             }
+        }
+    }
+
+    public void cargarDatosTemporalesParticipantes(){
+        SQLiteDatabase db = (new DataBase(conection)).getWritableDatabase();
+        Random random = new Random();
+        for (int a = 1; a < 900 ; a++) {
+
+
+            values = new ContentValues();
+            values.put("idParticipanteMatriculado", a);
+            values.put("estadoParticipanteActivo", true);
+            values.put("estadoParticipanteAprobacion", "estadoParticipanteActivo " + a);
+
+            values.put("idInscrito", random.nextInt(50) + 1);
+            System.out.println(String.valueOf(db.insert(Atributos.table_participante, null, values)) + " PARTICIPANTE ALMACENADA CORRECTAMENTE");
         }
     }
 }

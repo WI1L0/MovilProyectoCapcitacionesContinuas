@@ -10,8 +10,6 @@ public class MInscritos implements Serializable {
     private String fechaInscrito;
     private Boolean estadoInscrito;
     private Boolean estadoInscritoActivo;
-    private String estadoParticipanteAprobacion;
-    private Boolean estadoParticipanteActivo;
 
 
     private List<MParticipante> mParticipanteList;
@@ -21,13 +19,11 @@ public class MInscritos implements Serializable {
     public MInscritos() {
     }
 
-    public MInscritos(int idInscrito, String fechaInscrito, Boolean estadoInscrito, Boolean estadoInscritoActivo, String estadoParticipanteAprobacion, Boolean estadoParticipanteActivo, List<MParticipante> mParticipanteList, MUsuario mUsuario, MCursos mCursos) {
+    public MInscritos(int idInscrito, String fechaInscrito, Boolean estadoInscrito, Boolean estadoInscritoActivo, List<MParticipante> mParticipanteList, MUsuario mUsuario, MCursos mCursos) {
         this.idInscrito = idInscrito;
         this.fechaInscrito = fechaInscrito;
         this.estadoInscrito = estadoInscrito;
         this.estadoInscritoActivo = estadoInscritoActivo;
-        this.estadoParticipanteAprobacion = estadoParticipanteAprobacion;
-        this.estadoParticipanteActivo = estadoParticipanteActivo;
         this.mParticipanteList = mParticipanteList;
         this.mUsuario = mUsuario;
         this.mCursos = mCursos;
@@ -63,22 +59,6 @@ public class MInscritos implements Serializable {
 
     public void setEstadoInscritoActivo(Boolean estadoInscritoActivo) {
         this.estadoInscritoActivo = estadoInscritoActivo;
-    }
-
-    public String getEstadoParticipanteAprobacion() {
-        return estadoParticipanteAprobacion;
-    }
-
-    public void setEstadoParticipanteAprobacion(String estadoParticipanteAprobacion) {
-        this.estadoParticipanteAprobacion = estadoParticipanteAprobacion;
-    }
-
-    public Boolean getEstadoParticipanteActivo() {
-        return estadoParticipanteActivo;
-    }
-
-    public void setEstadoParticipanteActivo(Boolean estadoParticipanteActivo) {
-        this.estadoParticipanteActivo = estadoParticipanteActivo;
     }
 
     public List<MParticipante> getmParticipanteList() {

@@ -121,7 +121,7 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
             menuItem1.setChecked(true);
             menuItem4.setVisible(false);
 
-            SQLiteDatabase db = conection.getReadableDatabase();
+            /*SQLiteDatabase db = conection.getReadableDatabase();
 
             Cursor cursor = db.rawQuery("SELECT fotoPerfil, username FROM usuarios WHERE idUsuario = ?;",
                     new String[]{String.valueOf(idda)});
@@ -129,7 +129,7 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
             if (cursor.moveToFirst()) {
                 imgheader.setImageBitmap(ImgBitmap(cursor.getString(0)));
                 txtvheader.setText(cursor.getString(1));
-            }
+            }*/
 
         } else {
             menuItem1.setTitle("ASISTENCIA");
@@ -137,7 +137,7 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
             menuItem1.setChecked(true);
             menuItem2.setVisible(false);
 
-            SQLiteDatabase db = conection.getReadableDatabase();
+            /*SQLiteDatabase db = conection.getReadableDatabase();
 
             Cursor cursor = db.rawQuery("SELECT u.fotoPerfil, u.username FROM usuarios u INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE c.idCapacitador = ?;",
                     new String[]{String.valueOf(idda)});
@@ -145,7 +145,7 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
             if (cursor.moveToFirst()) {
                 imgheader.setImageBitmap(ImgBitmap(cursor.getString(0)));
                 txtvheader.setText(cursor.getString(1));
-            }
+            }*/
         }
     }
 

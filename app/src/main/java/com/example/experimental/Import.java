@@ -64,17 +64,17 @@ public class Import extends AppCompatActivity {
             conection.insercontrol();
         }
 
-        verificarAllAsistencia();
+        //verificarAllAsistencia();
         verificarAll();
 
         btnimport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //btnimport.setEnabled(false);
+                btnimport.setEnabled(false);
                 manejoProgressBar = new ManejoProgressBar(pgsimport);
                 manejoProgressBar.execute();
 
-                if (controlAsistencia() == false) {
+                //if (controlAsistencia() == false) {
                     cargar(new OnImportListener() {
                         @Override
                         public void onImportExito(int leng) {
@@ -89,9 +89,9 @@ public class Import extends AppCompatActivity {
                             btnimport.setText("REINTENTAR");
                         }
                     });
-                } else {
-                    verificarAllAsistencia();
-                }
+                //} else {
+                    //verificarAllAsistencia();
+                //}
 
             }
         });

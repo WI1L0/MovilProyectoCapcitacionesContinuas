@@ -98,7 +98,7 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             txtfinicio.setText(String.valueOf(item.getFechaInicioCurso()));
             txtffin.setText(String.valueOf(item.getFechaFinalizacionCurso()));
 
-            imgcurso.setImageBitmap(ImgBitmap(item.getFotoCurso()));
+            //imgcurso.setImageBitmap(ImgBitmap(item.getFotoCurso()));
 
             ManejoProgressBar manejoProgressBar = new ManejoProgressBar(pgcursos);
             pgcursos.setProgress(0);

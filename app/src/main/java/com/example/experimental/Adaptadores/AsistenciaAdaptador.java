@@ -87,7 +87,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
             txtnombres.setText(item.getmInscritos().getmUsuario().getmPersona().getNombre1() + ", " + item.getmInscritos().getmUsuario().getmPersona().getNombre2());
             txtapellidos.setText(item.getmInscritos().getmUsuario().getmPersona().getApellido1() + ", " + item.getmInscritos().getmUsuario().getmPersona().getApellido2());
 
-            imgasistencia.setImageBitmap(ImgBitmap(item.getmInscritos().getmUsuario().getFotoPerfil()));
+            //imgasistencia.setImageBitmap(ImgBitmap(item.getmInscritos().getmUsuario().getFotoPerfil()));
 
             if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
                 edtobservaciones.setText(item.getmAsistenciaList().get(0).getObservacionAsistencia());
