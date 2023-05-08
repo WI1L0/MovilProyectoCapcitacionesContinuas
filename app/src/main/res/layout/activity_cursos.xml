@@ -11,17 +11,40 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <SearchView
-            android:id="@+id/svcursos"
+        <TextView
+            android:id="@+id/curso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/app_name"
-            android:inputType="textPersonName"/>
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_margin="5dp"
+            android:text="@string/txt_Cursos"
+            android:fontFamily="sans-serif-condensed-light"
+            android:textColor="@color/cl_azulLetras"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <SearchView
+                android:id="@+id/svcursos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_margin="5dp"
+                android:hint="@string/app_name"
+                android:inputType="textPersonName"/>
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recicleCursos"
             android:layout_width="match_parent"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content" />
     </LinearLayout>
 </ScrollView>
