@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Perfil">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
@@ -46,19 +44,49 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="600dp" />
 
-        <ImageView
-            android:id="@+id/imgperfil"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtvnombredtcurso"
-            app:srcCompat="@drawable/ista" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        app:cardCornerRadius="20dp"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/guideline1">
+
+            <TextView
+                android:id="@+id/perfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Perfil De Usuario"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imgperfil"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtvnombredtcurso"
+                app:srcCompat="@drawable/ista" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -124,7 +152,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@string/txt_telefono"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/txtvtelefono"
@@ -144,7 +173,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@string/txt_celular"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtvcelularperfil"
@@ -164,7 +194,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@string/txt_correoUsuario"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtvcorreoperfil"
@@ -188,7 +219,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                        android:text="@string/txt_etniaUsuario"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/txtvetniaperfil"
@@ -213,7 +245,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                        android:text="@string/txt_tituloUsuario"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/txtvtituloperfil"
@@ -224,6 +257,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</RelativeLayout>

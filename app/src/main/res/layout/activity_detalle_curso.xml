@@ -190,7 +190,8 @@
                         android:id="@+id/textView8gf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="@string/txt_descripcionCurso"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/txtvdescripciondtcurso"
@@ -225,7 +226,8 @@
                         android:id="@+id/textView8ew"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="@string/txt_objetivoCurso"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtvobjetivosdtcurso"
@@ -260,7 +262,8 @@
                         android:id="@+id/textView8f"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="@string/txt_prerequisitosCurso"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtvrequisitosdtcurso"

@@ -11,12 +11,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/curso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:text="@string/cursos" />
+
         <SearchView
             android:id="@+id/svcursos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/app_name"
+            android:layout_margin="5dp"
             android:inputType="textPersonName"/>
 
         <androidx.recyclerview.widget.RecyclerView

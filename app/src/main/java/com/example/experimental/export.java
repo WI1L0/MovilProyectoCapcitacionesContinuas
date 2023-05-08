@@ -18,29 +18,23 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.experimental.DB.DataBase;
-import com.example.experimental.Modelos.MAsistencia;
-import com.example.experimental.Modelos.MInscritos;
 import com.example.experimental.Progresst_Bar.ManejoProgressBar;
 import com.example.experimental.Utilidades.Atributos;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-public class Export extends AppCompatActivity {
+public class export extends AppCompatActivity {
 
     private JSONObject postData;
 
     private int idasi;
 
     private int progreso = 0, count = 0;
-    private String host = "192.168.100.31";
+    private String host = "192.168.0.132";
 
     private ManejoProgressBar manejoProgressBar;
 
@@ -68,7 +62,7 @@ public class Export extends AppCompatActivity {
                 manejoProgressBar = new ManejoProgressBar(pgsexport);
                 manejoProgressBar.execute();
 
-                exportAll(true, Export.this);
+                exportAll(true, export.this);
             }
         });
     }

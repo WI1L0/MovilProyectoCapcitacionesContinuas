@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
             control(Atributos.table_cursos) == false || control(Atributos.table_prerequisitos) == false || control(Atributos.table_inscritos) == false || control(Atributos.table_participante) == false || control(Atributos.table_asistencia) == false) {
 
         //(control(Atributos.table_persona) == false && control(Atributos.table_usuarios) == false && control(Atributos.table_programas) == false && control(Atributos.table_capacitador) == false) {
-            t();
+            //t();
         }
 
         btninicio.setOnClickListener(new View.OnClickListener() {

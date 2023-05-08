@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.experimental.Adaptadores.ProgramasAdaptador;
@@ -30,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Programas extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -181,7 +179,7 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
                 break;
             }
             case R.id.activity4: {
-                Intent galleryIntent = new Intent(Programas.this, Export.class);
+                Intent galleryIntent = new Intent(Programas.this, export.class);
                 startActivity(galleryIntent);
                 break;
             }

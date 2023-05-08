@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:padding="5dp">
 
             <SearchView
                 android:id="@+id/svasistencia"
@@ -32,14 +33,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/txtvfecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="@string/txt_fechaAsistencia" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -61,6 +63,7 @@
             android:id="@+id/btnguardarasistencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/txt_btnGuardarAsistencia"
+            app:backgroundTint="#004f9f"/>
     </LinearLayout>
 </ScrollView>

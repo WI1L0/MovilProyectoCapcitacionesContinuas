@@ -1,34 +1,25 @@
 package com.example.experimental;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.experimental.DB.DataBase;
 import com.example.experimental.DB.DataBaseTemporal;
 import com.example.experimental.DB.DataBaseTransaction;
 import com.example.experimental.DB.ImportData;
 import com.example.experimental.DB.OnImportListener;
 import com.example.experimental.Progresst_Bar.ManejoProgressBar;
 import com.example.experimental.Utilidades.Atributos;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Import extends AppCompatActivity {
 
@@ -456,7 +447,7 @@ public class Import extends AppCompatActivity {
 
     public void verificarAllAsistencia(){
         if (controlAsistencia() == true) {
-            Export export = new Export();
+            export export = new export();
             export.exportAll(false, Import.this);
             System.out.println("sssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaa");
         }

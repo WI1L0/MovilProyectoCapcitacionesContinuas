@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Experimental"
         tools:targetApi="31">
         <activity
-            android:name=".Export"
+            android:name=".export"
             android:exported="false" />
         <activity
             android:name=".Import"
