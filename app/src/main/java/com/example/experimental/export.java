@@ -74,6 +74,7 @@ public class Export extends AppCompatActivity {
     }
 
     public void exportAll(Boolean est, Context context) {
+        System.out.println("--------------------------------------------------------------------------------------------------");
         mContext = context;
         DataBase conection = new DataBase(mContext);
         SQLiteDatabase db = conection.getReadableDatabase();

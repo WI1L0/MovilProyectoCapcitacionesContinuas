@@ -105,14 +105,14 @@ public class Cursos extends AppCompatActivity {
                 cursor = db.rawQuery("SELECT c.idCurso, c.nombreCurso, c.duracionCurso, c.nombreModalidadCurso, c.nombreTipoCurso, c.nombreEspecialidad, c.nombreArea, c.fechaInicioCurso, c.fechaFinalizacionCurso, c.fotoCurso " +
                                 "FROM cursos c INNER JOIN inscritos i ON i.idCurso = c.idCurso " +
                                 //"WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso != 'N' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = 'V' ORDER BY c.nombreCurso DESC;",
-                                "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso = 'P' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso = 'O' ORDER BY c.nombreCurso DESC;",
+                                "WHERE i.idUsuario = ? AND c.idPrograma = ? AND c.estadoAprovacionCurso = 'A' AND c.estadoCurso = '1' AND c.estadoPublicasionCurso in ('I','F')   ORDER BY c.nombreCurso DESC;",
                         new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
             } else {
 
                 cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso, fotoCurso " +
                                 //"FROM cursos WHERE idPrograma = ? AND estadoAprovacionCurso != 'N' AND estadoCurso = '1' AND estadoPublicasionCurso = 'V' ORDER BY nombreCurso DESC;",
-                                "FROM cursos WHERE idPrograma = ? AND estadoAprovacionCurso = 'P' AND estadoCurso = '1' AND estadoPublicasionCurso = 'O' ORDER BY nombreCurso DESC;",
+                                "FROM cursos WHERE idPrograma = ? AND estadoAprovacionCurso = 'A' AND estadoCurso = '1' AND estadoPublicasionCurso = 'V' ORDER BY nombreCurso DESC;",
                         new String[]{String.valueOf(idProgramas)});
 
             }
@@ -120,7 +120,7 @@ public class Cursos extends AppCompatActivity {
 
             cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso, fotoCurso " +
                             //"FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso != 'N' AND estadoCurso = '1' AND estadoPublicasionCurso = 'V' ORDER BY nombreCurso DESC;",
-                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso = 'P' AND estadoCurso = '1' AND estadoPublicasionCurso = 'O' ORDER BY nombreCurso DESC;",
+                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso = 'A' AND estadoCurso = '1' AND estadoPublicasionCurso = 'I' ORDER BY nombreCurso DESC;",
                     new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
         }

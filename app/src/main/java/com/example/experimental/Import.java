@@ -64,34 +64,46 @@ public class Import extends AppCompatActivity {
             conection.insercontrol();
         }
 
-        verificarAllAsistencia();
+        //verificarAllAsistencia();
         verificarAll();
 
         btnimport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //btnimport.setEnabled(false);
+                btnimport.setEnabled(false);
                 manejoProgressBar = new ManejoProgressBar(pgsimport);
                 manejoProgressBar.execute();
 
-                if (controlAsistencia() == false) {
+                int ntables = controlbtn();
+
+                verificarAllAsistencia();
+
                     cargar(new OnImportListener() {
+                        int count = 0;
+                        Boolean esterror = false;
                         @Override
                         public void onImportExito(int leng) {
                             verificarAll();
-                            //btnimport.setEnabled(true);
+                            count++;
+                            if (count == ntables && esterror == true) {
+                                btnimport.setEnabled(true);
+                                btnimport.setText("REINTENTAR");
+                            }
                         }
 
                         @Override
                         public void onImportError() {
                             verificarAll();
-                            btnimport.setEnabled(true);
-                            btnimport.setText("REINTENTAR");
+                            esterror = true;
+                            count++;
+                            if (count == ntables) {
+                                btnimport.setEnabled(true);
+                                btnimport.setText("REINTENTAR");
+                            }
                         }
                     });
-                } else {
-                    verificarAllAsistencia();
-                }
+
+
 
             }
         });
@@ -420,17 +432,13 @@ public class Import extends AppCompatActivity {
 
     public Boolean controlAsistencia(){
         SQLiteDatabase db = conection.getWritableDatabase();
-        String[] projection = {"idAsistencia"};
-        String selection = "estadoSubida = ?";
-        String[] selectionArgs = {"0"};
 
-        Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
-
-        if (cursor.moveToFirst()){
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1");
+        Cursor cursor = db.rawQuery("SELECT idAsistencia FROM asistencia WHERE estadoSubida = '0';", null);
+        if (cursor.moveToFirst()) {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeee1");
             return true;
         } else {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2");
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeee2");
             return false;
         }
     }
@@ -455,11 +463,9 @@ public class Import extends AppCompatActivity {
     }
 
     public void verificarAllAsistencia(){
-        if (controlAsistencia() == true) {
             Export export = new Export();
             export.exportAll(false, Import.this);
             System.out.println("sssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaa");
-        }
     }
 
     public int barActualizar(){
@@ -473,5 +479,18 @@ public class Import extends AppCompatActivity {
         cursor.close();
 
         return count * 10;
+    }
+
+    public int controlbtn(){
+        SQLiteDatabase db = conection.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + Atributos.table_control + " WHERE estado = '0'", null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+
+        return count;
     }
 }

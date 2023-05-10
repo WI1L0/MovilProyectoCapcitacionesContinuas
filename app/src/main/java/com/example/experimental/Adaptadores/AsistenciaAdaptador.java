@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.experimental.Asistencia;
 import com.example.experimental.Modelos.MAsistencia;
 import com.example.experimental.Modelos.MInscritos;
 import com.example.experimental.Modelos.MParticipante;
@@ -106,14 +107,15 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                 public void onClick(View view) {
                     //Toast.makeText(context, "ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
 
-                    //String contenido = edtobservaciones.getText().toString();
+                    String contenido = edtobservaciones.getText().toString();
                     mAsistencia = new MAsistencia();
                     mParticipante = new MParticipante();
 
                     mParticipante.setIdParticipanteMatriculado(item.getIdParticipanteMatriculado());
 
                     mAsistencia.setEstadoAsistencia(true);
-                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
+                    System.out.println(contenido);
+                    mAsistencia.setObservacionAsistencia(contenido);
                     mAsistencia.setmParticipante(mParticipante);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
@@ -125,6 +127,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
 
                     btnasiste.setEnabled(false);
                     btnnoasiste.setEnabled(true);
+                    btnobservacione.setEnabled(false);
                 }
             });
 
@@ -133,13 +136,15 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                 public void onClick(View view) {
                     //Toast.makeText(context, "NO ASISTE " + item.getIdPersona() + " id " + item.getNombre1() + ", " + item.getNombre2() + " nombres " + item.getApellido1() + ", " + item.getApellido2()  + " apellido", Toast.LENGTH_SHORT).show();
 
+                    String contenido = edtobservaciones.getText().toString();
                     mAsistencia = new MAsistencia();
                     mParticipante = new MParticipante();
 
                     mParticipante.setIdParticipanteMatriculado(item.getIdParticipanteMatriculado());
 
                     mAsistencia.setEstadoAsistencia(false);
-                    mAsistencia.setObservacionAsistencia(edtobservaciones.getText().toString());
+                    System.out.println(contenido);
+                    mAsistencia.setObservacionAsistencia(contenido);
                     mAsistencia.setmParticipante(mParticipante);
 
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
@@ -151,6 +156,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
 
                     btnnoasiste.setEnabled(false);
                     btnasiste.setEnabled(true);
+                    btnobservacione.setEnabled(false);
                 }
             });
 
