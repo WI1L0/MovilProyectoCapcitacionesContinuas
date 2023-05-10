@@ -3,6 +3,7 @@ package com.example.experimental.Adaptadores;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.experimental.Modelos.MCursos;
@@ -104,6 +106,7 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             pgcursos.setProgress(0);
 
             new Thread(new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void run() {
                     pgcursos.setProgress(porcentajeCurso(item.getFechaFinalizacionCurso(), item.getDuracionCurso()));
@@ -128,6 +131,7 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public int porcentajeCurso(String date2, int total){
         LocalDate fecha1 = LocalDate.now();
         LocalDate fecha2 = LocalDate.parse(date2);

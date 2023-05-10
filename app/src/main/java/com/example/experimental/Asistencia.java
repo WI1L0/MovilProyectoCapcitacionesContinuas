@@ -1,5 +1,6 @@
 package com.example.experimental;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,10 +10,12 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +55,8 @@ public class Asistencia extends AppCompatActivity {
 
     //vista
     private RecyclerView recycleViewListado;
-    private Button btnguardar, btnfecha;
+    private Button btnguardar;
+    private ImageButton btnfecha;
     private TextView txtfecha;
     private SearchView svasistencia;
 
@@ -63,6 +67,7 @@ public class Asistencia extends AppCompatActivity {
     //dato de curso
     private int idCurso;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +86,7 @@ public class Asistencia extends AppCompatActivity {
         //vista
         recycleViewListado = (RecyclerView) findViewById(R.id.recicleasistencia);
         btnguardar = (Button) findViewById(R.id.btnguardarasistencia);
-        btnfecha = (Button) findViewById(R.id.btnfecha);
+        btnfecha = (ImageButton) findViewById(R.id.btnfecha);
         txtfecha = (TextView) findViewById(R.id.txtvfecha);
         svasistencia = (SearchView) findViewById(R.id.svasistencia);
 
@@ -157,6 +162,7 @@ public class Asistencia extends AppCompatActivity {
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(Asistencia.this, new DatePickerDialog.OnDateSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         LocalDate selectedDate = LocalDate.of(year, month + 1, day);
@@ -213,6 +219,7 @@ public class Asistencia extends AppCompatActivity {
         recycleViewListado.setAdapter(asistenciaAdaptador);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void obtenerFechaActual(){
         Calendar cal = Calendar.getInstance();
         Date fechaActual = cal.getTime();

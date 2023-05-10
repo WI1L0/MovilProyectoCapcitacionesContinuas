@@ -59,8 +59,9 @@
             <TextView
                 android:id="@+id/fecha"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="4dp"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:text="@string/txt_fechaAsistencia"
                 android:textStyle="bold" />
@@ -68,22 +69,21 @@
             <TextView
                 android:id="@+id/txtvfecha"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_marginLeft="4dp"
                 android:layout_weight="1"
                 android:text="TextView"
                 android:textStyle="bold"/>
 
-
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/btnfecha"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:inputType="textEmailAddress"
-                app:backgroundTint="#004f9f"
-                android:alpha="0.7"
-                android:drawableRight="@drawable/ic_calendario"
-                android:drawablePadding="-12dp"
+                android:src="@drawable/ic_calendario"
+                app:backgroundTint="@color/cl_azulLetras"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
                 app:expandedHintEnabled="false"/>
 
         </LinearLayout>
@@ -98,6 +98,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txt_btnGuardarAsistencia"
-            app:backgroundTint="#004f9f" />
+            app:backgroundTint="@color/cl_azulLetras" />
     </LinearLayout>
 </ScrollView>
