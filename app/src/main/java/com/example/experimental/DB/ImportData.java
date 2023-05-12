@@ -127,33 +127,27 @@ public class ImportData extends DataBaseTemporal {
         requestunit.start();
     }
 
-    public void importarUsuarios(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/usuario/listar";
+    public void importarRol(final OnImportListener listener){
+        String uri = "http://" + host + ":8080/api/rol/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                System.out.println("CARGANDO USUARIO.....................................");
+                System.out.println("CARGANDO ROL.....................................");
                 if (response.length() != 0) {
                     SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
                     for (int a = 0; a < response.length(); a++) {
                         try {
                             JSONObject jsonObject = new JSONObject(response.get(a).toString());
-                            JSONObject jsonObjectIdPersona = new JSONObject(jsonObject.get("persona").toString());
-                            JSONObject jsonObjectRol = new JSONObject(jsonObject.get("rol").toString());
 
                             values = new ContentValues();
-                            values.put("idUsuario", jsonObject.getInt("idUsuario"));
-                            values.put("username", jsonObject.getString("username"));
-                            values.put("password", jsonObject.getString("password"));
-                            values.put("fotoPerfil", jsonObject.getString("fotoPerfil"));
-                            values.put("estadoUsuarioActivo", jsonObject.getBoolean("estadoUsuarioActivo"));
-                            values.put("nombreRol", jsonObjectRol.getString("nombreRol"));
-                            values.put("idPersona", jsonObjectIdPersona.getInt("idPersona"));
+                            values.put("idRol", jsonObject.getInt("idRol"));
+                            values.put("nombreRol", jsonObject.getString("nombreRol"));
+                            values.put("estadoRolActivo", jsonObject.getBoolean("estadoRolActivo"));
 
-                            long resultado = db.insert(Atributos.table_usuarios, null, values);
+                            long resultado = db.insert(Atributos.table_rol, null, values);
 
-                            System.out.println(resultado + " USUARIO ALMACENADA CORRECTAMENTE");
+                            System.out.println(resultado + " ROL ALMACENADA CORRECTAMENTE");
 
                             resultados.add(resultado);
 
@@ -169,6 +163,99 @@ public class ImportData extends DataBaseTemporal {
                                 listener.onImportExito(response.length());
                             } else {
                                 listener.onImportError();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            listener.onImportError();
+                        }
+                    }
+                } else {
+                    listener.onImportError();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("ERROR FINAL ROL............................");
+                System.out.println(error.getMessage());
+                listener.onImportError();
+            }
+        });
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                timeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        RequestQueue requestunit = Volley.newRequestQueue(conection);
+        requestunit.add(jsonArrayRequest);
+        requestunit.start();
+    }
+
+    public void importarUsuarios(final OnImportListener listener){
+        String uri = "http://" + host + ":8080/api/usuario/listar";
+        final List<Long> resultados = new ArrayList<>();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println("CARGANDO USUARIO.....................................");
+                if (response.length() != 0) {
+                    SQLiteDatabase db = (new DataBaseTemporal(conection)).getWritableDatabase();
+                    for (int a = 0; a < response.length(); a++) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.get(a).toString());
+                            JSONObject jsonObjectIdPersona = new JSONObject(jsonObject.get("persona").toString());
+
+                            values = new ContentValues();
+                            int idu = jsonObject.getInt("idUsuario");
+                            values.put("idUsuario", idu);
+                            values.put("username", jsonObject.getString("username"));
+                            values.put("password", jsonObject.getString("password"));
+                            values.put("fotoPerfil", jsonObject.getString("fotoPerfil"));
+                            values.put("estadoUsuarioActivo", jsonObject.getBoolean("estadoUsuarioActivo"));
+                            values.put("idPersona", jsonObjectIdPersona.getInt("idPersona"));
+
+                            Boolean est = false;
+                            JSONArray jsonArrayRoles = jsonObject.getJSONArray("roles");
+                            for (int i = 0; i < jsonArrayRoles.length(); i++) {
+                                System.out.println("----------------------------------------------" + i);
+                                JSONObject jsonObjectRol = jsonArrayRoles.getJSONObject(i);
+                                ContentValues values1 = new ContentValues();
+                                values1.put("idRol", jsonObjectRol.getInt("idRol"));
+                                values1.put("idUsuario", idu);
+
+                                long resul = db.insert(Atributos.table_rol_usu, null, values1);
+
+                                if (resul == -1){
+                                    System.out.println("00000000000000000000000000000000000000000000000 ");
+                                    est = true;
+                                } else {
+                                    System.out.println(resul + " RELACION ALMACENADA CORRECTAMENTE");
+                                }
+                            }
+
+                            if (est == false){
+
+                                long resultado = db.insert(Atributos.table_usuarios, null, values);
+
+                                System.out.println(resultado + " USUARIO ALMACENADA CORRECTAMENTE");
+
+                                resultados.add(resultado);
+
+                                boolean exito = true;
+                                for (long result : resultados) {
+                                    if (result == -1) {
+                                        exito = false;
+                                        break;
+                                    }
+                                }
+
+                                if (exito) {
+                                    listener.onImportExito(response.length());
+                                } else {
+                                    listener.onImportError();
+                                }
                             }
 
                         } catch (JSONException e) {

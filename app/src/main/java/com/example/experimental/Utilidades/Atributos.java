@@ -37,13 +37,20 @@ public class Atributos {
     public static final String atr_cap_estado_capacitador = "estadoActivoCapacitador";
     public static final String atr_cap_titulo = "tituloCapacitador";
 
+    public static final String table_rol_usu = "rolusuario";
+    public static final String atr_rolusuario_id = "idRolUsuario";
+
+    public static final String table_rol = "roles";
+    public static final String atr_rol_id = "idRol";
+    public static final String atr_rol_nombre = "nombreRol";
+    public static final String atr_rol_est = "estadoRolActivo";
+
     public static final String table_usuarios = "usuarios";
     public static final String atr_usu_id = "idUsuario";
     public static final String atr_usu_user = "username";
     public static final String atr_usu_paswork = "password";
     public static final String atr_usu_foto = "fotoPerfil";
     public static final String atr_usu_estado_activo = "estadoUsuarioActivo";
-    public static final String atr_usu_rol = "nombreRol";
 
     public static final String table_cursos = "cursos";
     public static final String atr_cur_id = "idCurso";
@@ -107,11 +114,20 @@ public class Atributos {
             atr_pro_f_inicio + " TEXT NOT NULL, " + atr_pro_f_fin + " TEXT NOT NULL, " +
             atr_pro_periodo + " TEXT NOT NULL);";
 
+    public static final String CREAR_TABLA_ROLES = "CREATE TABLE " + table_rol + " (" +
+            atr_rol_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_rol_est + " BOOLEAN NOT NULL, " +
+            atr_rol_nombre + " TEXT NOT NULL);";
+
+    public static final String CREAR_TABLA_ROLES_USUARIOS = "CREATE TABLE " + table_rol_usu + " (" +
+            atr_rolusuario_id + " INTEGER PRIMARY KEY AUTOINCREMENT, " + atr_usu_id + " INTEGER NOT NULL, " +
+            atr_rol_id + " INTEGER NOT NULL, " +
+            "FOREIGN KEY(" + atr_usu_id + ") REFERENCES " + table_usuarios + " (" + atr_usu_id + "), " +
+            "FOREIGN KEY(" + atr_rol_id + ") REFERENCES " + table_rol + " (" + atr_rol_id + "));";
+
     public static final String CREAR_TABLA_USUARIOS = "CREATE TABLE " + table_usuarios + " (" +
             atr_usu_id + " INTEGER PRIMARY KEY NOT NULL, " + atr_per_id + " INTEGER NOT NULL, " +
             atr_usu_user + " TEXT NOT NULL, " + atr_usu_paswork + " TEXT NOT NULL, " +
-            atr_usu_foto + " TEXT, " + atr_usu_rol + " TEXT NOT NULL, " +
-            atr_usu_estado_activo + " BOOLEAN NOT NULL, " +
+            atr_usu_foto + " TEXT, " + atr_usu_estado_activo + " BOOLEAN NOT NULL, " +
             "FOREIGN KEY(" + atr_per_id + ") REFERENCES " + table_persona + " (" + atr_per_id + "));";
 
     public static final String CREAR_TABLA_CAPACITADOR = "CREATE TABLE " + table_capacitador + " (" +

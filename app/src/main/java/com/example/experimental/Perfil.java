@@ -25,6 +25,7 @@ public class Perfil extends AppCompatActivity {
 
     private Cursor cursor;
     private Boolean usu;
+    private String rolfinal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +57,25 @@ public class Perfil extends AppCompatActivity {
         SQLiteDatabase db = conection.getReadableDatabase();
 
         if (rol.equals("alumno")){
-            cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.nombreRol, u.fotoPerfil FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona WHERE u.idUsuario = ?;",
+            cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona WHERE u.idUsuario = ?;",
                     new String[]{String.valueOf(id)});
             System.out.println(cursor.getCount() + "ddddddddddddddddddddddddddddddddddd1");
             txtv5.setVisibility(View.INVISIBLE);
             txtvtitulo.setVisibility(View.INVISIBLE);
             usu = true;
+            rolfinal = "Participante";
         } else {
-            cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.nombreRol, u.fotoPerfil, c.tituloCapacitador FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE c.idCapacitador = ?;",
+            cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil, c.tituloCapacitador FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE c.idCapacitador = ?;",
                     new String[]{String.valueOf(id)});
             System.out.println(cursor.getCount() + "ddddddddddddddddddddddddddddddddddd2");
             txtv5.setVisibility(View.VISIBLE);
             txtvtitulo.setVisibility(View.VISIBLE);
             usu = false;
+            rolfinal = "DocenteCapacitador";
         }
 
         while (cursor.moveToNext()) {
-            txtvrol.setText(cursor.getString(0) + " : " + cursor.getString(6));
+            txtvrol.setText(cursor.getString(0) + " : " + rolfinal);
             txtvcedula.setText(cursor.getString(1));
             txtvtelefono.setText(cursor.getString(2));
             txtvcelular.setText(cursor.getString(3));
@@ -80,9 +83,9 @@ public class Perfil extends AppCompatActivity {
             txtvetnia.setText(cursor.getString(5));
 
             if (usu == false) {
-                txtvtitulo.setText(cursor.getString(8));
+                txtvtitulo.setText(cursor.getString(7));
             }
-            imgperfil.setImageBitmap(ImgBitmap(cursor.getString(7)));
+            imgperfil.setImageBitmap(ImgBitmap(cursor.getString(6)));
         }
     }
 

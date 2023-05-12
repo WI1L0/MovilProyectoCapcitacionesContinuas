@@ -119,14 +119,41 @@ tools:context=".MainActivity">
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
-        <Button
-            android:id="@+id/btninicio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="inicio"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/btndatos"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline3" />
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            android:gravity="center">
+
+
+            <Button
+                android:id="@+id/btninicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="inicio"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/btnparticipante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Participante"
+                android:layout_margin="5dp"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btncapacitador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capacitador"
+                android:visibility="gone"
+                android:layout_margin="5dp" />
+
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/btndatos"

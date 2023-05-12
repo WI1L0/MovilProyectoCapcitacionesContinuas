@@ -26,14 +26,15 @@ public class MCursos implements Serializable {
     private String horaInicio;
     private String horaFin;
 
-
+    private MCapacitador mCapacitador;
+    private  MProgramas mProgramas;
     private List<MPrerequisitos> mPrerequisitosList;
-    private List<MUsuario> mUsuarioList;
+
 
     public MCursos() {
     }
 
-    public MCursos(int idCurso, String nombreCurso, String fotoCurso, int duracionCurso, String observacionCurso, Boolean estadoCurso, String estadoAprovacionCurso, Boolean estadoPublicasionCurso, String descripcionCurso, String objetivoGeneralesCurso, int numeroCuposCurso, String fechaInicioCurso, String fechaFinalizacionCurso, String nombreEspecialidad, String nombreArea, String nombreTipoCurso, String nombreModalidadCurso, String horaInicio, String horaFin, List<MPrerequisitos> mPrerequisitosList, List<MUsuario> mUsuarioList) {
+    public MCursos(int idCurso, String nombreCurso, String fotoCurso, int duracionCurso, String observacionCurso, Boolean estadoCurso, String estadoAprovacionCurso, Boolean estadoPublicasionCurso, String descripcionCurso, String objetivoGeneralesCurso, int numeroCuposCurso, String fechaInicioCurso, String fechaFinalizacionCurso, String nombreEspecialidad, String nombreArea, String nombreTipoCurso, String nombreModalidadCurso, String horaInicio, String horaFin, MCapacitador mCapacitador, MProgramas mProgramas, List<MPrerequisitos> mPrerequisitosList) {
         this.idCurso = idCurso;
         this.nombreCurso = nombreCurso;
         this.fotoCurso = fotoCurso;
@@ -53,8 +54,9 @@ public class MCursos implements Serializable {
         this.nombreModalidadCurso = nombreModalidadCurso;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.mCapacitador = mCapacitador;
+        this.mProgramas = mProgramas;
         this.mPrerequisitosList = mPrerequisitosList;
-        this.mUsuarioList = mUsuarioList;
     }
 
     public int getIdCurso() {
@@ -209,19 +211,27 @@ public class MCursos implements Serializable {
         this.horaFin = horaFin;
     }
 
+    public MCapacitador getmCapacitador() {
+        return mCapacitador;
+    }
+
+    public void setmCapacitador(MCapacitador mCapacitador) {
+        this.mCapacitador = mCapacitador;
+    }
+
+    public MProgramas getmProgramas() {
+        return mProgramas;
+    }
+
+    public void setmProgramas(MProgramas mProgramas) {
+        this.mProgramas = mProgramas;
+    }
+
     public List<MPrerequisitos> getmPrerequisitosList() {
         return mPrerequisitosList;
     }
 
     public void setmPrerequisitosList(List<MPrerequisitos> mPrerequisitosList) {
         this.mPrerequisitosList = mPrerequisitosList;
-    }
-
-    public List<MUsuario> getmUsuarioList() {
-        return mUsuarioList;
-    }
-
-    public void setmUsuarioList(List<MUsuario> mUsuarioList) {
-        this.mUsuarioList = mUsuarioList;
     }
 }

@@ -76,6 +76,58 @@ public class DataBaseTransaction {
 
             }
 
+            if (control(Atributos.table_rol) == false) {
+
+                //ROL
+                final int[] cont = {0};
+                newRol(new OnImportListener() {
+                    @Override
+                    public void onImportExito(int leng) {
+                        cont[0]++;
+                        if (cont[0] == leng) {
+                            Toast.makeText(context, "Datos roles fin descargados", Toast.LENGTH_SHORT).show();
+                            updatecontrol(Atributos.table_rol);
+                            progreso = progreso + 1;
+                            listenerMein.onImportExito(progreso);
+                        }
+                    }
+
+                    @Override
+                    public void onImportError() {
+                        Toast.makeText(context, "Error en descargar fin roles", Toast.LENGTH_SHORT).show();
+                        limpiartable(Atributos.table_rol);
+                        listenerMein.onImportError();
+                    }
+                });
+
+            }
+
+            if (control(Atributos.table_rol_usu) == false) {
+
+                //ROLUSUARIOS
+                final int[] cont = {0};
+                newRolUsuario(new OnImportListener() {
+                    @Override
+                    public void onImportExito(int leng) {
+                        cont[0]++;
+                        if (cont[0] == leng) {
+                            Toast.makeText(context, "Datos rolusuarios fin descargados", Toast.LENGTH_SHORT).show();
+                            updatecontrol(Atributos.table_rol_usu);
+                            progreso = progreso + 1;
+                            listenerMein.onImportExito(progreso);
+                        }
+                    }
+
+                    @Override
+                    public void onImportError() {
+                        Toast.makeText(context, "Error en descargar fin rolusuarios", Toast.LENGTH_SHORT).show();
+                        limpiartable(Atributos.table_rol_usu);
+                        listenerMein.onImportError();
+                    }
+                });
+
+            }
+
             if (control(Atributos.table_usuarios) == false) {
 
                 //USUARIO
@@ -95,6 +147,7 @@ public class DataBaseTransaction {
                     @Override
                     public void onImportError() {
                         Toast.makeText(context, "Error en descargar fin usuarios", Toast.LENGTH_SHORT).show();
+                        limpiartable(Atributos.table_rol_usu);
                         limpiartable(Atributos.table_usuarios);
                         listenerMein.onImportError();
                     }
@@ -339,12 +392,87 @@ public class DataBaseTransaction {
         }
     }
 
+    public void newRol(final OnImportListener listener){
+        SQLiteDatabase sdbFinal = conectionFinal.getWritableDatabase();
+        SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
+        final List<Long> resultados = new ArrayList<>();
+
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idRol, estadoRolActivo, nombreRol FROM " + Atributos.table_rol, null);
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                values = new ContentValues();
+                values.put("idRol", cursor.getInt(0));
+                values.put("estadoRolActivo", cursor.getInt(1));
+                values.put("nombreRol", cursor.getString(2));
+
+                long resultado = sdbFinal.insert(Atributos.table_rol, null, values);
+
+                resultados.add(resultado);
+
+                boolean exito = true;
+                for (long result : resultados) {
+                    if (result == -1) {
+                        exito = false;
+                        break;
+                    }
+                }
+
+                if (exito) {
+                    listener.onImportExito(cursor.getCount());
+                } else {
+                    listener.onImportError();
+                }
+
+            }
+        } else {
+            listener.onImportError();
+        }
+    }
+
+    public void newRolUsuario(final OnImportListener listener){
+        SQLiteDatabase sdbFinal = conectionFinal.getWritableDatabase();
+        SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
+        final List<Long> resultados = new ArrayList<>();
+
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idUsuario, idRol FROM " + Atributos.table_rol_usu, null);
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                values = new ContentValues();
+                values.put("idUsuario", cursor.getInt(0));
+                values.put("idRol", cursor.getInt(1));
+
+                long resultado = sdbFinal.insert(Atributos.table_rol_usu, null, values);
+
+                resultados.add(resultado);
+
+                boolean exito = true;
+                for (long result : resultados) {
+                    if (result == -1) {
+                        exito = false;
+                        break;
+                    }
+                }
+
+                if (exito) {
+                    listener.onImportExito(cursor.getCount());
+                } else {
+                    listener.onImportError();
+                }
+
+            }
+        } else {
+            listener.onImportError();
+        }
+    }
+
     public void newUsuario(final OnImportListener listener){
         SQLiteDatabase sdbFinal = conectionFinal.getWritableDatabase();
         SQLiteDatabase sdbTemporal = conectionTemporal.getReadableDatabase();
         final List<Long> resultados = new ArrayList<>();
 
-        Cursor cursor = sdbTemporal.rawQuery("SELECT idUsuario, username, password, fotoPerfil, estadoUsuarioActivo, nombreRol, idPersona FROM " + Atributos.table_usuarios, null);
+        Cursor cursor = sdbTemporal.rawQuery("SELECT idUsuario, username, password, fotoPerfil, estadoUsuarioActivo, idPersona FROM " + Atributos.table_usuarios, null);
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
@@ -354,8 +482,7 @@ public class DataBaseTransaction {
                 values.put("password", cursor.getString(2));
                 values.put("fotoPerfil", cursor.getString(3));
                 values.put("estadoUsuarioActivo", cursor.getInt(4));
-                values.put("nombreRol", cursor.getString(5));
-                values.put("idPersona", cursor.getInt(6));
+                values.put("idPersona", cursor.getInt(5));
 
                 long resultado = sdbFinal.insert(Atributos.table_usuarios, null, values);
 
@@ -729,7 +856,7 @@ public class DataBaseTransaction {
     }
 
     public boolean verificarAll(){
-        if (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
+        if (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true && control(Atributos.table_rol) == true &&
              control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_participante) == true && control(Atributos.table_asistencia) == true) {
 
         //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
@@ -763,7 +890,12 @@ public class DataBaseTransaction {
         }
         cursor.close();
 
-        return count * 2;
+        int resu = count * 2;
+        if (resu > 10){
+            resu = 10;
+        }
+
+        return resu;
     }
 
 }

@@ -8,7 +8,7 @@ import com.example.experimental.Utilidades.Atributos;
 
 public class DataBase extends SQLiteOpenHelper {
     public DataBase(Context context) {
-        super(context, "db_final", null, 1);
+        super(context, "db_final", null, 5);
     }
 
     @Override
@@ -16,7 +16,9 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL(Atributos.CREAR_TABLA_CONTROL);
         db.execSQL(Atributos.CREAR_TABLA_PERSONAS);
         db.execSQL(Atributos.CREAR_TABLA_PROGRAMAS);
+        db.execSQL(Atributos.CREAR_TABLA_ROLES);
         db.execSQL(Atributos.CREAR_TABLA_USUARIOS);
+        db.execSQL(Atributos.CREAR_TABLA_ROLES_USUARIOS);
         db.execSQL(Atributos.CREAR_TABLA_CAPACITADOR);
         db.execSQL(Atributos.CREAR_TABLA_CURSOS);
         db.execSQL(Atributos.CREAR_TABLA_PREREQUISITOS);
@@ -27,16 +29,18 @@ public class DataBase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int versionAntigua, int versionNueva) {
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_ASISTENCIAS);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PARTICIPANTES);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_INSCRITOS);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PREREQUISITOS);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_CURSOS);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_CAPACITADOR);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_USUARIOS);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PROGRAMAS);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_PERSONAS);
-        db.execSQL("DROP TABLE IF EXISTS " + Atributos.CREAR_TABLA_CONTROL);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_asistencia);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_participante);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_inscritos);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_prerequisitos);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_cursos);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_capacitador);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_rol_usu);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_usuarios);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_rol);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_programas);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_persona);
+        db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_control);
         onCreate(db);
     }
 
@@ -46,6 +50,8 @@ public class DataBase extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_persona + "', " + false + ")");
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_programas + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol + "', " + false + ")");
+        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol_usu + "', " + false + ")");
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_usuarios + "', " + false + ")");
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_capacitador + "', " + false + ")");
         db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_cursos + "', " + false + ")");

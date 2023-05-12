@@ -135,7 +135,7 @@ public class Export extends AppCompatActivity {
                         }
                         System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
                         System.out.println(response);
-                        actualizar(aid);
+                        actualizar(aid, est);
 
                     }
                 }, new Response.ErrorListener() {
@@ -174,7 +174,7 @@ public class Export extends AppCompatActivity {
                         }
                         System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
                         System.out.println(response);
-                        actualizar(aid);
+                        actualizar(aid, est);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -198,7 +198,7 @@ public class Export extends AppCompatActivity {
         queue.add(request);
     }
 
-    public void actualizar(int aid){
+    public void actualizar(int aid, Boolean est){
         DataBase conection = new DataBase(mContext);
         SQLiteDatabase db = conection.getWritableDatabase();
 
@@ -209,5 +209,23 @@ public class Export extends AppCompatActivity {
         statement.bindLong(3, aid);
         long resultado = statement.executeUpdateDelete();
         System.out.println("PARTICIPANTE ALMACENADA CORRECTAMENTE....................................." + aid);
+        if (controlAsistencia() == false && est == true){
+            btnexport.setEnabled(false);
+            btnexport.setText("DATOS CARGADO EXITOSAMENTE");
+        }
+    }
+
+    public Boolean controlAsistencia(){
+        DataBase conection = new DataBase(mContext);
+        SQLiteDatabase db = conection.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT idAsistencia FROM asistencia WHERE estadoSubida = '0';", null);
+        if (cursor.moveToFirst()) {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeee1");
+            return true;
+        } else {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeee2");
+            return false;
+        }
     }
 }

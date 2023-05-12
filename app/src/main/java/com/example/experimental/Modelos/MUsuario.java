@@ -10,26 +10,25 @@ public class MUsuario implements Serializable {
     private String password;
     private String fotoPerfil;
     private Boolean estadoUsuarioActivo;
-    private Boolean estadoActivoCapacitador;
-    private String tituloCapacitador;
-
 
     private MPersona mPersona;
     private List<MCursos> mCursosList;
+    private List<MRolUsuario> mRolUsuarioList;
+    private List<MCapacitador> mCapacitadorList;
 
     public MUsuario() {
     }
 
-    public MUsuario(int idUsuario, String username, String password, String fotoPerfil, Boolean estadoUsuarioActivo, Boolean estadoActivoCapacitador, String tituloCapacitador, MPersona mPersona, List<MCursos> mCursosList) {
+    public MUsuario(int idUsuario, String username, String password, String fotoPerfil, Boolean estadoUsuarioActivo, MPersona mPersona, List<MCursos> mCursosList, List<MRolUsuario> mRolUsuarioList, List<MCapacitador> mCapacitadorList) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.password = password;
         this.fotoPerfil = fotoPerfil;
         this.estadoUsuarioActivo = estadoUsuarioActivo;
-        this.estadoActivoCapacitador = estadoActivoCapacitador;
-        this.tituloCapacitador = tituloCapacitador;
         this.mPersona = mPersona;
         this.mCursosList = mCursosList;
+        this.mRolUsuarioList = mRolUsuarioList;
+        this.mCapacitadorList = mCapacitadorList;
     }
 
     public int getIdUsuario() {
@@ -72,22 +71,6 @@ public class MUsuario implements Serializable {
         this.estadoUsuarioActivo = estadoUsuarioActivo;
     }
 
-    public Boolean getEstadoActivoCapacitador() {
-        return estadoActivoCapacitador;
-    }
-
-    public void setEstadoActivoCapacitador(Boolean estadoActivoCapacitador) {
-        this.estadoActivoCapacitador = estadoActivoCapacitador;
-    }
-
-    public String getTituloCapacitador() {
-        return tituloCapacitador;
-    }
-
-    public void setTituloCapacitador(String tituloCapacitador) {
-        this.tituloCapacitador = tituloCapacitador;
-    }
-
     public MPersona getmPersona() {
         return mPersona;
     }
@@ -102,5 +85,21 @@ public class MUsuario implements Serializable {
 
     public void setmCursosList(List<MCursos> mCursosList) {
         this.mCursosList = mCursosList;
+    }
+
+    public List<MRolUsuario> getmRolUsuarioList() {
+        return mRolUsuarioList;
+    }
+
+    public void setmRolUsuarioList(List<MRolUsuario> mRolUsuarioList) {
+        this.mRolUsuarioList = mRolUsuarioList;
+    }
+
+    public List<MCapacitador> getmCapacitadorList() {
+        return mCapacitadorList;
+    }
+
+    public void setmCapacitadorList(List<MCapacitador> mCapacitadorList) {
+        this.mCapacitadorList = mCapacitadorList;
     }
 }

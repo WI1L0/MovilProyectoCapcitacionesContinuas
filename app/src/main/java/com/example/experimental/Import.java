@@ -144,7 +144,7 @@ public class Import extends AppCompatActivity {
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos personas descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_persona);
-                            progreso = progreso + 10;
+                            progreso = progreso + 8;
                             pgsimport.setProgress(progreso);
                             listenerMein.onImportExito(0);
                         }
@@ -160,6 +160,34 @@ public class Import extends AppCompatActivity {
 
             }
 
+        if (control(Atributos.table_rol) == false) {
+
+            //ROL
+            final int[] cont = {0};
+            importData.importarRol(new OnImportListener() {
+                @Override
+                public void onImportExito(int leng) {
+
+                    cont[0]++;
+                    if (cont[0] == leng) {
+                        Toast.makeText(Import.this, "Datos roles descargados", Toast.LENGTH_SHORT).show();
+                        updatecontrol(Atributos.table_rol);
+                        progreso = progreso + 8;
+                        pgsimport.setProgress(progreso);
+                        listenerMein.onImportExito(0);
+                    }
+                }
+
+                @Override
+                public void onImportError() {
+                    Toast.makeText(Import.this, "Error en descargar roles", Toast.LENGTH_SHORT).show();
+                    limpiartable(Atributos.table_rol);
+                    listenerMein.onImportError();
+                }
+            });
+
+        }
+
             if (control(Atributos.table_usuarios) == false) {
 
                 //USUARIO
@@ -172,7 +200,8 @@ public class Import extends AppCompatActivity {
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos usuarios descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_usuarios);
-                            progreso = progreso + 10;
+                            updatecontrol(Atributos.table_rol_usu);
+                            progreso = progreso + 8;
                             pgsimport.setProgress(progreso);
                             listenerMein.onImportExito(0);
                         }
@@ -182,6 +211,7 @@ public class Import extends AppCompatActivity {
                     public void onImportError() {
                         Toast.makeText(Import.this, "Error en descargar usuarios", Toast.LENGTH_SHORT).show();
                         limpiartable(Atributos.table_usuarios);
+                        limpiartable(Atributos.table_rol_usu);
                         listenerMein.onImportError();
                     }
                 });
@@ -200,7 +230,7 @@ public class Import extends AppCompatActivity {
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos programas descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_programas);
-                            progreso = progreso + 10;
+                            progreso = progreso + 8;
                             pgsimport.setProgress(progreso);
                             listenerMein.onImportExito(0);
                         }
@@ -228,7 +258,7 @@ public class Import extends AppCompatActivity {
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos capacitadores descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_capacitador);
-                            progreso = progreso + 10;
+                            progreso = progreso + 8;
                             pgsimport.setProgress(progreso);
                             listenerMein.onImportExito(0);
                         }
@@ -256,7 +286,7 @@ public class Import extends AppCompatActivity {
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos cursos descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_cursos);
-                            progreso = progreso + 10;
+                            progreso = progreso + 8;
                             pgsimport.setProgress(progreso);
                             listenerMein.onImportExito(0);
                         }
@@ -284,7 +314,7 @@ public class Import extends AppCompatActivity {
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos prerequisitos descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_prerequisitos);
-                            progreso = progreso + 10;
+                            progreso = progreso + 8;
                             pgsimport.setProgress(progreso);
                             listenerMein.onImportExito(0);
                         }
@@ -312,10 +342,10 @@ public class Import extends AppCompatActivity {
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos inscritos descargados", Toast.LENGTH_SHORT).show();
-                                        updatecontrol(Atributos.table_inscritos);
-                                        progreso = progreso + 10;
-                                        pgsimport.setProgress(progreso);
-                                        listenerMein.onImportExito(0);
+                            updatecontrol(Atributos.table_inscritos);
+                            progreso = progreso + 8;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
 
                         }
                     }
@@ -342,10 +372,10 @@ public class Import extends AppCompatActivity {
                         cont[0]++;
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos participante descargados", Toast.LENGTH_SHORT).show();
-                                        updatecontrol(Atributos.table_participante);
-                                        progreso = progreso + 10;
-                                        pgsimport.setProgress(progreso);
-                                        listenerMein.onImportExito(0);
+                            updatecontrol(Atributos.table_participante);
+                            progreso = progreso + 8;
+                            pgsimport.setProgress(progreso);
+                            listenerMein.onImportExito(0);
                         }
                     }
 
@@ -371,7 +401,7 @@ public class Import extends AppCompatActivity {
                         if (cont[0] == leng) {
                             Toast.makeText(Import.this, "Datos asistencias descargados", Toast.LENGTH_SHORT).show();
                             updatecontrol(Atributos.table_asistencia);
-                            progreso = progreso + 10;
+                            progreso = progreso + 8;
                             pgsimport.setProgress(progreso);
                             listenerMein.onImportExito(0);
                         }
@@ -444,7 +474,7 @@ public class Import extends AppCompatActivity {
     }
 
     public void verificarAll(){
-        if (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true &&
+        if (control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true && control(Atributos.table_rol) == true &&
              control(Atributos.table_cursos) == true && control(Atributos.table_prerequisitos) == true && control(Atributos.table_inscritos) == true && control(Atributos.table_participante) == true && control(Atributos.table_asistencia) == true) {
 
         //(control(Atributos.table_persona) == true && control(Atributos.table_usuarios) == true && control(Atributos.table_programas) == true && control(Atributos.table_capacitador) == true) {
@@ -478,7 +508,7 @@ public class Import extends AppCompatActivity {
         }
         cursor.close();
 
-        return count * 10;
+        return count * 8;
     }
 
     public int controlbtn(){
