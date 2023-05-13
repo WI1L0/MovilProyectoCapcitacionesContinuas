@@ -19,29 +19,49 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <SearchView
-                android:id="@+id/svprogramas"
+            <TextView
+                android:id="@+id/curso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/app_name"
-                android:inputType="textPersonName"/>
+                android:layout_margin="5dp"
+                android:gravity="center"
+                style="@style/TextViewStyle"
+                android:text="@string/txt_programas" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="5dp">
+
+                <SearchView
+                    android:id="@+id/svprogramas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_margin="5dp"
+                    android:hint="@string/app_name"
+                    android:inputType="textPersonName"/>
+
+            </androidx.cardview.widget.CardView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recicleProgramas"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"/>
         </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.navigation.NavigationView
-    android:id="@+id/navi"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    app:menu="@menu/menu"
-    app:headerLayout="@layout/nav_header" >
+        android:id="@+id/navi"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/menu"
+        app:headerLayout="@layout/nav_header" >
 
-</com.google.android.material.navigation.NavigationView>
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

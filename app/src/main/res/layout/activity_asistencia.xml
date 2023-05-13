@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Asistencia">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:id="@+id/curso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:text="@string/txt_asistencia"
+            style="@style/TextViewStyle"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,13 +32,22 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
 
-            <SearchView
-                android:id="@+id/svasistencia"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/app_name"
-                android:inputType="textPersonName"/>
+                android:layout_margin="2dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <SearchView
+                    android:id="@+id/svasistencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/app_name"
+                    android:inputType="textPersonName"/>
+
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
@@ -35,19 +58,33 @@
             android:layout_gravity="center">
 
             <TextView
+                android:id="@+id/fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="@string/txt_fechaAsistencia"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/txtvfecha"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginLeft="4dp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textStyle="bold"/>
 
-
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/btnfecha"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:inputType="textEmailAddress"
-                android:hint="."
+                android:src="@drawable/ic_calendario"
+                app:backgroundTint="@color/principal1"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
                 app:expandedHintEnabled="false"/>
 
         </LinearLayout>
@@ -61,6 +98,8 @@
             android:id="@+id/btnguardarasistencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="@string/txt_btnGuardarAsistencia"
+            app:backgroundTint="@color/principal1" />
     </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
