@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">experimental</string>
+    <string name="app_name">Capacitaciones ISTA</string>
 
     <!--Navegation Drawer-->
     <string name="nav_open">Open</string>
@@ -11,6 +11,7 @@
     <string name="txt_horarioCurso">Horario:</string>
     <string name="txt_nombreCurso">Nombre del Curso:</string>
     <string name="txt_areaCurso">Área del Curso:</string>
+    <string name="txt_progresoCurso">Progreso:</string>
     <string name="txt_especialidadCurso">Especialidad:</string>
     <string name="txt_descripcionCurso">Descripción del Curso:</string>
     <string name="txt_objetivoCurso">Objetivos del Curso:</string>
