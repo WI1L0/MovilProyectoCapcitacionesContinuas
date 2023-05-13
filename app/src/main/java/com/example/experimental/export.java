@@ -18,24 +18,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.experimental.DB.DataBase;
-import com.example.experimental.Modelos.MAsistencia;
-import com.example.experimental.Modelos.MInscritos;
 import com.example.experimental.Progresst_Bar.ManejoProgressBar;
 import com.example.experimental.Utilidades.Atributos;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class Export extends AppCompatActivity {
 
     private JSONObject postData;
+    private JSONObject participante;
 
     private int idasi;
 
@@ -79,7 +74,7 @@ public class Export extends AppCompatActivity {
         DataBase conection = new DataBase(mContext);
         SQLiteDatabase db = conection.getReadableDatabase();
 
-        String[] projection = {"idAsistencia", "fechaAsistencia", "estadoAsistencia", "observacionAsistencia", "estadoActual", "idParticipanteMatriculado"};
+        String[] projection = {"idAsistencia", "fechaAsistencia", "estadoAsistencia", "observacionAsistencia", "idParticipanteMatriculado", "estadoActual"};
         String selection = "estadoSubida = ?";
         String[] selectionArgs = {"0"};
 
@@ -93,6 +88,7 @@ public class Export extends AppCompatActivity {
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 postData = new JSONObject();
+                participante = new JSONObject();
 
                 try {
                     postData.put("idAsistencia", cursor.getInt(0));
@@ -100,20 +96,23 @@ public class Export extends AppCompatActivity {
                     postData.put("estadoAsistencia", cursor.getInt(2) == 1 ? true : false);
                     postData.put("observacionAsistencia", cursor.getString(3));
 
-                    JSONObject participantesMatriculados = new JSONObject();
-                    participantesMatriculados.put("idParticipanteMatriculado", cursor.getInt(5));
+                    participante.put("idParticipanteMatriculado", cursor.getInt(4));
+                    //System.out.println(cursor.getInt(4) + "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+                    //System.out.println(participante);
+                    postData.put("partipantesMatriculados", participante);
 
-                    postData.put("partipantesMatriculados", participantesMatriculados);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                if (cursor.getString(4).equals("Actualizado")) {
-                    bayPut(cursor.getInt(0), est);
+                String jsonString = postData.toString();
+
+                if (cursor.getString(5).equals("Actualizado")) {
+                    bayPut(cursor.getInt(0), est, jsonString);
                 }
 
-                if (cursor.getString(4).equals("Creado")) {
-                    bayNew(cursor.getInt(0), est);
+                if (cursor.getString(5).equals("Creado")) {
+                    bayNew(cursor.getInt(0), est, jsonString);
                 }
             }
         } else {
@@ -121,7 +120,7 @@ public class Export extends AppCompatActivity {
         }
     }
 
-    public void bayNew(int aid, Boolean est){
+    public void bayNew(int aid, Boolean est, String datos){
         String url = "http://" + host + ":8080/api/asistencia/save";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -147,7 +146,8 @@ public class Export extends AppCompatActivity {
         }) {
             @Override
             public byte[] getBody() throws AuthFailureError {
-                return postData.toString().getBytes();
+                byte[] jsonData = datos.getBytes();
+                return jsonData;
             }
 
             @Override
@@ -160,7 +160,7 @@ public class Export extends AppCompatActivity {
         queue.add(request);
     }
 
-    public void bayPut(int aid, Boolean est){
+    public void bayPut(int aid, Boolean est, String datos){
         String url = "http://" + host + ":8080/api/asistencia/actualizar/" + aid;
 
         StringRequest request = new StringRequest(Request.Method.PUT, url,
@@ -185,7 +185,9 @@ public class Export extends AppCompatActivity {
         }) {
             @Override
             public byte[] getBody() throws AuthFailureError {
-                return postData.toString().getBytes();
+                byte[] jsonData = datos.getBytes();
+                return jsonData;
+
             }
 
             @Override
