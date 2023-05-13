@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/listAsistencia"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -90,31 +91,34 @@
                         android:id="@+id/btnasisteasistencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:text="@string/txt_btnAsiste"
                         android:textSize="10dp"
                         app:backgroundTint="#136A16"
-                        android:layout_margin="5dp"/>
+                        tools:ignore="TextSizeCheck" />
 
                     <Button
                         android:id="@+id/btnnoasisteasistencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:text="@string/txt_btnNoAsiste"
                         android:textSize="10dp"
                         app:backgroundTint="#F44336"
-                        android:layout_margin="5dp"/>
+                        tools:ignore="TextSizeCheck" />
 
                     <Button
                         android:id="@+id/btnobservacionesasistencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:text="@string/txt_btnObservaciones"
                         android:textSize="8dp"
                         app:backgroundTint="#FFC107"
-                        android:layout_margin="5dp"/>
+                        tools:ignore="TextSizeCheck" />
                 </LinearLayout>
 
 

@@ -16,7 +16,7 @@
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
         <item name="android:textSize">20dp</item>
-        <item name="android:typeface">sans-serif-condensed-light</item>
+        <!-- <item name="android:typeface">sans-serif-condensed-light</item> -->
         <item name="android:background">@color/principal1</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
@@ -24,7 +24,7 @@
 
     <style name="TextViewStyle2" parent="android:Widget.TextView">
         <item name="android:textSize">18dp</item>
-        <item name="android:typeface">sans-serif-condensed-light</item>
+        <!-- <item name="android:typeface">sans-serif-condensed-light</item> -->
         <item name="android:textColor">@color/principal1</item>
         <item name="android:textStyle">bold</item>
     </style>

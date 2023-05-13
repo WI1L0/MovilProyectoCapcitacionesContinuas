@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +53,8 @@ public class Asistencia extends AppCompatActivity {
 
     //vista
     private RecyclerView recycleViewListado;
-    private Button btnguardar, btnfecha;
+    private Button btnguardar;
+    private ImageButton btnfecha;
     private TextView txtfecha;
     private SearchView svasistencia;
 
@@ -81,7 +83,7 @@ public class Asistencia extends AppCompatActivity {
         //vista
         recycleViewListado = (RecyclerView) findViewById(R.id.recicleasistencia);
         btnguardar = (Button) findViewById(R.id.btnguardarasistencia);
-        btnfecha = (Button) findViewById(R.id.btnfecha);
+        btnfecha = (ImageButton) findViewById(R.id.btnfecha);
         txtfecha = (TextView) findViewById(R.id.txtvfecha);
         svasistencia = (SearchView) findViewById(R.id.svasistencia);
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -65,7 +66,7 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtnombre, txtduracion, txtmodalidad, txttipo, txtespecialidad, txtarea, txtfinicio, txtffin;
 
-        Button btndetalles;
+        ImageButton btndetalles;
 
         ProgressBar pgcursos;
 

@@ -164,7 +164,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                 @Override
                 public void onClick(View view) {
                     if (edtobservaciones.getVisibility() == View.VISIBLE) {
-                        edtobservaciones.setVisibility(View.INVISIBLE);
+                        edtobservaciones.setVisibility(View.GONE);
                     } else {
                         edtobservaciones.setVisibility(View.VISIBLE);
                     }

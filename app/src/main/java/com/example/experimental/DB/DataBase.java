@@ -8,7 +8,7 @@ import com.example.experimental.Utilidades.Atributos;
 
 public class DataBase extends SQLiteOpenHelper {
     public DataBase(Context context) {
-        super(context, "db_final", null, 5);
+        super(context, "db_final", null, 8);
     }
 
     @Override
@@ -29,6 +29,7 @@ public class DataBase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int versionAntigua, int versionNueva) {
+
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_asistencia);
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_participante);
         db.execSQL("DROP TABLE IF EXISTS " + Atributos.table_inscritos);
@@ -46,18 +47,37 @@ public class DataBase extends SQLiteOpenHelper {
 
     public void insercontrol(){
 
-        SQLiteDatabase db = getWritableDatabase();
 
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_persona + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_programas + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol_usu + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_usuarios + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_capacitador + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_cursos + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_prerequisitos + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_inscritos + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_participante + "', " + false + ")");
-        db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_asistencia + "', " + false + ")");
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_persona + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_programas + "', " +false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol_usu + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_usuarios + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_capacitador + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_cursos + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_prerequisitos + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_inscritos + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_participante + "', " + false + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_asistencia + "', " + false + ")");
+
+        }catch (Exception e){
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_persona + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_programas + "', " +0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_rol_usu + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_usuarios + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_capacitador + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_cursos + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_prerequisitos + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_inscritos + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_participante + "', " + 0 + ")");
+            db.execSQL("INSERT INTO " + Atributos.table_control + " VALUES ('" + Atributos.table_asistencia + "', " + 0 + ")");
+
+            System.out.println("La eee-> "+e.getMessage());
+            System.out.println("La eee-> "+e.getCause());
+        }
     }
 }

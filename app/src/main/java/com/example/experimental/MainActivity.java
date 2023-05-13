@@ -79,8 +79,10 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                btncapacitador.setVisibility(View.INVISIBLE);
-                btnparticipantee.setVisibility(View.INVISIBLE);
+                btncapacitador.setVisibility(View.GONE);
+                btnparticipantee.setVisibility(View.GONE);
+                btninicio.setVisibility(View.GONE);
+                btninicio.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -97,8 +99,10 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                btncapacitador.setVisibility(View.INVISIBLE);
-                btnparticipantee.setVisibility(View.INVISIBLE);
+                btncapacitador.setVisibility(View.GONE);
+                btnparticipantee.setVisibility(View.GONE);
+                btninicio.setVisibility(View.GONE);
+                btninicio.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -189,6 +193,7 @@ public class MainActivity extends AppCompatActivity{
                         System.out.println("wwwwwwwwwwwwwwww5");
                         btncapacitador.setVisibility(View.VISIBLE);
                         btnparticipantee.setVisibility(View.VISIBLE);
+                        btninicio.setVisibility(View.GONE);
                     } else {
                         System.out.println("wwwwwwwwwwwwwwww6");
 

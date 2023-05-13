@@ -58,7 +58,7 @@
                 android:id="@+id/btnfinalizarimportdata"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_gravaity="center"
+                android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:text="FINALIZAR"
                 app:backgroundTint="@color/principal1"
