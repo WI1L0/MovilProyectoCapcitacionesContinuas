@@ -59,7 +59,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos personas fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos personas fin descargados");
                             updatecontrol(Atributos.table_persona);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -68,7 +68,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin personas", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin personas");
                         limpiartable(Atributos.table_persona);
                         listenerMein.onImportError();
                     }
@@ -85,7 +85,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos roles fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos roles fin descargados");
                             updatecontrol(Atributos.table_rol);
                             progreso = progreso + 1;
                             listenerMein.onImportExito(progreso);
@@ -94,7 +94,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin roles", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin roles");
                         limpiartable(Atributos.table_rol);
                         listenerMein.onImportError();
                     }
@@ -111,7 +111,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos rolusuarios fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos rolusuarios fin descargados");
                             updatecontrol(Atributos.table_rol_usu);
                             progreso = progreso + 1;
                             listenerMein.onImportExito(progreso);
@@ -120,7 +120,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin rolusuarios", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin rolusuarios");
                         limpiartable(Atributos.table_rol_usu);
                         listenerMein.onImportError();
                     }
@@ -137,7 +137,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos usuarios fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos usuarios fin descargados");
                             updatecontrol(Atributos.table_usuarios);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -146,7 +146,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin usuarios", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin usuarios");
                         limpiartable(Atributos.table_rol_usu);
                         limpiartable(Atributos.table_usuarios);
                         listenerMein.onImportError();
@@ -164,7 +164,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos programas fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos programas fin descargados");
                             updatecontrol(Atributos.table_programas);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -173,7 +173,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin programas", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin programas");
                         limpiartable(Atributos.table_programas);
                         listenerMein.onImportError();
                     }
@@ -190,7 +190,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos capacitadores fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos capacitadores fin descargados");
                             updatecontrol(Atributos.table_capacitador);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -199,7 +199,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin capacitadores", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin capacitadores");
                         limpiartable(Atributos.table_capacitador);
                         listenerMein.onImportError();
                     }
@@ -216,7 +216,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos cursos fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos cursos fin descargados");
                             updatecontrol(Atributos.table_cursos);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -225,7 +225,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin cursos", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin cursos");
                         limpiartable(Atributos.table_cursos);
                         listenerMein.onImportError();
                     }
@@ -242,7 +242,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos prerequisitos fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos prerequisitos fin descargados");
                             updatecontrol(Atributos.table_prerequisitos);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -251,7 +251,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin prerequisitos", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin prerequisitos");
                         limpiartable(Atributos.table_prerequisitos);
                         listenerMein.onImportError();
                     }
@@ -268,7 +268,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos inscritos fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos inscritos fin descargados");
                             updatecontrol(Atributos.table_inscritos);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -277,7 +277,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin inscritos", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin inscritos");
                         limpiartable(Atributos.table_inscritos);
                         listenerMein.onImportError();
                     }
@@ -294,7 +294,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos participante fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos participante fin descargados");
                             updatecontrol(Atributos.table_participante);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -303,7 +303,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin participante", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin participante");
                         limpiartable(Atributos.table_participante);
                         listenerMein.onImportError();
                     }
@@ -320,7 +320,7 @@ public class DataBaseTransaction {
                     public void onImportExito(int leng) {
                         cont[0]++;
                         if (cont[0] == leng) {
-                            Toast.makeText(context, "Datos asistencias fin descargados", Toast.LENGTH_SHORT).show();
+                            System.out.println("Datos asistencias fin descargados");
                             updatecontrol(Atributos.table_asistencia);
                             progreso = progreso + 2;
                             listenerMein.onImportExito(progreso);
@@ -329,7 +329,7 @@ public class DataBaseTransaction {
 
                     @Override
                     public void onImportError() {
-                        Toast.makeText(context, "Error en descargar fin asistencias", Toast.LENGTH_SHORT).show();
+                        System.out.println("Error en descargar fin asistencias");
                         limpiartable(Atributos.table_asistencia);
                         listenerMein.onImportError();
                     }
