@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,7 @@ public class Import extends AppCompatActivity {
     private ProgressBar pgsimport;
     private Button btnimport, btnfinalizar;
     private AsyncTask tarea;
+    private Boolean estimg = false;
 
     private ManejoProgressBar manejoProgressBar;
 
@@ -60,6 +62,9 @@ public class Import extends AppCompatActivity {
         btnimport = (Button) findViewById(R.id.btnimportdata);
         btnfinalizar = (Button) findViewById(R.id.btnfinalizarimportdata);
 
+        Drawable drawable2 = getResources().getDrawable(R.drawable.descargar_2);
+        imgimport.setImageDrawable(drawable2);
+
         if (limpiartable(Atributos.table_control) == true){
             conection.insercontrol();
         }
@@ -73,8 +78,9 @@ public class Import extends AppCompatActivity {
                 btnimport.setEnabled(false);
                 manejoProgressBar = new ManejoProgressBar(pgsimport);
                 manejoProgressBar.execute();
+                estimg = false;
 
-                int ntables = controlbtn();
+                int ntables = controlbtn() - 1;
 
                 verificarAllAsistencia();
 
@@ -83,11 +89,15 @@ public class Import extends AppCompatActivity {
                         Boolean esterror = false;
                         @Override
                         public void onImportExito(int leng) {
+                            img();
                             verificarAll();
                             count++;
                             if (count == ntables && esterror == true) {
                                 btnimport.setEnabled(true);
                                 btnimport.setText("REINTENTAR");
+
+                                Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
+                                imgimport.setImageDrawable(drawablef);
                             }
                         }
 
@@ -99,6 +109,9 @@ public class Import extends AppCompatActivity {
                             if (count == ntables) {
                                 btnimport.setEnabled(true);
                                 btnimport.setText("REINTENTAR");
+
+                                Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
+                                imgimport.setImageDrawable(drawablef);
                             }
                         }
                     });
@@ -111,6 +124,7 @@ public class Import extends AppCompatActivity {
         btnfinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 getApplicationContext().deleteDatabase("db_final");
                 //importBase();
                 DataBaseTransaction dataBaseTransaction = new DataBaseTransaction(getApplicationContext());
@@ -486,6 +500,10 @@ public class Import extends AppCompatActivity {
             Toast.makeText(this, "Datos almacenados", Toast.LENGTH_SHORT).show();
             btnimport.setVisibility(View.INVISIBLE);
             btnfinalizar.setVisibility(View.VISIBLE);
+
+            estimg = true;
+            Drawable drawablef = getResources().getDrawable(R.drawable.finalizando);
+            imgimport.setImageDrawable(drawablef);
         } else {
 
             progreso = barActualizar();
@@ -523,5 +541,17 @@ public class Import extends AppCompatActivity {
         cursor.close();
 
         return count;
+    }
+
+    public void img(){
+        Drawable drawable1 = getResources().getDrawable(R.drawable.descargar_1);
+        Drawable drawable2 = getResources().getDrawable(R.drawable.descargar_2);
+            if (estimg == false) {
+                estimg = true;
+                imgimport.setImageDrawable(drawable1);
+            } else {
+                estimg = false;
+                imgimport.setImageDrawable(drawable2);
+            }
     }
 }

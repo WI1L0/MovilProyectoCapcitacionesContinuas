@@ -34,7 +34,7 @@
         android:id="@+id/imgexporttdata"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:srcCompat="@tools:sample/avatars"
+        tools:srcCompat="@drawable/subir_1"
         android:layout_margin="20dp"/>
 
     <ProgressBar
