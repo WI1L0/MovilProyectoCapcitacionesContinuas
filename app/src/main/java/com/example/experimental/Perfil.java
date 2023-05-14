@@ -11,13 +11,15 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+
 
 import com.example.experimental.DB.DataBase;
 
 public class Perfil extends AppCompatActivity {
 
     //Vista
-    TextView txtvrol, txtvcedula, txtvtelefono, txtvcelular, txtvcorreo, txtvetnia, txtvtitulo, txtv5;
+    TextView txtvrol, txtvcedula, txtvtelefono, txtvcelular, txtvcorreo, txtvnombre; //, txtvetnia, txtvtitulo, txtv5;
     ImageView imgperfil;
 
     //use database
@@ -49,9 +51,10 @@ public class Perfil extends AppCompatActivity {
         txtvtelefono = (TextView) findViewById(R.id.txtvtelefono);
         txtvcelular = (TextView) findViewById(R.id.txtvcelularperfil);
         txtvcorreo = (TextView) findViewById(R.id.txtvcorreoperfil);
-        txtvetnia = (TextView) findViewById(R.id.txtvetniaperfil);
-        txtvtitulo = (TextView) findViewById(R.id.txtvtituloperfil);
-        txtv5 = (TextView) findViewById(R.id.txtv5);
+        txtvnombre = (TextView) findViewById(R.id.txtnombreperfil);
+//        txtvetnia = (TextView) findViewById(R.id.txtvetniaperfil);
+//        txtvtitulo = (TextView) findViewById(R.id.txtvtituloperfil);
+//        txtv5 = (TextView) findViewById(R.id.txtv5);
         imgperfil = (ImageView) findViewById(R.id.imgperfil);
 
         SQLiteDatabase db = conection.getReadableDatabase();
@@ -60,32 +63,37 @@ public class Perfil extends AppCompatActivity {
             cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona WHERE u.idUsuario = ?;",
                     new String[]{String.valueOf(id)});
             System.out.println(cursor.getCount() + "ddddddddddddddddddddddddddddddddddd1");
-            txtv5.setVisibility(View.INVISIBLE);
-            txtvtitulo.setVisibility(View.INVISIBLE);
+            //txtv5.setVisibility(View.INVISIBLE);
+//            txtvtitulo.setVisibility(View.INVISIBLE);
             usu = true;
             rolfinal = "Participante";
         } else {
             cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil, c.tituloCapacitador FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE c.idCapacitador = ?;",
                     new String[]{String.valueOf(id)});
             System.out.println(cursor.getCount() + "ddddddddddddddddddddddddddddddddddd2");
-            txtv5.setVisibility(View.VISIBLE);
-            txtvtitulo.setVisibility(View.VISIBLE);
+            //txtv5.setVisibility(View.VISIBLE);
+            //txtvtitulo.setVisibility(View.VISIBLE);
             usu = false;
             rolfinal = "DocenteCapacitador";
         }
 
         while (cursor.moveToNext()) {
-            txtvrol.setText(cursor.getString(0) + " : " + rolfinal);
+            txtvrol.setText(rolfinal);
+            txtvnombre.setText(cursor.getString(0));
             txtvcedula.setText(cursor.getString(1));
             txtvtelefono.setText(cursor.getString(2));
             txtvcelular.setText(cursor.getString(3));
             txtvcorreo.setText(cursor.getString(4));
-            txtvetnia.setText(cursor.getString(5));
+            //txtvetnia.setText(cursor.getString(5));
 
             if (usu == false) {
-                txtvtitulo.setText(cursor.getString(7));
+                //txtvtitulo.setText(cursor.getString(7));
             }
-            imgperfil.setImageBitmap(ImgBitmap(cursor.getString(6)));
+            //imgperfil.setImageBitmap(ImgBitmap(cursor.getString(6)));
+            Glide.with(this)
+                    .load(ImgBitmap(cursor.getString(6)))
+                    .circleCrop()
+                    .into(imgperfil);
         }
     }
 
