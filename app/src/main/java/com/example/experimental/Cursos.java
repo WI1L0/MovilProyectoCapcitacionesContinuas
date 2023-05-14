@@ -120,7 +120,7 @@ public class Cursos extends AppCompatActivity {
 
             cursor = db.rawQuery("SELECT idCurso, nombreCurso, duracionCurso, nombreModalidadCurso, nombreTipoCurso, nombreEspecialidad, nombreArea, fechaInicioCurso, fechaFinalizacionCurso, fotoCurso " +
                             //"FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso != 'N' AND estadoCurso = '1' AND estadoPublicasionCurso = 'V' ORDER BY nombreCurso DESC;",
-                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso = 'A' AND estadoCurso = '1' AND estadoPublicasionCurso = 'V' ORDER BY nombreCurso DESC;",
+                            "FROM cursos WHERE idCapacitador = ? AND idPrograma = ? AND estadoAprovacionCurso = 'A' AND estadoCurso = '1' AND estadoPublicasionCurso = 'I' ORDER BY nombreCurso DESC;",
                     new String[]{String.valueOf(id), String.valueOf(idProgramas)});
 
         }
