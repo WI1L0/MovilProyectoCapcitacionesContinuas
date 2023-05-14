@@ -35,7 +35,7 @@ public class Export extends AppCompatActivity {
     private int idasi;
 
     private int progreso = 0, count = 0;
-    private String host = "192.168.18.4";
+    private String host = "192.168.0.105";
 
     private ManejoProgressBar manejoProgressBar;
 
