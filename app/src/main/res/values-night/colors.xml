@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="principal1">#FFFFFF</color>
+    <color name="principal2">#FFFFFF</color>
+    <color name="amarilloIsta">#91FFD8</color>
+    <color name="azulNuevo">#E8F3FF</color>
+    <color name="purple_200">#FFFFFF</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="button_login_1">#dac470</color>
+    <color name="txtfield_login_1">#0073FF</color>
+    <color name="fondo_login_1">#c8d0da</color>
+    <color name="letras_login_1">#967402</color>
+</resources>

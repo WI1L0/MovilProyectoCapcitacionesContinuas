@@ -94,6 +94,7 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:text="@string/txt_btnAsiste"
+                        android:textColor="@color/white"
                         android:textSize="10dp"
                         app:backgroundTint="#136A16"
                         tools:ignore="TextSizeCheck" />
@@ -106,6 +107,7 @@
                         android:layout_weight="1"
                         android:text="@string/txt_btnNoAsiste"
                         android:textSize="10dp"
+                        android:textColor="@color/white"
                         app:backgroundTint="#F44336"
                         tools:ignore="TextSizeCheck" />
 
@@ -116,8 +118,9 @@
                         android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:text="@string/txt_btnObservaciones"
+                        android:textColor="@color/black"
                         android:textSize="8dp"
-                        app:backgroundTint="#FFC107"
+                        app:backgroundTint="@color/amarilloIsta"
                         tools:ignore="TextSizeCheck" />
                 </LinearLayout>
 

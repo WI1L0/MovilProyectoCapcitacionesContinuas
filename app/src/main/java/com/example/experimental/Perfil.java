@@ -60,7 +60,7 @@ public class Perfil extends AppCompatActivity {
         SQLiteDatabase db = conection.getReadableDatabase();
 
         if (rol.equals("alumno")){
-            cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona WHERE u.idUsuario = ?;",
+            cursor = db.rawQuery("SELECT u.username,p.nombre1, p.nombre2,p.apellido1, p.apellido2,  p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona WHERE u.idUsuario = ?;",
                     new String[]{String.valueOf(id)});
             System.out.println(cursor.getCount() + "ddddddddddddddddddddddddddddddddddd1");
             //txtv5.setVisibility(View.INVISIBLE);
@@ -68,7 +68,7 @@ public class Perfil extends AppCompatActivity {
             usu = true;
             rolfinal = "Participante";
         } else {
-            cursor = db.rawQuery("SELECT u.username, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil, c.tituloCapacitador FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE c.idCapacitador = ?;",
+            cursor = db.rawQuery("SELECT u.username, p.nombre1, p.nombre2,p.apellido1, p.apellido2, p.identificacion, p.telefono, p.celular, p.correo, p.etnia, u.fotoPerfil, c.tituloCapacitador FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN capacitador c ON c.idUsuario = u.idUsuario WHERE c.idCapacitador = ?;",
                     new String[]{String.valueOf(id)});
             System.out.println(cursor.getCount() + "ddddddddddddddddddddddddddddddddddd2");
             //txtv5.setVisibility(View.VISIBLE);
@@ -79,11 +79,11 @@ public class Perfil extends AppCompatActivity {
 
         while (cursor.moveToNext()) {
             txtvrol.setText(rolfinal);
-            txtvnombre.setText(cursor.getString(0));
-            txtvcedula.setText(cursor.getString(1));
-            txtvtelefono.setText(cursor.getString(2));
-            txtvcelular.setText(cursor.getString(3));
-            txtvcorreo.setText(cursor.getString(4));
+            txtvnombre.setText(cursor.getString(1) + ' ' + cursor.getString(2) + ' ' + cursor.getString(3) + ' ' + cursor.getString(4));
+            txtvcedula.setText(cursor.getString(5));
+            txtvtelefono.setText(cursor.getString(6));
+            txtvcelular.setText(cursor.getString(7));
+            txtvcorreo.setText(cursor.getString(8));
             //txtvetnia.setText(cursor.getString(5));
 
             if (usu == false) {
@@ -91,7 +91,7 @@ public class Perfil extends AppCompatActivity {
             }
             //imgperfil.setImageBitmap(ImgBitmap(cursor.getString(6)));
             Glide.with(this)
-                    .load(ImgBitmap(cursor.getString(6)))
+                    .load(ImgBitmap(cursor.getString(10)))
                     .circleCrop()
                     .into(imgperfil);
         }

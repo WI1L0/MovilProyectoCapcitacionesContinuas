@@ -102,7 +102,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Cedula"
-                                android:textColor="#182693"
+                                android:textColor="@color/azulNuevo"
                                 android:textSize="18sp"
                                 android:drawableLeft="@drawable/identificacioin_ico"
                                 android:drawablePadding="8dp"
@@ -142,7 +142,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Correo"
-                                android:textColor="#182693"
+                                android:textColor="@color/azulNuevo"
                                 android:textSize="18sp"
                                 android:drawableLeft="@drawable/correo_icon"
                                 android:drawablePadding="8dp"/>
@@ -181,7 +181,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Celular"
-                                android:textColor="#182693"
+                                android:textColor="@color/azulNuevo"
                                 android:textSize="18sp"
                                 android:drawableLeft="@drawable/cell_ico"
                                 android:drawablePadding="8dp"/>
@@ -221,7 +221,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Teléfono"
-                                android:textColor="#182693"
+                                android:textColor="@color/azulNuevo"
                                 android:textSize="18sp"
                                 android:drawableLeft="@drawable/tel"
                                 android:drawablePadding="8dp"/>
@@ -261,7 +261,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Dirección"
-                                android:textColor="#182693"
+                                android:textColor="@color/azulNuevo"
                                 android:textSize="18sp"
                                 android:drawableLeft="@drawable/direccion_ico"
                                 android:drawablePadding="8dp"/>

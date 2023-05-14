@@ -79,7 +79,7 @@
                 android:layout_margin="10dp"
                 android:fontFamily="@font/viga"
                 android:text="Bienvenido"
-                android:textColor="#004e9f"
+                android:textColor="@color/azulNuevo"
                 android:textSize="42dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -178,6 +178,7 @@
                     android:background="@drawable/btn_login"
                     android:fontFamily="@font/viga"
                     android:text="inicio"
+                    android:textColor="@color/white"
                     app:backgroundTint="@color/principal1"
                     app:icon="@drawable/vistobueno"
                     app:iconGravity="textEnd"/>
@@ -190,6 +191,7 @@
                     android:background="@drawable/btn_login"
                     android:fontFamily="@font/viga"
                     android:text="Participante"
+                    android:textColor="@color/white"
                     android:visibility="gone" />
 
                 <Button
@@ -200,6 +202,7 @@
                     android:background="@drawable/btn_login"
                     android:fontFamily="@font/viga"
                     android:text="Capacitador"
+                    android:textColor="@color/white"
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -213,6 +216,7 @@
                 android:background="@drawable/btn_login"
                 android:fontFamily="@font/viga"
                 android:text="cargar datos temporales"
+                android:textColor="@color/white"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/guideline5"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -233,6 +237,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Database Temporal"
+                android:textColor="@color/white"
                 android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline3"
