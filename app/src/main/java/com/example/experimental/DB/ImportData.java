@@ -33,7 +33,7 @@ public class ImportData extends DataBaseTemporal {
 
     private Context conection;
     private ContentValues values;
-    private String host = "192.168.100.31";
+    private String host = "192.168.0.105";
     private int timeout = 10000;
 
     public ImportData(@NotNull Context context) {
