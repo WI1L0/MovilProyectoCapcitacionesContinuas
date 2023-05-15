@@ -8,9 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.experimental.DB.DataBase;
 import com.example.experimental.DB.DataBaseTemporal;
@@ -234,7 +238,8 @@ public class MainActivity extends AppCompatActivity{
             if (cursor2.moveToFirst()) {
 
                 if (cursor2.getInt(1) == 1) {
-                    Toast.makeText(this, "Bienvenido Capacitador", Toast.LENGTH_SHORT).show();
+                    toastGreen("Bienvenido Capacitador");
+//                    Toast.makeText(this, "Bienvenido Capacitador", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(this, Programas.class);
 
@@ -278,5 +283,18 @@ public class MainActivity extends AppCompatActivity{
             estado = cursor.getInt(0) == 1 ? true : false;
         }
         return estado;
+    }
+
+    public void toastGreen(String msg){
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View view = layoutInflater.inflate(R.layout.custom_toast_ok, (ViewGroup) findViewById(R.id.toast_custom_ok));
+        TextView camposmsg = view.findViewById(R.id.txtmensajetoas);
+        camposmsg.setText(msg);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0 , 200);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(view);
+        toast.show();
     }
 }
