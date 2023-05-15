@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,9 +34,11 @@ public class Export extends AppCompatActivity {
     private JSONObject participante;
 
     private int idasi;
+    private Boolean estimg = false;
 
     private int progreso = 0, count = 0;
     private String host = "192.168.18.4";
+
 
     private ManejoProgressBar manejoProgressBar;
 
@@ -55,6 +58,9 @@ public class Export extends AppCompatActivity {
         imgexport = (ImageView) findViewById(R.id.imgexporttdata);
         pgsexport = (ProgressBar) findViewById(R.id.pgbexportdata);
         btnexport = (Button) findViewById(R.id.btnexportdata);
+
+        Drawable drawablef = getResources().getDrawable(R.drawable.subir_2);
+        imgexport.setImageDrawable(drawablef);
 
         btnexport.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +134,7 @@ public class Export extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (est == true) {
+                            img();
                             progreso++;
                             int pg = (progreso * 100) / count;
                             pgsexport.setProgress(pg);
@@ -142,6 +149,10 @@ public class Export extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);
                 Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
+
+
+                Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
+                imgexport.setImageDrawable(drawablef);
             }
         }) {
             @Override
@@ -168,6 +179,7 @@ public class Export extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if (est == true) {
+                            img();
                             progreso++;
                             int pg = (progreso * 100) / count;
                             pgsexport.setProgress(pg);
@@ -181,6 +193,10 @@ public class Export extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);
                 Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
+
+
+                Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
+                imgexport.setImageDrawable(drawablef);
             }
         }) {
             @Override
@@ -214,6 +230,8 @@ public class Export extends AppCompatActivity {
         if (controlAsistencia() == false && est == true){
             btnexport.setEnabled(false);
             btnexport.setText("DATOS CARGADO EXITOSAMENTE");
+            Drawable drawablef = getResources().getDrawable(R.drawable.finalizando);
+            imgexport.setImageDrawable(drawablef);
         }
     }
 
@@ -229,5 +247,17 @@ public class Export extends AppCompatActivity {
             System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeee2");
             return false;
         }
+    }
+
+    public void img(){
+        Drawable drawable1 = getResources().getDrawable(R.drawable.subir_1);
+        Drawable drawable2 = getResources().getDrawable(R.drawable.subir_2);
+            if (estimg == false) {
+                estimg = true;
+                imgexport.setImageDrawable(drawable1);
+            } else {
+                estimg = false;
+                imgexport.setImageDrawable(drawable2);
+            }
     }
 }

@@ -72,6 +72,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
 
         ImageView imgcurso;
 
+        private TextView progressTextView;
+
         ViewHolder(View itemView){
             super(itemView);
             txtnombre = itemView.findViewById(R.id.txtvnombrecurso);
@@ -86,6 +88,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             imgcurso = itemView.findViewById(R.id.imgcurso);
 
             btndetalles = itemView.findViewById(R.id.btnDetallesCurso);
+
+            progressTextView = (TextView) itemView.findViewById(R.id.progressTextView);
         }
 
         void bindData(final MCursos item, int position){
@@ -107,7 +111,14 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    pgcursos.setProgress(porcentajeCurso(item.getFechaFinalizacionCurso(), item.getDuracionCurso()));
+                    pgcursos.setProgress(porcentajeCurso(item.getFechaInicioCurso(), item.getFechaFinalizacionCurso()));
+                    try {
+                        progressTextView.setText(""+porcentajeCurso(item.getFechaInicioCurso(), item.getFechaFinalizacionCurso())+"%");
+
+                    }catch (Exception e){
+                        System.out.println("Error en el progres text");
+                    }
+
                 }
             }).start();
 
@@ -129,24 +140,24 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
         }
     }
 
-    public int porcentajeCurso(String date2, int total){
-        LocalDate fecha1 = LocalDate.now();
-        LocalDate fecha2 = LocalDate.parse(date2);
+    public int porcentajeCurso(String fechaInicio, String fechaFin){
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaInit = LocalDate.parse(fechaInicio);
+        LocalDate fechaF = LocalDate.parse(fechaFin);
 
-        System.out.println(fecha1 + "sssssssssssssssssssssssssssssssss");
-        System.out.println(fecha2 + "sssssssssssssssssssssssssssssssssdddd");
-        long diasFaltantes = ChronoUnit.DAYS.between(fecha2, fecha1);
+        double diasTotales = ChronoUnit.DAYS.between(fechaInit, fechaF)  + 1;
 
-        int progreso = 0;
-        if (diasFaltantes > 0) {
-            System.out.println(diasFaltantes + "ddddddddddddddddd");
+        double diasTrancurridos = ChronoUnit.DAYS.between(fechaInit, fechaActual)  + 1;
 
-            progreso = (int) ((diasFaltantes * 100) / total);
-            progreso = progreso - 100;
-        } else {
-            progreso = 100;
+        double progres = diasTrancurridos / diasTotales;
+
+        progres = progres * 100;
+
+        if (diasTrancurridos > diasTotales) {
+            return 100;
         }
-        return progreso;
+
+        return (int) progres;
     }
 
     public Bitmap ImgBitmap(String img){
