@@ -38,8 +38,6 @@
 
     <style name="TextViewStyle2" parent="android:Widget.TextView">
         <item name="android:textSize">18dp</item>
-        <!-- <item name="android:typeface">sans-serif-condensed-light</item> -->
-        <item name="android:textColor">@color/principal1</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -71,6 +69,17 @@
         <item name="android:layout_height">150dp</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:background">@drawable/circular_background</item>
+    </style>
+
+    <style name="BotonEstilo" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/btn_login</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="BtnAsistencia" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/btns_asistencia</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_margin">4dp</item>
     </style>
 
 

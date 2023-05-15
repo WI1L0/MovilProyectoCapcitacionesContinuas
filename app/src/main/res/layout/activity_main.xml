@@ -146,8 +146,8 @@ tools:context=".MainActivity">
                 android:id="@+id/btninicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="inicio"
-                app:backgroundTint="@color/principal1"
+                android:text="@string/txt_login"
+                style="@style/BotonEstilo"
                 android:layout_margin="5dp"/>
 
             <Button
