@@ -248,12 +248,12 @@
 
                     <ProgressBar
                         android:id="@+id/progressBarCurso"
-                        style="?android:attr/progressBarStyleHorizontal"
+                        style="@style/ProgressBarCustomStyle"
                         android:layout_width="match_parent"
                         android:layout_height="12dp"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="16dp"
-                        android:scaleY="3" />
+                         />
 
                     <TextView
                         android:id="@+id/progressTextView"
