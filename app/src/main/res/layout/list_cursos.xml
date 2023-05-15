@@ -242,7 +242,33 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <ProgressBar
+                        android:id="@+id/progressBarCurso"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:scaleY="3" />
+
+                    <TextView
+                        android:id="@+id/progressTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="75%"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_alignBottom="@id/progressBarCurso"
+                        android:layout_alignEnd="@id/progressBarCurso"
+                        android:layout_marginEnd="10dp" />
+
+
+                </RelativeLayout>
 
             </LinearLayout>
         </RelativeLayout>
