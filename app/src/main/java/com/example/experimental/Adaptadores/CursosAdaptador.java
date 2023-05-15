@@ -72,6 +72,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
 
         ImageView imgcurso;
 
+        private TextView progressTextView;
+
         ViewHolder(View itemView){
             super(itemView);
             txtnombre = itemView.findViewById(R.id.txtvnombrecurso);
@@ -86,6 +88,8 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
             imgcurso = itemView.findViewById(R.id.imgcurso);
 
             btndetalles = itemView.findViewById(R.id.btnDetallesCurso);
+
+            progressTextView = (TextView) itemView.findViewById(R.id.progressTextView);
         }
 
         void bindData(final MCursos item, int position){
@@ -108,6 +112,13 @@ public class CursosAdaptador extends RecyclerView.Adapter<CursosAdaptador.ViewHo
                 @Override
                 public void run() {
                     pgcursos.setProgress(porcentajeCurso(item.getFechaInicioCurso(), item.getFechaFinalizacionCurso()));
+                    try {
+                        progressTextView.setText(""+porcentajeCurso(item.getFechaInicioCurso(), item.getFechaFinalizacionCurso())+"%");
+
+                    }catch (Exception e){
+                        System.out.println("Error en el progres text");
+                    }
+
                 }
             }).start();
 
