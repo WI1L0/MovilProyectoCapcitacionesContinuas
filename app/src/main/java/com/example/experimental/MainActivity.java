@@ -23,6 +23,19 @@ import com.example.experimental.Utilidades.Atributos;
 
 import java.util.ArrayList;
 
+
+
+//Another importy dialog
+
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity{
 
     //use database
@@ -37,6 +50,9 @@ public class MainActivity extends AppCompatActivity{
     private int id_usu;
 
 
+    //Another variabe
+    private AlertDialog alertDialog;
+    private AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +136,8 @@ public class MainActivity extends AppCompatActivity{
         btninicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pasa();
+                //pasa();  solo le comento este metodo..
+                validaDatos();
             }
         });
 
@@ -162,7 +179,46 @@ public class MainActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    public void validaDatos(){
+        try {
+            if(edtusername.getText().toString().isEmpty() || edtpassword.getText().toString().isEmpty()){
+               this.validatorGeneric("CAMPOS VACIOS", "Debe ingresar usuario y contraseña.", 1);
+            }else{
+                pasa();
+            }
+        }catch (Exception e){
+            System.out.println("The error-> "+e.getMessage());
+            pasa();
+        }
+
+
+    }
+
+    public void validatorGeneric(String title, String message, int id){
+        builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(title); // set Title
+        builder.setMessage(message);  // set message
+        builder.setCancelable(true); //  Sets whether the dialog is cancelable or not
+        if(id == 1){
+            builder.setIcon(R.drawable.err);
+        }else{
+            builder.setIcon(R.drawable.notfound);
+        }
+
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                alertDialog.cancel();
+
+            }
+        });
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     public void pasa() {
+   
         SQLiteDatabase db = conection1.getReadableDatabase();
 
         Cursor cursor1 = db.rawQuery("SELECT u.idUsuario, r.nombreRol FROM usuarios u INNER JOIN rolusuario ru ON ru.idUsuario = u.idUsuario INNER JOIN roles r ON r.idRol = ru.idRol " +
@@ -220,7 +276,13 @@ public class MainActivity extends AppCompatActivity{
                 }
             } else {
                 System.out.println("wwwwwwwwwwwwwwww10");
-                Toast.makeText(this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
+                try {
+                    this.validatorGeneric("CREDENCIALES ERRONEAS", "Verifique su usuario y contraseña.",2);
+
+                }catch (Exception e){
+                    Toast.makeText(this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
+
+                }
             }
 
         cursor1.close();
