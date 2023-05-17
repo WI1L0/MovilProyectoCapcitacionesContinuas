@@ -98,11 +98,6 @@ public class Asistencia extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                for (int a = 0 ; a < listaasistencia.size() ; a++){
-                    System.out.println(listaasistencia.get(a).getObservacionAsistencia() + "assssssssssssssssssssssssssssaaaaaaaaaaaaasdsss");
-                    System.out.println(listaasistencia.get(a).getEstadoAsistencia() + "assssssssssssssssssssssssssssaaaaaaaaaaaaasdsss");
-                }
-
                 SQLiteDatabase db = conection.getReadableDatabase();
 
                 if (listaasistencia.size() != 0){
@@ -110,23 +105,30 @@ public class Asistencia extends AppCompatActivity {
                     Cursor cursor = db.rawQuery("SELECT a.idAsistencia FROM asistencia a INNER JOIN participante pa ON pa.idParticipanteMatriculado = a.idParticipanteMatriculado INNER JOIN inscritos i ON i.idInscrito = pa.idInscrito WHERE a.fechaAsistencia = ? AND i.idCurso = ?;",
                             new String[]{String.valueOf(txtfecha.getText()), String.valueOf(idCurso)});
 
-                    if (cursor.moveToFirst()) {
+                    if (cursor.moveToNext()) {
                         for (int i = 0; i < listaasistencia.size(); i++) {
 
-                            Cursor cursor1 = db.rawQuery("SELECT estadoActual FROM asistencia WHERE idAsistencia = ?;",
-                                    new String[]{String.valueOf(cursor.getInt(0))});
+                            if (cursor.moveToPosition(i)) {
+                                int idss = cursor.getInt(0);
 
-                            ContentValues values = new ContentValues();
-                            values.put("fechaAsistencia", listaasistencia.get(i).getFechaAsistencia());
-                            values.put("estadoAsistencia", listaasistencia.get(i).getEstadoAsistencia());
-                            values.put("observacionAsistencia", listaasistencia.get(i).getObservacionAsistencia());
-                            values.put("estadoSubida", false);
-                            while (cursor1.moveToNext()) {
-                                if (cursor1.getString(0).equals("Descargado")) {
-                                    values.put("estadoActual", "Actualizado");
+                                Cursor cursor1 = db.rawQuery("SELECT estadoActual FROM asistencia WHERE idAsistencia = ?;",
+                                        new String[]{String.valueOf(idss)});
+
+                                ContentValues values = new ContentValues();
+                                values.put("fechaAsistencia", listaasistencia.get(i).getFechaAsistencia());
+                                values.put("estadoAsistencia", listaasistencia.get(i).getEstadoAsistencia());
+                                values.put("observacionAsistencia", listaasistencia.get(i).getObservacionAsistencia());
+                                values.put("estadoSubida", false);
+                                if (cursor1.moveToNext()) {
+                                    if (cursor1.moveToPosition(0)) {
+                                        if (cursor1.getString(0).equals("Descargado")) {
+                                            values.put("estadoActual", "Actualizado");
+                                        }
+                                    }
                                 }
+
+                                db.update(Atributos.table_asistencia, values, Atributos.atr_asi_id + " = ?", new String[]{String.valueOf(listaasistencia.get(i).getIdAsistencia())});
                             }
-                            db.update(Atributos.table_asistencia, values, Atributos.atr_asi_id + " = ?", new String[]{String.valueOf(listaasistencia.get(i).getIdAsistencia())});
                         }
                         finish();
                         // (id, rol);
@@ -320,8 +322,6 @@ public class Asistencia extends AppCompatActivity {
 
 
     public void crearArrayAsistencia(MAsistencia mAsistencia){
-
-        System.out.println(mAsistencia.getObservacionAsistencia() + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa666666666666666666666666");
 
         if (actualisarOCrear == false) {
             System.out.println("vacio");

@@ -3,15 +3,19 @@ package com.example.experimental;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.graphics.drawable.Drawable;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,6 +31,10 @@ import com.example.experimental.Utilidades.Atributos;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Export extends AppCompatActivity {
 
@@ -37,17 +45,18 @@ public class Export extends AppCompatActivity {
     private Boolean estimg = false;
 
     private int progreso = 0, count = 0;
-    private String host = "http://capacitaciones-continuas.us-east-1.elasticbeanstalk.com/api/";
+    private String host = "http://capacitaciones-continuas-ista.us-east-1.elasticbeanstalk.com/api/";
 
 
+    private String donde = "export";
     private ManejoProgressBar manejoProgressBar;
 
     //VISTA
     private ImageView imgexport;
     private ProgressBar pgsexport;
     private Button btnexport;
+    private TextView txtvcuent;
 
-    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,9 @@ public class Export extends AppCompatActivity {
         imgexport = (ImageView) findViewById(R.id.imgexporttdata);
         pgsexport = (ProgressBar) findViewById(R.id.pgbexportdata);
         btnexport = (Button) findViewById(R.id.btnexportdata);
+        txtvcuent = (TextView) findViewById(R.id.txtvcuenta);
+
+        donde = (String) getIntent().getSerializableExtra("donde");
 
         Drawable drawablef = getResources().getDrawable(R.drawable.subir_2);
         imgexport.setImageDrawable(drawablef);
@@ -69,15 +81,14 @@ public class Export extends AppCompatActivity {
                 manejoProgressBar = new ManejoProgressBar(pgsexport);
                 manejoProgressBar.execute();
 
-                exportAll(true, Export.this);
+                exportAll();
             }
         });
     }
 
-    public void exportAll(Boolean est, Context context) {
+    public void exportAll() {
         System.out.println("--------------------------------------------------------------------------------------------------");
-        mContext = context;
-        DataBase conection = new DataBase(mContext);
+        DataBase conection = new DataBase(Export.this);
         SQLiteDatabase db = conection.getReadableDatabase();
 
         String[] projection = {"idAsistencia", "fechaAsistencia", "estadoAsistencia", "observacionAsistencia", "idParticipanteMatriculado", "estadoActual"};
@@ -86,10 +97,7 @@ public class Export extends AppCompatActivity {
 
         Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
 
-
-        if (est == true) {
-            count = cursor.getCount();
-        }
+        count = cursor.getCount();
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
@@ -112,48 +120,44 @@ public class Export extends AppCompatActivity {
                 }
 
                 String jsonString = postData.toString();
-
+                int ids = cursor.getInt(0);
                 if (cursor.getString(5).equals("Actualizado")) {
-                    bayPut(cursor.getInt(0), est, jsonString);
+                    bayPut(ids, jsonString);
                 }
 
                 if (cursor.getString(5).equals("Creado")) {
-                    bayNew(cursor.getInt(0), est, jsonString);
+                    bayNew(ids, jsonString);
                 }
             }
         } else {
-            Toast.makeText(mContext, "No hay datos para exportar", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Export.this, "No hay datos para exportar", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void bayNew(int aid, Boolean est, String datos){
+    public void bayNew(int aid, String datos){
         String url = host + "asistencia/save";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (est == true) {
                             img();
                             progreso++;
                             int pg = (progreso * 100) / count;
                             pgsexport.setProgress(pg);
-                        }
                         System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
                         System.out.println(response);
-                        actualizar(aid, est);
+                        actualizar(aid);
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);
-                Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Export.this, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
 
-                if (est == true) {
                     Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
                     imgexport.setImageDrawable(drawablef);
-                }
             }
         }) {
             @Override
@@ -168,37 +172,34 @@ public class Export extends AppCompatActivity {
             }
         };
 
-        RequestQueue queue = Volley.newRequestQueue(mContext);
+        RequestQueue queue = Volley.newRequestQueue(Export.this);
         queue.add(request);
     }
 
-    public void bayPut(int aid, Boolean est, String datos){
+    public void bayPut(int aid, String datos){
         String url = host + "asistencia/actualizar/" + aid;
 
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (est == true) {
                             img();
                             progreso++;
                             int pg = (progreso * 100) / count;
                             pgsexport.setProgress(pg);
-                        }
+
                         System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
                         System.out.println(response);
-                        actualizar(aid, est);
+                        actualizar(aid);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error);
-                Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Export.this, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
 
-                if (est == true) {
                     Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
                     imgexport.setImageDrawable(drawablef);
-                }
             }
         }) {
             @Override
@@ -214,12 +215,12 @@ public class Export extends AppCompatActivity {
             }
         };
 
-        RequestQueue queue = Volley.newRequestQueue(mContext);
+        RequestQueue queue = Volley.newRequestQueue(Export.this);
         queue.add(request);
     }
 
-    public void actualizar(int aid, Boolean est){
-        DataBase conection = new DataBase(mContext);
+    public void actualizar(int aid){
+        DataBase conection = new DataBase(Export.this);
         SQLiteDatabase db = conection.getWritableDatabase();
 
         String sql = "UPDATE asistencia SET estadoSubida = ?, estadoActual = ? WHERE idAsistencia = ?";
@@ -229,25 +230,42 @@ public class Export extends AppCompatActivity {
         statement.bindLong(3, aid);
         long resultado = statement.executeUpdateDelete();
         System.out.println("PARTICIPANTE ALMACENADA CORRECTAMENTE....................................." + aid);
-        if (controlAsistencia() == false && est == true){
             btnexport.setEnabled(false);
             btnexport.setText("DATOS CARGADO EXITOSAMENTE");
             Drawable drawablef = getResources().getDrawable(R.drawable.finalizando);
             imgexport.setImageDrawable(drawablef);
-        }
+
+            controlAsistencia();
     }
 
-    public Boolean controlAsistencia(){
-        DataBase conection = new DataBase(mContext);
-        SQLiteDatabase db = conection.getWritableDatabase();
+    public void controlAsistencia(){
 
-        Cursor cursor = db.rawQuery("SELECT idAsistencia FROM asistencia WHERE estadoSubida = '0';", null);
-        if (cursor.moveToFirst()) {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeee1");
-            return true;
-        } else {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeee2");
-            return false;
+        if (donde != null && donde.equals("import")) {
+            DataBase conection = new DataBase(Export.this);
+            SQLiteDatabase db = conection.getReadableDatabase();
+            String[] projection = {"idAsistencia", "fechaAsistencia", "estadoAsistencia", "observacionAsistencia", "idParticipanteMatriculado", "estadoActual"};
+            String selection = "estadoSubida = ?";
+            String[] selectionArgs = {"0"};
+
+            Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
+
+            if (cursor.getCount() == 0) {
+                txtvcuent.setVisibility(View.VISIBLE);
+
+                try {
+                    txtvcuent.setText("2");
+                    Thread.sleep(5*1000);
+                    txtvcuent.setText("1");
+                    Thread.sleep(5*1000);
+                    txtvcuent.setText("0");
+                    Thread.sleep(5*1000);
+                    finish();
+                    Toast.makeText(this, "Puede continuar con su update", Toast.LENGTH_SHORT).show();
+                } catch (InterruptedException e) {
+                    System.out.println("export time");
+                    System.out.println(e);
+                }
+            }
         }
     }
 
