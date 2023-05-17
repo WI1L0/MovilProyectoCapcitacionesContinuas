@@ -33,7 +33,7 @@ public class ImportData extends DataBaseTemporal {
 
     private Context conection;
     private ContentValues values;
-    private String host = "192.168.18.4";
+    private String host = "http://capacitaciones-continuas.us-east-1.elasticbeanstalk.com/api/";
     private int timeout = 10000;
 
     public ImportData(@NotNull Context context) {
@@ -54,7 +54,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarPersonas(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/persona/listar";
+        String uri = host + "persona/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -105,7 +105,7 @@ public class ImportData extends DataBaseTemporal {
                         }
                     }
                 } else {
-                        listener.onImportError();
+                    listener.onImportError();
                 }
             }
         }, new Response.ErrorListener() {
@@ -128,7 +128,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarRol(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/rol/listar";
+        String uri = host + "rol/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -194,7 +194,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarUsuarios(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/usuario/listar";
+        String uri = host + "usuario/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -287,7 +287,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarCapacitador(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/capacitador/list";
+        String uri = host + "capacitador/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -356,7 +356,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarProgramas(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/programa/listar";
+        String uri = host + "programa/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -427,7 +427,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarCursos(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/curso/list";
+        String uri = host + "curso/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -523,7 +523,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarPrerequisitos(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/prerequisitoCurso/list";
+        String uri = host + "prerequisitoCurso/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -591,7 +591,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarInscrito(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/inscritocurso/listar";
+        String uri = host + "inscritocurso/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -663,7 +663,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarParticipanteMatriculado(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/participantesMatriculados/listar";
+        String uri = host + "participantesMatriculados/listar";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override
@@ -731,7 +731,7 @@ public class ImportData extends DataBaseTemporal {
     }
 
     public void importarAsistencia(final OnImportListener listener){
-        String uri = "http://" + host + ":8080/api/asistencia/list";
+        String uri = host + "asistencia/list";
         final List<Long> resultados = new ArrayList<>();
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, uri, null, new Response.Listener<JSONArray>() {
             @Override

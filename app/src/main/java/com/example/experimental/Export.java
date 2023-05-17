@@ -37,7 +37,7 @@ public class Export extends AppCompatActivity {
     private Boolean estimg = false;
 
     private int progreso = 0, count = 0;
-    private String host = "192.168.18.4";
+    private String host = "http://capacitaciones-continuas.us-east-1.elasticbeanstalk.com/api/";
 
 
     private ManejoProgressBar manejoProgressBar;
@@ -127,7 +127,7 @@ public class Export extends AppCompatActivity {
     }
 
     public void bayNew(int aid, Boolean est, String datos){
-        String url = "http://" + host + ":8080/api/asistencia/save";
+        String url = host + "asistencia/save";
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -150,9 +150,10 @@ public class Export extends AppCompatActivity {
                 System.out.println(error);
                 Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
 
-
-                Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
-                imgexport.setImageDrawable(drawablef);
+                if (est == true) {
+                    Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
+                    imgexport.setImageDrawable(drawablef);
+                }
             }
         }) {
             @Override
@@ -172,7 +173,7 @@ public class Export extends AppCompatActivity {
     }
 
     public void bayPut(int aid, Boolean est, String datos){
-        String url = "http://" + host + ":8080/api/asistencia/actualizar/" + aid;
+        String url = host + "asistencia/actualizar/" + aid;
 
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 new Response.Listener<String>() {
@@ -194,9 +195,10 @@ public class Export extends AppCompatActivity {
                 System.out.println(error);
                 Toast.makeText(mContext, "Error inesperado intentar nuevamente", Toast.LENGTH_SHORT).show();
 
-
-                Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
-                imgexport.setImageDrawable(drawablef);
+                if (est == true) {
+                    Drawable drawablef = getResources().getDrawable(R.drawable.reintentar_1);
+                    imgexport.setImageDrawable(drawablef);
+                }
             }
         }) {
             @Override

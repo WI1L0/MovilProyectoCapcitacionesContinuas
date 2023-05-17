@@ -50,6 +50,7 @@ public class Asistencia extends AppCompatActivity {
     ArrayList<MParticipante> listParticipantes;
     ArrayList<MAsistencia> listaasistencia = new ArrayList<>();
 
+    private Boolean actualisarOCrear = false;
 
     //vista
     private RecyclerView recycleViewListado;
@@ -97,6 +98,10 @@ public class Asistencia extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                for (int a = 0 ; a < listaasistencia.size() ; a++){
+                    System.out.println(listaasistencia.get(a).getObservacionAsistencia() + "assssssssssssssssssssssssssssaaaaaaaaaaaaasdsss");
+                    System.out.println(listaasistencia.get(a).getEstadoAsistencia() + "assssssssssssssssssssssssssssaaaaaaaaaaaaasdsss");
+                }
 
                 SQLiteDatabase db = conection.getReadableDatabase();
 
@@ -234,7 +239,6 @@ public class Asistencia extends AppCompatActivity {
                 new String[]{String.valueOf(txtfecha.getText()), String.valueOf(id)});
 
         Cursor cursor;
-        Boolean actualisarOCrear = false;
 
         if (cursor2.moveToFirst()) {
             cursor = db.rawQuery("SELECT pa.idParticipanteMatriculado, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo,  pa.estadoParticipanteActivo, u.fotoPerfil, a.idAsistencia, a.fechaAsistencia, a.estadoAsistencia, a.observacionAsistencia " +
@@ -247,6 +251,7 @@ public class Asistencia extends AppCompatActivity {
                             "FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario INNER JOIN participante pa ON pa.idInscrito = i.idInscrito " +
                             "wHERE i.idCurso = ? AND i.estadoInscrito = '1' AND pa.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC;",
                     new String[]{String.valueOf(id)});
+            actualisarOCrear = false;
         }
 
         while (cursor.moveToNext()) {
@@ -316,10 +321,39 @@ public class Asistencia extends AppCompatActivity {
 
     public void crearArrayAsistencia(MAsistencia mAsistencia){
 
-        Boolean ingreso = false;
+        System.out.println(mAsistencia.getObservacionAsistencia() + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa666666666666666666666666");
 
-        if (!listaasistencia.isEmpty()){
-            System.out.println("aaaaaaaaa");
+        if (actualisarOCrear == false) {
+            System.out.println("vacio");
+            Boolean ingreso = false;
+
+            if (!listaasistencia.isEmpty()){
+                System.out.println("aaaaaaaaa");
+                for (int a = 0 ; a < listaasistencia.size() ; a++){
+                    System.out.println("bbbbbbbbbbbbbbb");
+                    if (listaasistencia.get(a).getmParticipante().getIdParticipanteMatriculado() == mAsistencia.getmParticipante().getIdParticipanteMatriculado()){
+                        System.out.println("ccccccccccccccccc");
+                        ingreso = true;
+                        listaasistencia.get(a).setEstadoAsistencia(mAsistencia.getEstadoAsistencia());
+                        listaasistencia.get(a).setObservacionAsistencia(mAsistencia.getObservacionAsistencia());
+                    }
+                }
+
+                if(ingreso == false){
+                    System.out.println("dddddddddddddddddddddddddddddddddddddd");
+                    listaasistencia.add(mAsistencia);
+                }
+
+            } else {
+                System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeee");
+                listaasistencia.add(mAsistencia);
+            }
+        }
+
+        if (actualisarOCrear == true){
+
+            Boolean ingreso = false;
+
             for (int a = 0 ; a < listaasistencia.size() ; a++){
                 System.out.println("bbbbbbbbbbbbbbb");
                 if (listaasistencia.get(a).getmParticipante().getIdParticipanteMatriculado() == mAsistencia.getmParticipante().getIdParticipanteMatriculado()){
@@ -335,9 +369,6 @@ public class Asistencia extends AppCompatActivity {
                 listaasistencia.add(mAsistencia);
             }
 
-        } else {
-            System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeee");
-            listaasistencia.add(mAsistencia);
         }
     }
 
