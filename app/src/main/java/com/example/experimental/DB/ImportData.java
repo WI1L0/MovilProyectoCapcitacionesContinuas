@@ -33,7 +33,7 @@ public class ImportData extends DataBaseTemporal {
 
     private Context conection;
     private ContentValues values;
-    private String host = "http://capacitaciones-continuas.us-east-1.elasticbeanstalk.com/api/";
+    private String host = "http://capacitaciones-continuas-ista.us-east-1.elasticbeanstalk.com/api/";
     private int timeout = 10000;
 
     public ImportData(@NotNull Context context) {

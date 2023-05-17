@@ -75,18 +75,19 @@ public class Import extends AppCompatActivity {
         btnimport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnimport.setEnabled(false);
-                manejoProgressBar = new ManejoProgressBar(pgsimport);
-                manejoProgressBar.execute();
-                estimg = false;
 
-                int ntables = controlbtn() - 1;
+                if (verificarAllAsistencia() == false) {
 
-                verificarAllAsistencia();
+                    btnimport.setEnabled(false);
+                    manejoProgressBar = new ManejoProgressBar(pgsimport);
+                    manejoProgressBar.execute();
+                    estimg = false;
 
+                    int ntables = controlbtn() - 1;
                     cargar(new OnImportListener() {
                         int count = 0;
                         Boolean esterror = false;
+
                         @Override
                         public void onImportExito(int leng) {
                             img();
@@ -117,7 +118,7 @@ public class Import extends AppCompatActivity {
                     });
 
 
-
+                }
             }
         });
 
@@ -511,10 +512,27 @@ public class Import extends AppCompatActivity {
         }
     }
 
-    public void verificarAllAsistencia(){
-            Export export = new Export();
-            export.exportAll(false, Import.this);
-            System.out.println("sssssssssssssssssssaaaaaaaaaaaaaaaaaaaaaaaa");
+    public Boolean verificarAllAsistencia(){
+        DataBase conection1 = new DataBase(Import.this);
+        SQLiteDatabase db = conection1.getReadableDatabase();
+
+        String[] projection = {"idAsistencia", "fechaAsistencia", "estadoAsistencia", "observacionAsistencia", "idParticipanteMatriculado", "estadoActual"};
+        String selection = "estadoSubida = ?";
+        String[] selectionArgs = {"0"};
+
+        Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
+
+        if (cursor.getCount() == 0) {
+            System.out.println("ssssssssssssssssssssssssssssssssssssssssssss");
+            return false;
+        } else {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            Toast.makeText(this, "Tiene datos que exportar", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, Export.class);
+            intent.putExtra("donde", "import");
+            startActivity(intent);
+            return true;
+        }
     }
 
     public int barActualizar(){
