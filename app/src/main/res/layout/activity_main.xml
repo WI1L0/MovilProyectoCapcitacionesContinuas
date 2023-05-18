@@ -180,7 +180,9 @@
                         android:textColor="@color/white"
                         app:backgroundTint="#004e9f"
                         app:icon="@drawable/vistobueno"
-                        app:iconGravity="textEnd" />
+                        android:background="@drawable/btn_login"
+                        app:iconGravity="textEnd"
+                        />
 
 
 
@@ -193,6 +195,7 @@
                         android:text="Participante"
                         android:textColor="@color/white"
                         app:backgroundTint="#004e9f"
+                        android:background="@drawable/btn_login"
                         android:visibility="gone" />
 
                     <Button
@@ -204,6 +207,7 @@
                         android:text="Capacitador"
                         android:textColor="@color/white"
                         app:backgroundTint="#004e9f"
+                        android:background="@drawable/btn_login"
                         android:visibility="gone" />
 
                 </LinearLayout>
@@ -211,6 +215,7 @@
 
                 <Button
                     android:id="@+id/btndatos"
+                    android:background="@drawable/btn_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -240,6 +245,7 @@
                     android:text="Database Temporal"
                     android:textColor="@color/white"
                     app:backgroundTint="#004e9f"
+                    android:background="@drawable/btn_login"
                     android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"

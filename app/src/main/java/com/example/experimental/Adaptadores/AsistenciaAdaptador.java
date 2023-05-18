@@ -129,6 +129,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     listener.obtenList(mAsistencia);
 
                     btnasiste.setEnabled(false);
+                    btnasiste.setBackgroundColor(Color.GREEN);
                     btnnoasiste.setEnabled(true);
                     btnnoasiste.setBackgroundColor(Color.GRAY);
                     btnobservacione.setEnabled(false);
@@ -161,6 +162,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     listener.obtenList(mAsistencia);
 
                     btnnoasiste.setEnabled(false);
+                    btnnoasiste.setBackgroundColor(Color.RED);
                     btnasiste.setEnabled(true);
                     btnasiste.setBackgroundColor(Color.GRAY);
                     btnobservacione.setEnabled(true);

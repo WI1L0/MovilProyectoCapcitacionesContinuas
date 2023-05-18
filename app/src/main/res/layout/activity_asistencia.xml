@@ -82,7 +82,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_calendario"
-                android:background="@drawable/btn_login"
+                android:background="#004e9f"
                 android:padding="12dp"
                 android:scaleType="fitCenter"
                 app:expandedHintEnabled="false"/>
@@ -96,6 +96,7 @@
 
         <Button
             android:id="@+id/btnguardarasistencia"
+            android:background="@drawable/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
