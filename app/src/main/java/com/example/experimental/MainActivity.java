@@ -2,6 +2,8 @@ package com.example.experimental;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,8 +14,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.experimental.DB.DataBase;
@@ -57,6 +61,14 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ImageView imageView = findViewById(R.id.imageView3);
+
+        ObjectAnimator jumpAnimator = ObjectAnimator.ofFloat(imageView, "translationY", 0, 100, -100, 0);
+        jumpAnimator.setDuration(2000);
+        jumpAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        jumpAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        jumpAnimator.start();
 
         //use database
         conection1 = new DataBase(getApplicationContext());

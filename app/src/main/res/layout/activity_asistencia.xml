@@ -82,7 +82,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_calendario"
-                app:backgroundTint="@color/principal1"
+                android:background="@drawable/btn_login"
                 android:padding="12dp"
                 android:scaleType="fitCenter"
                 app:expandedHintEnabled="false"/>
@@ -98,9 +98,9 @@
             android:id="@+id/btnguardarasistencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/txt_btnGuardarAsistencia"
             android:textColor="@color/white"
-            app:backgroundTint="@color/principal1" />
+            app:backgroundTint="#004e9f"
+            android:text="@string/txt_btnGuardarAsistencia"/>
     </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

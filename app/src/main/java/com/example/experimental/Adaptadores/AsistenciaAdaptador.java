@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +69,8 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtnombres, txtapellidos;
-        Button btnasiste, btnnoasiste, btnobservacione;
+        Button  btnobservacione;
+        ImageButton btnasiste, btnnoasiste;
         EditText edtobservaciones;
         ImageView imgasistencia;
 

@@ -1,7 +1,4 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Definiciones de estilos para la aplicación -->
-    </style>
 
     <style name="ProgressBarCustomStyle" parent="android:Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>

@@ -49,9 +49,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
         app:cardUseCompatPadding="true"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -85,8 +85,8 @@
 
             <ImageView
                 android:id="@+id/imgdtcurso"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
@@ -127,6 +127,16 @@
                         android:text="TextView" />
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#D9D9D9"
+                    tools:layout_marginStart="5dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -148,6 +158,16 @@
                         android:text="TextView" />
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#D9D9D9"
+                    tools:layout_marginStart="5dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,6 +188,16 @@
                         android:layout_weight="1"
                         android:text="TextView" />
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#D9D9D9"
+                    tools:layout_marginStart="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -196,6 +226,16 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#D9D9D9"
+                    tools:layout_marginStart="5dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -222,6 +262,16 @@
                             android:text="TextView" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#D9D9D9"
+                    tools:layout_marginStart="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -250,6 +300,16 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#D9D9D9"
+                    tools:layout_marginStart="5dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -276,6 +336,16 @@
                             android:text="TextView" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/view7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="#D9D9D9"
+                    tools:layout_marginStart="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -304,6 +374,16 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="6dp"
+                android:background="#D9D9D9"
+                tools:layout_marginStart="5dp" />
 
             <LinearLayout
                 android:id="@+id/linearLayout2"

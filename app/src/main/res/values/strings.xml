@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">experimental</string>
+    <string name="app_name">Capacitaciones ISTA</string>
 
     <!--Navegation Drawer-->
     <string name="nav_open">Open</string>

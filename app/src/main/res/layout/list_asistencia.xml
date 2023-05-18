@@ -87,29 +87,29 @@
                     android:gravity="center">
 
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btnasisteasistencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:text="@string/txt_btnAsiste"
+                        android:src="@drawable/ic_baseline_check_24"
                         android:textColor="@color/white"
-                        android:textSize="10dp"
                         app:backgroundTint="#136A16"
-                        tools:ignore="TextSizeCheck" />
+                        app:expandedHintEnabled="false"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btnnoasisteasistencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:text="@string/txt_btnNoAsiste"
-                        android:textSize="10dp"
+                        android:src="@drawable/ic_close"
                         android:textColor="@color/white"
                         app:backgroundTint="#F44336"
-                        tools:ignore="TextSizeCheck" />
+                        app:expandedHintEnabled="false"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                     <Button
                         android:id="@+id/btnobservacionesasistencia"
@@ -119,8 +119,9 @@
                         android:layout_weight="1"
                         android:text="@string/txt_btnObservaciones"
                         android:textColor="@color/black"
-                        android:textSize="8dp"
-                        app:backgroundTint="@color/amarilloIsta"
+                        android:drawableRight="@drawable/ic_eye"
+                        android:textSize="9dp"
+                        app:backgroundTint="#fcc700"
                         tools:ignore="TextSizeCheck" />
                 </LinearLayout>
 

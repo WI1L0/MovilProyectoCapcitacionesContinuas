@@ -51,7 +51,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:text="@string/txt_btnDescargar"
-                app:backgroundTint="@color/principal1"/>
+                android:textColor="@color/white"
+                app:backgroundTint="#004e9f"/>
 
 
             <Button
@@ -61,7 +62,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="20dp"
                 android:text="FINALIZAR"
-                app:backgroundTint="@color/principal1"
+                android:textColor="@color/white"
+                app:backgroundTint="#004e9f"
                 android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
