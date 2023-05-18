@@ -73,7 +73,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/ista" />
+                    app:srcCompat="@drawable/logoista" />
 
                 <TextView
                     android:id="@+id/textViewWelcome"
@@ -189,7 +189,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:background="@drawable/btn_login"
                         android:fontFamily="@font/viga"
                         android:text="Participante"
                         android:textColor="@color/white"
@@ -201,7 +200,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:background="@drawable/btn_login"
                         android:fontFamily="@font/viga"
                         android:text="Capacitador"
                         android:textColor="@color/white"
@@ -216,7 +214,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/btn_login"
                     android:fontFamily="@font/viga"
                     android:text="cargar datos temporales"
                     android:textColor="@color/white"
@@ -240,7 +237,6 @@
                     android:id="@+id/btndatabasetemporal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_login"
                     android:text="Database Temporal"
                     android:textColor="@color/white"
                     app:backgroundTint="#004e9f"

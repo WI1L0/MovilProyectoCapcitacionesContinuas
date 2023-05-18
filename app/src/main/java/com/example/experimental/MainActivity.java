@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
         SQLiteDatabase sdb = (new DataBase(MainActivity.this).getWritableDatabase());
         SQLiteDatabase sdb2 = (new DataBaseTemporal(MainActivity.this).getWritableDatabase());
         if (sdb != null){
-            Toast.makeText(this, "BASE DE DATOS CREADA", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "BASE DE DATOS CREADA", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "ERROR EN CREAR BASE DE DATOS ", Toast.LENGTH_SHORT).show();
         }
@@ -332,8 +332,8 @@ public class MainActivity extends AppCompatActivity{
         }
         if (rol.equals("Participante")) {
 
-
-            Toast.makeText(this, "Bienvenido Alumno", Toast.LENGTH_SHORT).show();
+            toastGreen("Bienvenido Alumno");
+            //Toast.makeText(this, "Bienvenido Alumno", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, Programas.class);
             intent.putExtra("id", id);

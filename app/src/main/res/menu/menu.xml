@@ -12,7 +12,7 @@
         <item
             android:id="@+id/activity2"
             android:title=""
-            />
+            android:icon="@drawable/ic_book"/>
 
         <item
             android:id="@+id/activity3"

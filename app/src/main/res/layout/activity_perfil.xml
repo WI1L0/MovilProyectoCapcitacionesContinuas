@@ -8,8 +8,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F5F5F5">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,210 +76,216 @@
                         app:layout_constraintTop_toBottomOf="@+id/txtnombreperfil" />
 
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout6"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="30dp"
-                        android:background="@drawable/white_background"
-                        android:elevation="3dp"
-                        android:orientation="vertical"
+                        android:animateLayoutChanges="true"
+                        app:cardUseCompatPadding="true"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtvroluserperfil">
 
                         <LinearLayout
+                            android:id="@+id/linearLayout6"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="horizontal">
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtvroluserperfil">
 
-                            <TextView
-                                android:id="@+id/textView10"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Cedula"
-                                android:textColor="#004e9f"
-                                android:textSize="18sp"
-                                android:drawableLeft="@drawable/identificacioin_ico"
-                                android:drawablePadding="8dp"
-                                />
+                                android:layout_margin="20dp"
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/txtvcedulaperfil"
-                                android:layout_width="wrap_content"
+                                <TextView
+                                    android:id="@+id/textView10"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Cedula"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:drawableLeft="@drawable/identificacioin_ico"
+                                    android:drawablePadding="8dp"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/txtvcedulaperfil"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="TextView"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/view2"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="6dp"
+                                android:background="#D9D9D9"
+                                tools:layout_marginStart="5dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="TextView"
-                                android:textAlignment="textEnd"
-                                android:textColor="#5B5B5B"
-                                android:textSize="18sp" />
+                                android:layout_margin="20dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView12"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Correo"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:drawableLeft="@drawable/correo_icon"
+                                    android:drawablePadding="8dp"/>
+
+                                <TextView
+                                    android:id="@+id/txtvcorreoperfil"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="TextView"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="18sp" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/view3"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="6dp"
+                                android:background="#D9D9D9"
+                                tools:layout_marginStart="10dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView14"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Celular"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:drawableLeft="@drawable/cell_ico"
+                                    android:drawablePadding="8dp"/>
+
+                                <TextView
+                                    android:id="@+id/txtvcelularperfil"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="TextView"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="18sp" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/view9"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="6dp"
+                                android:background="#D9D9D9"
+                                tools:layout_marginStart="5dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView18"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Teléfono"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:drawableLeft="@drawable/tel"
+                                    android:drawablePadding="8dp"/>
+
+                                <TextView
+                                    android:id="@+id/txtvtelefono"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Teléfono"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="18sp" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/view8"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="6dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginBottom="6dp"
+                                android:background="#D9D9D9"
+                                tools:layout_marginStart="5dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView16"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Dirección"
+                                    android:textStyle="bold"
+                                    android:textSize="18sp"
+                                    android:drawableLeft="@drawable/direccion_ico"
+                                    android:drawablePadding="8dp"/>
+
+                                <TextView
+                                    android:id="@+id/txtvdireccionperfil"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="TextView"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="18sp" />
+
+
+                            </LinearLayout>
+
 
                         </LinearLayout>
-
-                        <View
-                            android:id="@+id/view2"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="#D9D9D9"
-                            tools:layout_marginStart="5dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textView12"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Correo"
-                                android:textColor="#004e9f"
-                                android:textSize="18sp"
-                                android:drawableLeft="@drawable/correo_icon"
-                                android:drawablePadding="8dp"/>
-
-                            <TextView
-                                android:id="@+id/txtvcorreoperfil"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="TextView"
-                                android:textAlignment="textEnd"
-                                android:textColor="#5B5B5B"
-                                android:textSize="18sp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/view3"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="#D9D9D9"
-                            tools:layout_marginStart="10dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textView14"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Celular"
-                                android:textColor="#004e9f"
-                                android:textSize="18sp"
-                                android:drawableLeft="@drawable/cell_ico"
-                                android:drawablePadding="8dp"/>
-
-                            <TextView
-                                android:id="@+id/txtvcelularperfil"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="TextView"
-                                android:textAlignment="textEnd"
-                                android:textColor="#5B5B5B"
-                                android:textSize="18sp" />
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/view9"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="#D9D9D9"
-                            tools:layout_marginStart="5dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textView18"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Teléfono"
-                                android:textColor="#004e9f"
-                                android:textSize="18sp"
-                                android:drawableLeft="@drawable/tel"
-                                android:drawablePadding="8dp"/>
-
-                            <TextView
-                                android:id="@+id/txtvtelefono"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Teléfono"
-                                android:textAlignment="textEnd"
-                                android:textColor="#5B5B5B"
-                                android:textSize="18sp" />
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/view8"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginBottom="6dp"
-                            android:background="#D9D9D9"
-                            tools:layout_marginStart="5dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textView16"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Dirección"
-                                android:textColor="#004e9f"
-                                android:textSize="18sp"
-                                android:drawableLeft="@drawable/direccion_ico"
-                                android:drawablePadding="8dp"/>
-
-                            <TextView
-                                android:id="@+id/txtvdireccionperfil"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="TextView"
-                                android:textAlignment="textEnd"
-                                android:textColor="#5B5B5B"
-                                android:textSize="18sp" />
-
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
+                    </androidx.cardview.widget.CardView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

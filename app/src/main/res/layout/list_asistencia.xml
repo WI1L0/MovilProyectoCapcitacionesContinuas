@@ -87,25 +87,24 @@
                     android:gravity="center">
 
 
-                    <ImageButton
+                    <Button
                         android:id="@+id/btnasisteasistencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_baseline_check_24"
+                        android:drawableRight="@drawable/ic_baseline_check_24"
                         android:textColor="@color/white"
                         app:backgroundTint="#136A16"
                         app:expandedHintEnabled="false"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-                    <ImageButton
+                    <Button
                         android:id="@+id/btnnoasisteasistencia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_close"
+                        android:drawableRight="@drawable/ic_close"
                         android:textColor="@color/white"
                         app:backgroundTint="#F44336"
                         app:expandedHintEnabled="false"

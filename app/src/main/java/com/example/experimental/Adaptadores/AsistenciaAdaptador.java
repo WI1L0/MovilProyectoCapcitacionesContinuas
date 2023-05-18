@@ -3,6 +3,7 @@ package com.example.experimental.Adaptadores;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,8 +70,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtnombres, txtapellidos;
-        Button  btnobservacione;
-        ImageButton btnasiste, btnnoasiste;
+        Button  btnobservacione,btnasiste, btnnoasiste;
         EditText edtobservaciones;
         ImageView imgasistencia;
 
@@ -130,7 +130,9 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
 
                     btnasiste.setEnabled(false);
                     btnnoasiste.setEnabled(true);
+                    btnnoasiste.setBackgroundColor(Color.GRAY);
                     btnobservacione.setEnabled(false);
+                    btnobservacione.setBackgroundColor(Color.GRAY);
                 }
             });
 
@@ -160,7 +162,8 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
 
                     btnnoasiste.setEnabled(false);
                     btnasiste.setEnabled(true);
-                    btnobservacione.setEnabled(false);
+                    btnasiste.setBackgroundColor(Color.GRAY);
+                    btnobservacione.setEnabled(true);
                 }
             });
 
