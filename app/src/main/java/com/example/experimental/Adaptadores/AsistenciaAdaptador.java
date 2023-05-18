@@ -123,6 +123,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
                         mAsistencia.setIdAsistencia(item.getmAsistenciaList().get(0).getIdAsistencia());
                         mAsistencia.setFechaAsistencia(item.getmAsistenciaList().get(0).getFechaAsistencia());
+                        mAsistencia.setEstadoActual(item.getmAsistenciaList().get(0).getEstadoActual());
                     }
 
                     listener.obtenList(mAsistencia);
@@ -152,6 +153,7 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     if (item.getmAsistenciaList() != null && !item.getmAsistenciaList().isEmpty()) {
                         mAsistencia.setIdAsistencia(item.getmAsistenciaList().get(0).getIdAsistencia());
                         mAsistencia.setFechaAsistencia(item.getmAsistenciaList().get(0).getFechaAsistencia());
+                        mAsistencia.setEstadoActual(item.getmAsistenciaList().get(0).getEstadoActual());
                     }
 
                     listener.obtenList(mAsistencia);

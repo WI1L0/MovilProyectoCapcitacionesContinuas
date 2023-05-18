@@ -108,27 +108,20 @@ public class Asistencia extends AppCompatActivity {
                     if (cursor.moveToNext()) {
                         for (int i = 0; i < listaasistencia.size(); i++) {
 
-                            if (cursor.moveToPosition(i)) {
-                                int idss = cursor.getInt(0);
-
                                 Cursor cursor1 = db.rawQuery("SELECT estadoActual FROM asistencia WHERE idAsistencia = ?;",
-                                        new String[]{String.valueOf(idss)});
+                                        new String[]{String.valueOf(listaasistencia.get(i).getIdAsistencia())});
 
                                 ContentValues values = new ContentValues();
                                 values.put("fechaAsistencia", listaasistencia.get(i).getFechaAsistencia());
                                 values.put("estadoAsistencia", listaasistencia.get(i).getEstadoAsistencia());
                                 values.put("observacionAsistencia", listaasistencia.get(i).getObservacionAsistencia());
                                 values.put("estadoSubida", false);
-                                if (cursor1.moveToNext()) {
-                                    if (cursor1.moveToPosition(0)) {
-                                        if (cursor1.getString(0).equals("Descargado")) {
-                                            values.put("estadoActual", "Actualizado");
-                                        }
-                                    }
-                                }
+                            if (listaasistencia.get(i).getEstadoActual() != null && listaasistencia.get(i).getEstadoActual().equals("Descargado")) {
+                                values.put("estadoActual", "Actualizado");
+                            }
 
                                 db.update(Atributos.table_asistencia, values, Atributos.atr_asi_id + " = ?", new String[]{String.valueOf(listaasistencia.get(i).getIdAsistencia())});
-                            }
+
                         }
                         finish();
                         // (id, rol);
@@ -243,7 +236,7 @@ public class Asistencia extends AppCompatActivity {
         Cursor cursor;
 
         if (cursor2.moveToFirst()) {
-            cursor = db.rawQuery("SELECT pa.idParticipanteMatriculado, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo,  pa.estadoParticipanteActivo, u.fotoPerfil, a.idAsistencia, a.fechaAsistencia, a.estadoAsistencia, a.observacionAsistencia " +
+            cursor = db.rawQuery("SELECT pa.idParticipanteMatriculado, p.nombre1, p.nombre2, p.apellido1, p.apellido2, i.estadoInscritoActivo,  pa.estadoParticipanteActivo, u.fotoPerfil, a.idAsistencia, a.fechaAsistencia, a.estadoAsistencia, a.observacionAsistencia, a.estadoActual " +
                             "FROM personas p INNER JOIN usuarios u ON u.idPersona = p.idPersona INNER JOIN inscritos i ON i.idUsuario = u.idUsuario INNER JOIN participante pa ON pa.idInscrito = i.idInscrito INNER JOIN asistencia a ON a.idParticipanteMatriculado = pa.idParticipanteMatriculado " +
                             "wHERE i.idCurso = ? AND a.fechaAsistencia = ? AND i.estadoInscrito = '1' AND pa.estadoParticipanteActivo = '1' ORDER BY apellido1 DESC;",
                     new String[]{String.valueOf(id), String.valueOf(txtfecha.getText())});
@@ -270,6 +263,7 @@ public class Asistencia extends AppCompatActivity {
                 mAsistencia.setFechaAsistencia(cursor.getString(9));
                 mAsistencia.setEstadoAsistencia(cursor.getInt(10) == 1 ? true : false);
                 mAsistencia.setObservacionAsistencia(cursor.getString(11));
+                mAsistencia.setEstadoActual(cursor.getString(12));
 
                 arrayList.add(mAsistencia);
                 mParticipante.setmAsistenciaList(arrayList);

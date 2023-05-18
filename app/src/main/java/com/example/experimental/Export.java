@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.graphics.drawable.Drawable;
 import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,7 +42,7 @@ public class Export extends AppCompatActivity {
     private JSONObject postData;
     private JSONObject participante;
 
-    private int idasi;
+    private int acaba = 0;
     private Boolean estimg = false;
 
     private int progreso = 0, count = 0;
@@ -130,7 +131,67 @@ public class Export extends AppCompatActivity {
                 }
             }
         } else {
-            Toast.makeText(Export.this, "No hay datos para exportar", Toast.LENGTH_SHORT).show();
+            if (donde != null && donde.equals("import")) {
+
+                new AsyncTask<Void, Integer, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        try {
+                            // Realizar tareas de exportación aquí
+                            Thread.sleep(2 * 1000);
+                            publishProgress(91);
+                            publishProgress(92);
+                            Thread.sleep(2 * 1000);
+                            publishProgress(93);
+                            publishProgress(94);
+                            Thread.sleep(2 * 1000);
+                            publishProgress(95);
+                            publishProgress(96);
+                            Thread.sleep(2 * 1000);
+                            publishProgress(97);
+                            publishProgress(98);
+                            Thread.sleep(2 * 1000);
+                            publishProgress(99);
+                            publishProgress(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        System.out.println(values[0] + "                          dddddddddd");
+                        super.onProgressUpdate(values);
+                        pgsexport.setProgress(values[0]);
+                        if (values[0] == 92){
+                            txtvcuent.setText("3");
+                            txtvcuent.setVisibility(View.VISIBLE);
+                        }
+                        if (values[0] == 94) {
+                            txtvcuent.setText("2");
+                        }
+                        if (values[0] == 96) {
+                            txtvcuent.setText("1");
+                        }
+                        if (values[0] == 98) {
+                            txtvcuent.setText("0");
+                        }
+                        if (values[0] == 100) {
+                            txtvcuent.setText("...");
+                        }
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        finish();
+                        Toast.makeText(Export.this, "Puede continuar con su update", Toast.LENGTH_SHORT).show();
+                    }
+                }.execute();
+            } else {
+                Toast.makeText(Export.this, "No hay datos para exportar", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -143,8 +204,13 @@ public class Export extends AppCompatActivity {
                     public void onResponse(String response) {
                             img();
                             progreso++;
+                        if (donde != null && donde.equals("import")) {
+                            int pg = (progreso * 90) / count;
+                            pgsexport.setProgress(pg);
+                        } else {
                             int pg = (progreso * 100) / count;
                             pgsexport.setProgress(pg);
+                        }
                         System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
                         System.out.println(response);
                         actualizar(aid);
@@ -185,8 +251,13 @@ public class Export extends AppCompatActivity {
                     public void onResponse(String response) {
                             img();
                             progreso++;
+                        if (donde != null && donde.equals("import")) {
+                            int pg = (progreso * 90) / count;
+                            pgsexport.setProgress(pg);
+                        } else {
                             int pg = (progreso * 100) / count;
                             pgsexport.setProgress(pg);
+                        }
 
                         System.out.println("siuuuuuuuuuuuuuuuuuuuuuuu");
                         System.out.println(response);
@@ -234,39 +305,10 @@ public class Export extends AppCompatActivity {
             btnexport.setText("DATOS CARGADO EXITOSAMENTE");
             Drawable drawablef = getResources().getDrawable(R.drawable.finalizando);
             imgexport.setImageDrawable(drawablef);
-
-            controlAsistencia();
-    }
-
-    public void controlAsistencia(){
-
-        if (donde != null && donde.equals("import")) {
-            DataBase conection = new DataBase(Export.this);
-            SQLiteDatabase db = conection.getReadableDatabase();
-            String[] projection = {"idAsistencia", "fechaAsistencia", "estadoAsistencia", "observacionAsistencia", "idParticipanteMatriculado", "estadoActual"};
-            String selection = "estadoSubida = ?";
-            String[] selectionArgs = {"0"};
-
-            Cursor cursor = db.query(Atributos.table_asistencia, projection, selection, selectionArgs, null, null, null);
-
-            if (cursor.getCount() == 0) {
-                txtvcuent.setVisibility(View.VISIBLE);
-
-                try {
-                    txtvcuent.setText("2");
-                    Thread.sleep(5*1000);
-                    txtvcuent.setText("1");
-                    Thread.sleep(5*1000);
-                    txtvcuent.setText("0");
-                    Thread.sleep(5*1000);
-                    finish();
-                    Toast.makeText(this, "Puede continuar con su update", Toast.LENGTH_SHORT).show();
-                } catch (InterruptedException e) {
-                    System.out.println("export time");
-                    System.out.println(e);
-                }
+        acaba++;
+            if (acaba == count) {
+                exportAll();
             }
-        }
     }
 
     public void img(){
