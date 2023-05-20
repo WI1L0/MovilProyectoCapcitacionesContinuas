@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">Capacitaciones ISTA</string>
+
+    <!--Navegation Drawer-->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+
+    <string name="txt_periodoPrograma">Período:</string>
+    <string name="txt_fechaPrograma">Fecha:</string>
+    <string name="txt_tipoCurso">Tipo de Curso:</string>
+    <string name="txt_horarioCurso">Horario:</string>
+    <string name="txt_nombreCurso">Nombre del Curso:</string>
+    <string name="txt_areaCurso">Área del Curso:</string>
+    <string name="txt_especialidadCurso">Especialidad:</string>
+    <string name="txt_descripcionCurso">Descripción del Curso:</string>
+    <string name="txt_objetivoCurso">Objetivos del Curso:</string>
+    <string name="txt_nombreUsuario">Nombre</string>
+    <string name="txt_apellidoUsuario">Apellido</string>
+    <string name="txt_rolUsuario">Rol:</string>
+    <string name="txt_correoUsuario">Correo</string>
+    <string name="txt_cedulaUsuario">Cédula</string>
+    <string name="txt_etniaUsuario">Etnia:</string>
+    <string name="txt_tituloUsuario">Título:</string>
+    <string name="txt_prerequisitosCurso">Prerequisitos:</string>
+    <string name="txt_fechaInicioCurso">Fecha Inicio:</string>
+    <string name="txt_fechaFinCurso">Fecha Fin:</string>
+    <string name="txt_numCuposCurso">Número de Cupos:</string>
+    <string name="txt_nivel">Nivel:</string>
+    <string name="txt_celular">Celular:</string>
+    <string name="txt_telefono">Teléfono:</string>
+    <string name="txt_modalidadCurso">Modalidad:</string>
+    <string name="txt_duracionCurso">Duración:</string>
+    <string name="txt_fechaAsistencia">Fecha</string>
+    <string name="txt_nombreParticipanteAsistencia">Nombre</string>
+    <string name="txt_apellidoParticipanteAsistencia">Apellido</string>
+    <string name="txt_buscarPrograma">Nombre del Programa</string>
+    <string name="txt_buscarCurso">Nombre del Curso</string>
+    <string name="txt_btnAsiste">Asiste</string>
+    <string name="txt_btnNoAsiste">No Asiste</string>
+    <string name="txt_btnObservaciones">Observaciones</string>
+    <string name="txt_btnGuardarAsistencia">Guardar</string>
+    <string name="txt_btnDescargar">Descargar</string>
+    <string name="txt_btnSubirRegistro">Subir Registro</string>
+    <string name="txt_login">Inicio</string>
+    <string name="txt_userName">User Name</string>
+    <string name="txt_password">Password</string>
+    <string name="perfil">PERFIL DE USUARIO</string>
+    <string name="txt_Cursos">CURSOS DISPONIBLES</string>
+    <string name="txt_programas">PROGRAMAS</string>
+    <string name="txt_asistencia">REGISTRO DE ASISTENCIA</string>
+    <string name="txt_importar">IMPORTAR</string>
+    <string name="txt_exportar">EXPORTAR</string>
+</resources>

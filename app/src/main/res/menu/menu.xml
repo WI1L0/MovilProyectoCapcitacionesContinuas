@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/activity1"
+            android:title=""
+            android:icon="@drawable/ic_asistencia"/>
+
+        <item
+            android:id="@+id/activity2"
+            android:title=""
+            android:icon="@drawable/ic_book"/>
+
+        <item
+            android:id="@+id/activity3"
+            android:title=""
+            android:icon="@drawable/ic_perfil"/>
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/activity4"
+            android:title="EXPORT"
+            android:icon="@drawable/ic_iexport"/>
+
+        <item
+            android:id="@+id/activity5"
+            android:title="UPDATE"
+            android:icon="@drawable/ic_update"/>
+
+        <item
+            android:id="@+id/activity6"
+            android:title="EXIT"
+            android:icon="@drawable/ic_exit"/>
+    </group>
+</menu>

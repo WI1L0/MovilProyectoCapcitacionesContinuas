@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="#CCCCCC" /> <!-- Color de fondo -->
+            <corners android:radius="6dp" /> <!-- Radio de las esquinas (borde redondeado) -->
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <solid android:color="#2196F3" /> <!-- Color de progreso -->
+                <corners android:radius="6dp" /> <!-- Radio de las esquinas (borde redondeado) -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>
