@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.nfc.Tag;
 import android.os.AsyncTask;
@@ -303,6 +304,7 @@ public class Export extends AppCompatActivity {
         System.out.println("PARTICIPANTE ALMACENADA CORRECTAMENTE....................................." + aid);
             btnexport.setEnabled(false);
             btnexport.setText("DATOS CARGADO EXITOSAMENTE");
+            btnexport.setBackgroundColor(Color.GRAY);
             Drawable drawablef = getResources().getDrawable(R.drawable.finalizando);
             imgexport.setImageDrawable(drawablef);
         acaba++;

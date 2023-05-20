@@ -96,8 +96,18 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                 edtobservaciones.setText(item.getmAsistenciaList().get(0).getObservacionAsistencia());
                 if (item.getmAsistenciaList().get(0).getEstadoAsistencia() == true) {
                     btnasiste.setEnabled(false);
+                    btnasiste.setBackgroundColor(Color.GREEN);
+                    btnnoasiste.setEnabled(true);
+                    btnnoasiste.setBackgroundColor(Color.GRAY);
+                    btnobservacione.setEnabled(true);
+                    btnobservacione.setBackgroundColor(Color.parseColor("#fcc700"));
                 } else {
                     btnnoasiste.setEnabled(false);
+                    btnnoasiste.setBackgroundColor(Color.RED);
+                    btnasiste.setEnabled(true);
+                    btnasiste.setBackgroundColor(Color.GRAY);
+                    btnobservacione.setEnabled(true);
+                    btnobservacione.setBackgroundColor(Color.parseColor("#fcc700"));
                 }
             } else {
                 btnasiste.setEnabled(true);
@@ -165,7 +175,8 @@ public class AsistenciaAdaptador extends RecyclerView.Adapter<AsistenciaAdaptado
                     btnnoasiste.setBackgroundColor(Color.RED);
                     btnasiste.setEnabled(true);
                     btnasiste.setBackgroundColor(Color.GRAY);
-                    btnobservacione.setEnabled(true);
+                    btnobservacione.setEnabled(false);
+                    btnobservacione.setBackgroundColor(Color.GRAY);
                 }
             });
 

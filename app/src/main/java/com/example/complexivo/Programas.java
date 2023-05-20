@@ -113,6 +113,8 @@ public class Programas extends AppCompatActivity implements NavigationView.OnNav
         MenuItem menuItem2 = navigationMenu.findItem(R.id.activity2);
         MenuItem menuItem3 = navigationMenu.findItem(R.id.activity3);
         MenuItem menuItem4 = navigationMenu.findItem(R.id.activity4);
+        MenuItem menuItem5 = navigationMenu.findItem(R.id.activity5);
+        MenuItem menuItem6 = navigationMenu.findItem(R.id.activity6);
 
         if (rol.equals("alumno")){
             menuItem1.setTitle("MIS CURSOS");
