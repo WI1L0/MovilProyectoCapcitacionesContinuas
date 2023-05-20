@@ -20,10 +20,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.VolleyError;
 import com.example.experimental.DB.DataBase;
 import com.example.experimental.DB.DataBaseTemporal;
 import com.example.experimental.DB.ImportData;
 import com.example.experimental.Utilidades.Atributos;
+import com.example.experimental.service.Login;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,9 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity{
 
     //use database
@@ -192,6 +198,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void validaDatos(){
+        inicioSecionApi();  
         try {
             if(edtusername.getText().toString().isEmpty() || edtpassword.getText().toString().isEmpty()){
                this.validatorGeneric("CAMPOS VACIOS", "Debe ingresar usuario y contraseña.", 1);
@@ -370,5 +377,25 @@ public class MainActivity extends AppCompatActivity{
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(view);
         toast.show();
+    }
+
+
+
+    //LOGIN CON EL USUARIO
+    public void inicioSecionApi(){
+
+        Login apiManager = new Login(getApplicationContext());
+
+        apiManager.login("gaby", "123", new Login.OnLoginResponseListener() {
+            @Override
+            public void onLoginSuccess(String response) {
+                System.out.println("Data-> "+response);
+            }
+
+            @Override
+            public void onLoginFailure(String error) {
+                // Manejar el error de la solicitud aquí
+            }
+        });
     }
 }
